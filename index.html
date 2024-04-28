@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ЄСтендап Кьольн</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg custom-navbar">
+            <a class="navbar-brand" href="#">
+                <img src="logo.png" alt="ЄСтендап Кьольн лого" width="50" height="50">
+                <span class="club-name text-white">ЄСтендап Кьольн</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#upcoming-events">Майбутні події</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#past-events">Минулі події</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#about-us">Про нас</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="upcoming-events" class="container">
+            <h2 class="section-title">Майбутні події</h2>
+            <div id="events-container"></div>
+        </section>
+
+        <section id="past-events" class="container">
+            <h2 class="section-title">Минулі події</h2>
+            <div id="past-events-container"></div>
+        </section>
+
+        <section id="about-us" class="container">
+            <h2 class="section-title">Про нас</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <img src="logo.png" alt="Logo" class="img-fluid">
+                </div>
+                <div class="col-md-6">
+                    <div id="about-us-content"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; 2024 ЄСтендап Кьольн. Усі права захищені.</p>
+                </div>
+                <div class="col-md-6">
+                    <div class="social-media text-right">
+                        <a href="https://chat.whatsapp.com/BXBNeksXPrJ29btgeo9BZZ" target="_blank">
+                            <img src="whatsapp-icon.svg" alt="WhatsApp icon" width="40" height="40">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+    <script>
+        requirejs.config({
+            paths: {
+                jquery: 'https://code.jquery.com/jquery-3.6.0.min',
+                app: 'app'
+            }
+        });
+
+        requirejs(['app'], function(app) {
+            app.init();
+        });
+    </script>
+</body>
+</html>
