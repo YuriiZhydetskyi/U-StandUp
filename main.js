@@ -5,10 +5,10 @@ requirejs.config({
         app: 'app'
     },
     shim: {
-        bootstrap: ['jquery']
+        'bootstrap': ['jquery']
     }
 });
 
-requirejs(['app'], function(app) {
+requirejs(['jquery', 'bootstrap', 'app'], function($, bootstrap, app) {
     app.init();
 });
