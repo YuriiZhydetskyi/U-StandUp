@@ -3,13 +3,21 @@ define(['jquery', './events', './about-us'], function ($, events, aboutUs) {
         const eventsContainer = $('#events-container');
         const pastEventsContainer = $('#past-events-container');
         const currentDate = new Date();
-
-        events.sort((a, b) => new Date(a.date) - new Date(b.date));
-
+    
+        events.sort((a, b) => {
+            if (a.isFavorite && !b.isFavorite) return -1;
+            if (!a.isFavorite && b.isFavorite) return 1;
+            return new Date(a.date) - new Date(b.date);
+        });
+    
         events.forEach(event => {
             const eventDate = new Date(event.date);
             const eventElement = createEventElement(event);
-
+    
+            if (event.isFavorite) {
+                eventElement.addClass('favorite-event');
+            }
+    
             if (eventDate >= currentDate) {
                 eventsContainer.append(eventElement);
             } else {
