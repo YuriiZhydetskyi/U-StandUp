@@ -30,7 +30,7 @@ define(['jquery', './events', './about-us'], function ($, events, aboutUs) {
         const locationElement = event.linkToMaps ? `<p><strong>Місце:</strong> <a href="${event.linkToMaps}" target="_blank">${event.location}</a></p>` : `<p><strong>Місце:</strong> ${event.location}</p>`;
     
         return $(`
-            <div class="event">
+            <div class="event" id="${event.id}">
                 <h3>${event.name}</h3>
                 <p><strong>Дата:</strong> ${formatDate(event.date)}</p>
                 <p><strong>Час:</strong> ${event.time}</p>
