@@ -1,5 +1,4 @@
-define(['jquery', './events', './about-us'], function ($, events, aboutUs) {
-    function displayEvents() {
+define(['jquery', './events', './about-us', './otherClubs'], function ($, events, aboutUs, otherClubs) {    function displayEvents() {
         const eventsContainer = $('#events-container');
         const pastEventsContainer = $('#past-events-container');
         const currentDate = new Date();
@@ -41,6 +40,35 @@ define(['jquery', './events', './about-us'], function ($, events, aboutUs) {
             </div>
         `);
     }
+
+    function displayOtherClubs() {
+        const otherClubsContainer = $('#other-clubs-container');
+
+        otherClubs.forEach(club => {
+            const clubElement = createClubElement(club);
+            otherClubsContainer.append(clubElement);
+        });
+    }
+
+    function createClubElement(club) {
+        const linksHtml = club.links.map(link => `<a href="${link.url}" target="_blank">${link.label}</a>`).join(' | ');
+    
+        return $(`
+            <div class="club" id="${club.id}">
+                <div class="row">
+                    <div class="col-md-3">
+                        ${club.picture ? `<img src="${club.picture}" alt="${club.title}" class="club-logo">` : ''}
+                    </div>
+                    <div class="col-md-9">
+                        <h3>${club.title}</h3>
+                        <p><strong>Місто:</strong> ${club.city}, ${club.country}</p>
+                        <p>${club.description}</p>
+                        <p>Посилання: ${linksHtml}</p>
+                    </div>
+                </div>
+            </div>
+        `);
+    }
     
     function formatDate(dateString) {
         const date = new Date(dateString);
@@ -57,6 +85,7 @@ define(['jquery', './events', './about-us'], function ($, events, aboutUs) {
     function init() {
         displayEvents();
         displayAboutUs();
+        displayOtherClubs();
     }
 
     return {

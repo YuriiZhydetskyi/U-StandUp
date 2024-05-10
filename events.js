@@ -32,7 +32,7 @@ define(function () {
             "location": "Theatercafe Filmdose, Zülpicher Str. 39, 50674 Köln",
             "linkToMaps": "https://maps.app.goo.gl/BPHbnNLBU87iRAmM9",
             "description": "<p>Запрошуємо всіх охочих взяти участь у першому українському відкритому мікрофоні у Кельні!</p><ul><li>Виступити може кожен бажаючий безкоштовно.</li><li>Для участі потрібно заповнити <a href=\"https://forms.gle/1w1J6xF9m9JD37Fk9\">гугл форму</a>.</li><li>Якщо хочете отримати підтримку в підготовці до виступу - ласкаво просимо до нашого групового <a href=\"https://chat.whatsapp.com/BXBNeksXPrJ29btgeo9BZZ\" target=\"_blank\">чату у WhatsApp</a>.</li></ul><p>Вхід для глядачів: 5 євро. 100% виручки йде на підтримку ЗСУ.</p><p>Квитки можна придбати <a href=\"https://www.eventbrite.de/e/902820298817\" target=\"_blank\">тут</a>.</p>",
-            "image": "openMic1.webp",
+            "image": "img/openMic1.webp",
             "googleFormLink": "",
             "isFavorite": true
         }
