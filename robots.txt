@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /YeStandUp-Cologne/prerendered-index
-Disallow: /YeStandUp-Cologne/
 
 Sitemap: https://yuriizhydetskyi.github.io/YeStandUp-Cologne/sitemap.xml
