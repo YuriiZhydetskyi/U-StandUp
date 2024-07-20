@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /prerendered-index
 
-Sitemap: http://www.ustandup.club/sitemap.xml
+Sitemap: https://www.ustandup.club/sitemap.xml
