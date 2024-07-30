@@ -9,12 +9,8 @@ body {
 }
 
 .custom-navbar .navbar-nav .nav-link {
-    color: #fff;
-    margin-left: 15px;
     transition: color 0.3s;
     font-weight: bold;
-    padding: 5px 10px;
-
 }
 
 .custom-navbar .navbar-nav .nav-link:hover {
@@ -27,9 +23,8 @@ body {
 }
 
 .club-name {
-    font-size: 24px;
+    font-size: 1.2rem;
     font-weight: bold;
-    margin-left: 10px;
     text-shadow:
         -1px -1px 0 #000,
         1px -1px 0 #000,
@@ -42,7 +37,7 @@ section {
 }
 
 .section-title {
-    font-size: 36px;
+    font-size: 2rem;
     font-weight: bold;
     margin-bottom: 40px;
     text-align: center;
