@@ -3,7 +3,7 @@ define(function () {
 {
             "id": "meeting-13",
             "name": "Читка",
-            "date": "2024-08-09",
+            "date": "2024-08-11",
             "time": "17:00",
             "location": "Столики в парку біля Hanzaring, Köln",
             "linkToMaps": "https://maps.app.goo.gl/tscc3bUP3BpQkBFt9",
