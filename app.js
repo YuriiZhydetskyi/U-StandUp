@@ -1,4 +1,6 @@
-define(['jquery', './events', './about-us', './otherClubs', 'ics'], function ($, events, aboutUs, otherClubs, ics) {
+define(['jquery', './events', './about-us', './otherClubs', './ics-browserified'], function ($, events, aboutUs, otherClubs, ics) {
+    let generateICS;
+
     function displayEvents() {
         const eventsContainer = $('#events-container');
         const pastEventsContainer = $('#past-events-container');
@@ -51,7 +53,7 @@ define(['jquery', './events', './about-us', './otherClubs', 'ics'], function ($,
 
     function createGoogleCalendarLink(event) {
         const startDate = new Date(`${event.date}T${event.time}`);
-        const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000);
+        const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000); // Assuming 2 hours duration
         const encodedName = encodeURIComponent(event.name);
         const encodedDescription = encodeURIComponent(event.description);
         const encodedLocation = encodeURIComponent(event.location);
@@ -60,36 +62,55 @@ define(['jquery', './events', './about-us', './otherClubs', 'ics'], function ($,
     }
 
     function createAppleCalendarButton(event) {
-        return `<button onclick="generateICS('${event.id}')" class="btn btn-info ml-2">Додати до Apple Calendar</button>`;
+        return `<button onclick="window.generateICS('${event.id}')" class="btn btn-info ml-2">Додати до Apple Calendar</button>`;
     }
 
-    function generateICS(eventId) {
+    generateICS = function(eventId) {
         const event = events.find(e => e.id === eventId);
         if (!event) return;
 
-        const cal = ics();
         const startDate = new Date(`${event.date}T${event.time}`);
-        const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000);
+        const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000); // Assuming 2 hours duration
 
-        const eventObj = {
+        const icsEvent = {
+            start: [startDate.getFullYear(), startDate.getMonth() + 1, startDate.getDate(), startDate.getHours(), startDate.getMinutes()],
+            duration: { hours: 2 },
             title: event.name,
             description: event.description,
             location: event.location,
-            start: startDate.toISOString(),
-            end: endDate.toISOString(),
+            url: event.linkToMaps,
+            status: 'CONFIRMED',
+            busyStatus: 'BUSY',
+            productId: 'adamgibbons/ics',
             alarms: []
         };
 
         if (event.isFavorite) {
-            eventObj.alarms.push({ action: 'display', trigger: { days: 2, before: true } });
-            eventObj.alarms.push({ action: 'display', trigger: { hours: 2, before: true } });
+            icsEvent.alarms.push(
+                { action: 'display', trigger: { days: 2, before: true } },
+                { action: 'display', trigger: { hours: 2, before: true } }
+            );
         } else {
-            eventObj.alarms.push({ action: 'display', trigger: { hours: 3, before: true } });
+            icsEvent.alarms.push(
+                { action: 'display', trigger: { hours: 3, before: true } }
+            );
         }
 
-        cal.addEvent(eventObj);
-        cal.download(`${event.id}.ics`);
-    }
+        ics.createEvent(icsEvent, (error, value) => {
+            if (error) {
+                console.log(error);
+                return;
+            }
+
+            const blob = new Blob([value], { type: 'text/calendar;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = `${event.name}.ics`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    };
 
     function displayOtherClubs() {
         const otherClubsContainer = $('#other-clubs-container');
@@ -136,7 +157,7 @@ define(['jquery', './events', './about-us', './otherClubs', 'ics'], function ($,
         displayEvents();
         displayAboutUs();
         displayOtherClubs();
-        window.generateICS = generateICS;
+        window.generateICS = generateICS; // Make generateICS available globally
     }
 
     return {
