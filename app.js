@@ -71,10 +71,25 @@ define(['jquery', './events', './about-us', './otherClubs', 'ics'], function ($,
         const startDate = new Date(`${event.date}T${event.time}`);
         const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000);
 
-        cal.addEvent(event.name, event.description, event.location, startDate.toISOString(), endDate.toISOString());
+        const eventObj = {
+            title: event.name,
+            description: event.description,
+            location: event.location,
+            start: startDate.toISOString(),
+            end: endDate.toISOString(),
+            alarms: []
+        };
+
+        if (event.isFavorite) {
+            eventObj.alarms.push({ action: 'display', trigger: { days: 2, before: true } });
+            eventObj.alarms.push({ action: 'display', trigger: { hours: 2, before: true } });
+        } else {
+            eventObj.alarms.push({ action: 'display', trigger: { hours: 3, before: true } });
+        }
+
+        cal.addEvent(eventObj);
         cal.download(`${event.id}.ics`);
     }
-
 
     function displayOtherClubs() {
         const otherClubsContainer = $('#other-clubs-container');
