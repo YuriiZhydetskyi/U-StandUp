@@ -1,4 +1,5 @@
-define(['jquery', './events', './about-us', './otherClubs'], function ($, events, aboutUs, otherClubs) {    function displayEvents() {
+define(['jquery', './events', './about-us', './otherClubs', 'ics'], function ($, events, aboutUs, otherClubs, ics) {
+    function displayEvents() {
         const eventsContainer = $('#events-container');
         const pastEventsContainer = $('#past-events-container');
         const currentDate = new Date();
@@ -28,6 +29,9 @@ define(['jquery', './events', './about-us', './otherClubs'], function ($, events
     function createEventElement(event) {
         const locationElement = event.linkToMaps ? `<p><strong>Місце:</strong> <a href="${event.linkToMaps}" target="_blank">${event.location}</a></p>` : `<p><strong>Місце:</strong> ${event.location}</p>`;
     
+        const googleCalendarLink = createGoogleCalendarLink(event);
+        const appleCalendarButton = createAppleCalendarButton(event);
+    
         return $(`
             <div class="event" id="${event.id}">
                 <h3>${event.name}</h3>
@@ -37,9 +41,40 @@ define(['jquery', './events', './about-us', './otherClubs'], function ($, events
                 <p>${event.description}</p>
                 ${event.image ? `<img src="${event.image}" alt="${event.name}">` : ''}
                 ${event.googleFormLink ? `<a href="${event.googleFormLink}" target="_blank" class="btn btn-primary">Зареєструватися</a>` : ''}
+                <div class="mt-3">
+                    <a href="${googleCalendarLink}" target="_blank" class="btn btn-success">Додати до Google Calendar</a>
+                    ${appleCalendarButton}
+                </div>
             </div>
         `);
     }
+
+    function createGoogleCalendarLink(event) {
+        const startDate = new Date(`${event.date}T${event.time}`);
+        const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000);
+        const encodedName = encodeURIComponent(event.name);
+        const encodedDescription = encodeURIComponent(event.description);
+        const encodedLocation = encodeURIComponent(event.location);
+        
+        return `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodedName}&dates=${startDate.toISOString().replace(/-|:|\.\d\d\d/g, '')}/${endDate.toISOString().replace(/-|:|\.\d\d\d/g, '')}&details=${encodedDescription}&location=${encodedLocation}`;
+    }
+
+    function createAppleCalendarButton(event) {
+        return `<button onclick="generateICS('${event.id}')" class="btn btn-info ml-2">Додати до Apple Calendar</button>`;
+    }
+
+    function generateICS(eventId) {
+        const event = events.find(e => e.id === eventId);
+        if (!event) return;
+
+        const cal = ics();
+        const startDate = new Date(`${event.date}T${event.time}`);
+        const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000);
+
+        cal.addEvent(event.name, event.description, event.location, startDate.toISOString(), endDate.toISOString());
+        cal.download(`${event.id}.ics`);
+    }
+
 
     function displayOtherClubs() {
         const otherClubsContainer = $('#other-clubs-container');
@@ -86,6 +121,7 @@ define(['jquery', './events', './about-us', './otherClubs'], function ($, events
         displayEvents();
         displayAboutUs();
         displayOtherClubs();
+        window.generateICS = generateICS;
     }
 
     return {
