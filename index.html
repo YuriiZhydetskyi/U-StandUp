@@ -9,30 +9,32 @@
     <link rel="icon" type="image/png" href="img/favicon.svg">
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg custom-navbar">
-            <a class="navbar-brand" href="#">
+   <header>
+    <nav class="navbar navbar-expand-lg custom-navbar">
+        <div class="container">
+            <a class="navbar-brand d-flex flex-column flex-lg-row align-items-lg-center" href="#">
                 <img src="img/logo.png" alt="У Стендап лого" width="120" height="50">
-                <span class="club-name text-white">український стендап у Кельні</span>
+                <span class="club-name text-white mt-2 mt-lg-0 ml-lg-2">український стендап у Кельні</span>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="#upcoming-events">Майбутні події</a>
+                        <a class="nav-link text-white py-2" href="#upcoming-events">Майбутні події</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="#past-events">Минулі події</a>
+                        <a class="nav-link text-white py-2" href="#past-events">Минулі події</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="#about-us">Про нас</a>
+                        <a class="nav-link text-white py-2" href="#about-us">Про нас</a>
                     </li>
                 </ul>
             </div>
-        </nav>
-    </header>
+        </div>
+    </nav>
+</header>
 
     <main>
         <section id="upcoming-events" class="container">
@@ -85,6 +87,9 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
     <script src="main.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
