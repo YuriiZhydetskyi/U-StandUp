@@ -126,3 +126,15 @@ h3.smaller-heading {
     font-size: 1.25rem;
     font-weight: bold;
 }
+
+.btn-success, .btn-info {
+    margin-right: 10px;
+}
+
+.mt-3 {
+    margin-top: 1rem;
+}
+
+.ml-2 {
+    margin-left: 0.5rem;
+}
