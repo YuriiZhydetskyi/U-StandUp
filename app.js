@@ -29,23 +29,33 @@ define(['jquery', './events', './about-us', './otherClubs', './ics-browserified'
     }
 
     function createEventElement(event) {
-        const locationElement = event.linkToMaps ? `<p><strong>Місце:</strong> <a href="${event.linkToMaps}" target="_blank">${event.location}</a></p>` : `<p><strong>Місце:</strong> ${event.location}</p>`;
+        const locationElement = event.linkToMaps 
+            ? `<p><strong>Місце:</strong> <a href="${event.linkToMaps}" target="_blank">${event.location}</a></p>` 
+            : `<p><strong>Місце:</strong> ${event.location}</p>`;
     
         const googleCalendarLink = createGoogleCalendarLink(event);
         const appleCalendarButton = createAppleCalendarButton(event);
     
         return $(`
-            <div class="event" id="${event.id}">
-                <h3>${event.name}</h3>
-                <p><strong>Дата:</strong> ${formatDate(event.date)}</p>
-                <p><strong>Час:</strong> ${event.time}</p>
-                ${locationElement}
-                <p>${event.description}</p>
-                ${event.image ? `<img src="${event.image}" alt="${event.name}">` : ''}
-                ${event.googleFormLink ? `<a href="${event.googleFormLink}" target="_blank" class="btn btn-primary">Зареєструватися</a>` : ''}
-                <div class="mt-3">
-                    <a href="${googleCalendarLink}" target="_blank" class="btn btn-success">Додати до Google Calendar</a>
-                    ${appleCalendarButton}
+            <div class="event card mb-4" id="${event.id}">
+                <div class="card-body">
+                    <h3 class="card-title">${event.name}</h3>
+                    <p class="card-text"><strong>Дата:</strong> ${formatDate(event.date)}</p>
+                    <p class="card-text"><strong>Час:</strong> ${event.time}</p>
+                    ${locationElement}
+                    <p class="card-text">${event.description}</p>
+                    ${event.image ? `<img src="${event.image}" alt="${event.name}" class="img-fluid mb-3">` : ''}
+                    <div class="row">
+                        <div class="col-12 col-sm-6 col-md-4 mb-2">
+                            ${event.googleFormLink ? `<a href="${event.googleFormLink}" target="_blank" class="btn btn-primary btn-block">Зареєструватися</a>` : ''}
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-4 mb-2">
+                            <a href="${googleCalendarLink}" target="_blank" class="btn btn-success btn-block">Додати до Google Calendar</a>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-4 mb-2">
+                            ${appleCalendarButton}
+                        </div>
+                    </div>
                 </div>
             </div>
         `);
@@ -62,7 +72,7 @@ define(['jquery', './events', './about-us', './otherClubs', './ics-browserified'
     }
 
     function createAppleCalendarButton(event) {
-        return `<button onclick="window.generateICS('${event.id}')" class="btn btn-info ml-2">Додати до Apple Calendar</button>`;
+        return `<button onclick="window.generateICS('${event.id}')" class="btn btn-info btn-block">Додати до Apple Calendar</button>`;
     }
 
     generateICS = function(eventId) {
