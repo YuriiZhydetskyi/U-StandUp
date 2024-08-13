@@ -63,12 +63,18 @@ define(['./events', './about-us', './otherClubs', './ics-browserified'], functio
         return eventDiv;
     }
 
+    function getDescriptionForCalendar(event) {
+        return event.locationForCalendar 
+                ? `Локація: ` + `<a href="${event.linkToMaps}" target="_blank">${event.location}</a>\n\n${event.description}`
+                : event.description;
+    }
+
     function createGoogleCalendarLink(event) {
         const startDate = new Date(`${event.date}T${event.time}`);
         const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000); // Assuming 2 hours duration
         const encodedName = encodeURIComponent(event.name);
-        const encodedDescription = encodeURIComponent(event.description);
-        const encodedLocation = encodeURIComponent(event.location);
+        const encodedDescription = encodeURIComponent(getDescriptionForCalendar(event));
+        const encodedLocation = encodeURIComponent(event.locationForCalendar ?? event.location);
         
         return `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodedName}&dates=${startDate.toISOString().replace(/-|:|\.\d\d\d/g, '')}/${endDate.toISOString().replace(/-|:|\.\d\d\d/g, '')}&details=${encodedDescription}&location=${encodedLocation}`;
     }
@@ -82,14 +88,13 @@ define(['./events', './about-us', './otherClubs', './ics-browserified'], functio
         if (!event) return;
 
         const startDate = new Date(`${event.date}T${event.time}`);
-        const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000); // Assuming 2 hours duration
 
         const icsEvent = {
             start: [startDate.getFullYear(), startDate.getMonth() + 1, startDate.getDate(), startDate.getHours(), startDate.getMinutes()],
             duration: { hours: 2 },
             title: event.name,
-            description: event.description,
-            location: event.location,
+            description: getDescriptionForCalendar(event),
+            location: event.location ?? event.locationForCalendar,
             url: event.linkToMaps,
             status: 'CONFIRMED',
             busyStatus: 'BUSY',
