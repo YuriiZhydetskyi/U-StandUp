@@ -94,7 +94,7 @@ define(['./events', './about-us', './otherClubs', './ics-browserified'], functio
             duration: { hours: 2 },
             title: event.name,
             description: getDescriptionForCalendar(event),
-            location: event.location ?? event.locationForCalendar,
+            location: event.locationForCalendar ?? event.location,
             url: event.linkToMaps,
             status: 'CONFIRMED',
             busyStatus: 'BUSY',
