@@ -1,15 +1,11 @@
 requirejs.config({
     paths: {
-        jquery: 'https://code.jquery.com/jquery-3.6.0.min',
-        bootstrap: 'https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min',
+        bootstrap: 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min',
         app: 'app',
         ics: 'ics-browserified'
-    },
-    shim: {
-        'bootstrap': ['jquery']
     }
 });
 
-requirejs(['jquery', 'bootstrap', 'app'], function($, bootstrap, app) {
+requirejs(['bootstrap', 'app'], function(bootstrap, app) {
     app.init();
 });

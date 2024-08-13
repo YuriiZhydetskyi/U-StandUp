@@ -1,9 +1,9 @@
-define(['jquery', './events', './about-us', './otherClubs', './ics-browserified'], function ($, events, aboutUs, otherClubs, ics) {
+define(['./events', './about-us', './otherClubs', './ics-browserified'], function (events, aboutUs, otherClubs, ics) {
     let generateICS;
 
     function displayEvents() {
-        const eventsContainer = $('#events-container');
-        const pastEventsContainer = $('#past-events-container');
+        const eventsContainer = document.getElementById('events-container');
+        const pastEventsContainer = document.getElementById('past-events-container');
         const currentDate = new Date();
     
         events.sort((a, b) => {
@@ -17,13 +17,13 @@ define(['jquery', './events', './about-us', './otherClubs', './ics-browserified'
             const eventElement = createEventElement(event);
     
             if (event.isFavorite) {
-                eventElement.addClass('favorite-event');
+                eventElement.classList.add('favorite-event');
             }
     
             if (eventDate >= currentDate) {
-                eventsContainer.append(eventElement);
+                eventsContainer.appendChild(eventElement);
             } else {
-                pastEventsContainer.append(eventElement);
+                pastEventsContainer.appendChild(eventElement);
             }
         });
     }
@@ -36,29 +36,31 @@ define(['jquery', './events', './about-us', './otherClubs', './ics-browserified'
         const googleCalendarLink = createGoogleCalendarLink(event);
         const appleCalendarButton = createAppleCalendarButton(event);
     
-        return $(`
-            <div class="event card mb-4" id="${event.id}">
-                <div class="card-body">
-                    <h3 class="card-title">${event.name}</h3>
-                    <p class="card-text"><strong>Дата:</strong> ${formatDate(event.date)}</p>
-                    <p class="card-text"><strong>Час:</strong> ${event.time}</p>
-                    ${locationElement}
-                    <p class="card-text">${event.description}</p>
-                    ${event.image ? `<img src="${event.image}" alt="${event.name}" class="img-fluid mb-3">` : ''}
-                    <div class="row">
-                        <div class="col-12 col-sm-6 col-md-4 mb-2">
-                            ${event.googleFormLink ? `<a href="${event.googleFormLink}" target="_blank" class="btn btn-primary btn-block">Зареєструватися</a>` : ''}
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-4 mb-2">
-                            <a href="${googleCalendarLink}" target="_blank" class="btn btn-success btn-block">Додати до Google Calendar</a>
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-4 mb-2">
-                            ${appleCalendarButton}
-                        </div>
+        const eventDiv = document.createElement('div');
+        eventDiv.className = `event card mb-4 ${event.isFavorite ? 'border-warning bg-warning bg-opacity-10' : ''}`;
+        eventDiv.id = event.id;
+        eventDiv.innerHTML = `
+            <div class="card-body">
+                <h3 class="card-title">${event.name}</h3>
+                <p class="card-text"><strong>Дата:</strong> ${formatDate(event.date)}</p>
+                <p class="card-text"><strong>Час:</strong> ${event.time}</p>
+                ${locationElement}
+                <p class="card-text">${event.description}</p>
+                ${event.image ? `<img src="${event.image}" alt="${event.name}" class="img-fluid mb-3">` : ''}
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-4 mb-2">
+                        ${event.googleFormLink ? `<a href="${event.googleFormLink}" target="_blank" class="btn btn-primary w-100">Зареєструватися</a>` : ''}
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4 mb-2">
+                        <a href="${googleCalendarLink}" target="_blank" class="btn btn-success w-100">Додати до Google Calendar</a>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4 mb-2">
+                        ${appleCalendarButton}
                     </div>
                 </div>
             </div>
-        `);
+        `;
+        return eventDiv;
     }
 
     function createGoogleCalendarLink(event) {
@@ -72,7 +74,7 @@ define(['jquery', './events', './about-us', './otherClubs', './ics-browserified'
     }
 
     function createAppleCalendarButton(event) {
-        return `<button onclick="window.generateICS('${event.id}')" class="btn btn-info btn-block">Додати до Apple Calendar</button>`;
+        return `<button onclick="window.generateICS('${event.id}')" class="btn btn-info w-100">Додати до Apple Calendar</button>`;
     }
 
     generateICS = function(eventId) {
@@ -123,32 +125,34 @@ define(['jquery', './events', './about-us', './otherClubs', './ics-browserified'
     };
 
     function displayOtherClubs() {
-        const otherClubsContainer = $('#other-clubs-container');
+        const otherClubsContainer = document.getElementById('other-clubs-container');
 
         otherClubs.forEach(club => {
             const clubElement = createClubElement(club);
-            otherClubsContainer.append(clubElement);
+            otherClubsContainer.appendChild(clubElement);
         });
     }
 
     function createClubElement(club) {
         const linksHtml = club.links.map(link => `<a href="${link.url}" target="_blank">${link.label}</a>`).join(' | ');
     
-        return $(`
-            <div class="club" id="${club.id}">
-                <div class="row">
-                    <div class="col-md-3">
-                        ${club.picture ? `<img src="${club.picture}" alt="${club.title}" class="club-logo">` : ''}
-                    </div>
-                    <div class="col-md-9">
-                        <h3>${club.title}</h3>
-                        <p><strong>Місто:</strong> ${club.city}, ${club.country}</p>
-                        <p>${club.description}</p>
-                        <p>Посилання: ${linksHtml}</p>
-                    </div>
+        const clubDiv = document.createElement('div');
+        clubDiv.className = 'club';
+        clubDiv.id = club.id;
+        clubDiv.innerHTML = `
+            <div class="row">
+                <div class="col-md-3">
+                    ${club.picture ? `<img src="${club.picture}" alt="${club.title}" class="club-logo">` : ''}
+                </div>
+                <div class="col-md-9">
+                    <h3>${club.title}</h3>
+                    <p><strong>Місто:</strong> ${club.city}, ${club.country}</p>
+                    <p>${club.description}</p>
+                    <p>Посилання: ${linksHtml}</p>
                 </div>
             </div>
-        `);
+        `;
+        return clubDiv;
     }
     
     function formatDate(dateString) {
@@ -160,7 +164,7 @@ define(['jquery', './events', './about-us', './otherClubs', './ics-browserified'
     }
 
     function displayAboutUs() {
-        $('#about-us-content').html(aboutUs);
+        document.getElementById('about-us-content').innerHTML = aboutUs;
     }
 
     function init() {
