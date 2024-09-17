@@ -16,7 +16,7 @@ define(function () {
         {
             "id": "concert-october",
             "name": "Український стендап у Кельні",
-            "date": "2024-09-01",
+            "date": "2024-10-01",
             "time": "19:00",
             "location": "Theatercafe Filmdose, Zülpicher Str. 39, 50674 Köln",
             "linkToMaps": "https://maps.app.goo.gl/BPHbnNLBU87iRAmM9",
