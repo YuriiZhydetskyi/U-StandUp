@@ -9,7 +9,7 @@ define(['./events', './about-us', './otherClubs', './ics-browserified'], functio
         events.sort((a, b) => {
             if (a.isFavorite && !b.isFavorite) return -1;
             if (!a.isFavorite && b.isFavorite) return 1;
-            return new Date(a.date) - new Date(b.date);
+            return new Date(b.date) - new Date(a.date);
         });
     
         events.forEach(event => {
