@@ -77,6 +77,12 @@ footer {
     margin-bottom: 20px;
 }
 
+/* style for elements that have .hidden-event and .card class simulteniously */
+.hidden-event.card {
+    display: none;
+}
+
+
 @media (max-width: 991px) {
     .navbar-brand span {
         font-size: 18px;
