@@ -5,37 +5,53 @@ define(['./events', './about-us', './otherClubs', './ics-browserified'], functio
         const eventsContainer = document.getElementById('events-container');
         const pastEventsContainer = document.getElementById('past-events-container');
         const currentDate = new Date();
-    
+        const oneMonthAgo = new Date();
+        oneMonthAgo.setMonth(currentDate.getMonth() - 1);
+
         events.sort((a, b) => {
             if (a.isFavorite && !b.isFavorite) return -1;
             if (!a.isFavorite && b.isFavorite) return 1;
             return new Date(b.date) - new Date(a.date);
         });
-    
+
         events.forEach(event => {
             const eventDate = new Date(`${event.date}T${event.time}`);
             const eventElement = createEventElement(event);
-    
+
             if (event.isFavorite) {
                 eventElement.classList.add('favorite-event');
             }
-    
+
             if (eventDate >= currentDate) {
                 eventsContainer.appendChild(eventElement);
+            } else if (eventDate >= oneMonthAgo) {
+                pastEventsContainer.appendChild(eventElement);
             } else {
+                eventElement.classList.add('hidden-event');
                 pastEventsContainer.appendChild(eventElement);
             }
         });
+
+        const showMoreButton = document.createElement('button');
+        showMoreButton.textContent = 'Показати старіші події';
+        showMoreButton.className = 'btn btn-secondary';
+        showMoreButton.addEventListener('click', () => {
+            document.querySelectorAll('.hidden-event').forEach(event => {
+                event.classList.remove('hidden-event');
+            });
+            showMoreButton.style.display = 'none';
+        });
+        pastEventsContainer.appendChild(showMoreButton);
     }
 
     function createEventElement(event) {
         const locationElement = event.linkToMaps 
             ? `<p><strong>Місце:</strong> <a href="${event.linkToMaps}" target="_blank">${event.location}</a></p>` 
             : `<p><strong>Місце:</strong> ${event.location}</p>`;
-    
+
         const googleCalendarLink = createGoogleCalendarLink(event);
         const appleCalendarButton = createAppleCalendarButton(event);
-    
+
         const eventDiv = document.createElement('div');
         eventDiv.className = `event card mb-4 ${event.isFavorite ? 'border-warning bg-warning bg-opacity-10' : ''}`;
         eventDiv.id = event.id;
@@ -140,7 +156,7 @@ define(['./events', './about-us', './otherClubs', './ics-browserified'], functio
 
     function createClubElement(club) {
         const linksHtml = club.links.map(link => `<a href="${link.url}" target="_blank">${link.label}</a>`).join(' | ');
-    
+
         const clubDiv = document.createElement('div');
         clubDiv.className = 'club';
         clubDiv.id = club.id;
