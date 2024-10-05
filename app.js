@@ -13,7 +13,7 @@ define(['./events', './about-us', './otherClubs', './ics-browserified'], functio
         });
     
         events.forEach(event => {
-            const eventDate = new Date(event.date);
+            const eventDate = new Date(`${event.date}T${event.time}`);
             const eventElement = createEventElement(event);
     
             if (event.isFavorite) {
