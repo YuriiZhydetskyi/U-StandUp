@@ -1,5 +1,18 @@
 define(function () {
     const events = [
+{
+            "id": "meeting-22",
+            "name": "Читка",
+            "date": "2024-10-27",
+            "time": "16:00",
+            "location": "Мовна школа на Clevischer Ring 7, 51065 Köln",
+            "locationForCalendar": "Clevischer Ring 7, 51065 Köln",
+            "linkToMaps": "https://maps.app.goo.gl/v5argQe8wJKerXSS8?g_st=it",
+            "description": "Ця читка буде у приміщенні мовної школи. Будемо писати новий матеріал для наступного висту. Зверніть увагу, що ця читка почнеться на годину раніше ніж зазвичай.",
+            "image": "",
+            "googleFormLink": "",
+            "isFavorite": false
+        },
         {
             "id": "meeting-21",
             "name": "Читка",
