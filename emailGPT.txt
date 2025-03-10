@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Запрошуємо на стендап Віталія Абрамова!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 10px 0;
+        }
+        .poster {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .content {
+            font-size: 16px;
+            line-height: 1.5;
+            padding: 0 20px 20px;
+        }
+        .cta-button {
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+            background-color: #FF5A5F;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px auto;
+        }
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">Український стендап у Кельні</div>
+        <img src="{{poster_image_url}}" alt="Poster" class="poster">
+        <div class="content">
+            <p>Привіт!</p>
+            <p>Можливо, ти ще не бачив виступів Віталія Абрамова. І це не дивно – він любить бути загадковим. Але часи змінюються!</p>
+            <p><strong>Вже у вівторок, 18 березня, Віталій Абрамов презентує свій сольний стендап у Кельні.</strong></p>
+            <p>Ти почуєш:
+                <ul>
+                    <li>чому ти досі не бачив Віталія,</li>
+                    <li>про досвід учасника «Ліги Сміху»,</li>
+                    <li>як це бути гумористом з 8-річним досвідом,</li>
+                    <li>кумедні історії про парадокси життя, роботи та сім'ї.</li>
+                </ul>
+            </p>
+            <p><strong>Коли?</strong> Вівторок, 18 березня о 19:00</p>
+            <p><strong>Де?</strong> Filmdose Cafe, Zülpicher Str. 39, 50674 Köln</p>
+            <div style="text-align: center;">
+                <a href="https://secure.wayforpay.com/payment/abramov" class="cta-button">Купити квиток</a>
+            </p>
+        </div>
+        <div class="footer">
+            До зустрічі! Буде весело 😉<br>
+            Твій український стендап-клуб у Кельні
+        </div>
+    </div>
+</body>
+</html>

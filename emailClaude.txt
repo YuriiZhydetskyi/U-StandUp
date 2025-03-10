@@ -1,0 +1,126 @@
+const emailHtml = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Запрошення на сольний стендап Віталія Абрамова</title>
+    <style type="text/css">
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+        
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', Arial, sans-serif;
+            line-height: 1.6;
+        }
+        
+        @media screen and (max-width: 600px) {
+            .container {
+                width: 100% !important;
+            }
+            .content {
+                padding: 15px !important;
+            }
+            .btn {
+                display: block !important;
+                width: 80% !important;
+                margin: 0 auto !important;
+            }
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f7f7f7;">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
+        <tr>
+            <td align="center">
+                <!-- Email Container -->
+                <table class="container" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse; background-color: #ffffff; border-radius: 8px; overflow: hidden; margin-top: 20px; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.05);">
+                    <!-- Header -->
+                    <tr>
+                        <td align="center" style="background-color: #FFD100; padding: 25px 0;">
+                            <h1 style="color: #333333; margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 1px;">Сольний Стендап</h1>
+                        </td>
+                    </tr>
+                    
+                    <!-- Poster Image -->
+                    <tr>
+                        <td align="center" style="padding: 0;">
+                            <img src="[POSTER_URL]" alt="Віталій Абрамов - Сольний стендап" width="600" style="display: block; border: 0; max-width: 100%;">
+                        </td>
+                    </tr>
+                    
+                    <!-- Personal Greeting -->
+                    <tr>
+                        <td class="content" style="padding: 30px 40px 10px 40px;">
+                            <p style="margin-top: 0; margin-bottom: 20px; color: #333333; font-size: 16px;">Привіт, {username}!</p>
+                            
+                            <p style="margin-bottom: 20px; color: #333333; font-size: 16px;">Можливо, ти ще не бачив(ла) Віталія Абрамова. Це не просто так. Це тому, що він так вирішив. Але часи змінюються.</p>
+                            
+                            <p style="margin-bottom: 20px; color: #333333; font-size: 16px;"><strong>Вже у вівторок, 18 березня</strong>, у Кельні буде сольний стендап Віталія, який організовує наш клуб.</p>
+                            
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; margin-bottom: 25px; background-color: #f9f9f9; padding: 15px; border-radius: 6px;">
+                                <tr>
+                                    <td>
+                                        <ul style="color: #333333; font-size: 16px; padding-left: 20px; margin: 10px 0;">
+                                            <li style="margin-bottom: 10px;">📍 Що робити з параноєю незакритих дверей?</li>
+                                            <li style="margin-bottom: 10px;">📍 Як змінюється секс після шлюбу?</li>
+                                            <li style="margin-bottom: 10px;">📍 Чому в дитинстві Віталія було аж дві матері?</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <p style="margin-bottom: 20px; color: #333333; font-size: 16px;">Відповіді на всі ці питання — у стендапі Віталія.</p>
+                            
+                            <p style="margin-bottom: 20px; color: #333333; font-size: 16px;"><strong>👉 А це точно буде смішно?</strong> Так, бо у Віталія 8 років досвіду в гуморі! Він грав у «Лізі Сміху», а зараз — виступає на найкращих стендап-майданчиках Європи.</p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Event Details -->
+                    <tr>
+                        <td align="center" style="padding: 10px 40px 30px 40px;">
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; margin-bottom: 30px; background-color: #333333; padding: 20px; border-radius: 6px; color: #ffffff;">
+                                <tr>
+                                    <td align="center" style="padding-bottom: 15px;">
+                                        <p style="margin: 0; font-size: 18px; font-weight: bold;">Деталі події:</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" style="padding-bottom: 10px;">
+                                        <p style="margin: 0; font-size: 16px;">📆 <strong>Коли:</strong> 18 березня, 19:00</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" style="padding-bottom: 15px;">
+                                        <p style="margin: 0; font-size: 16px;">📌 <strong>Де:</strong> Zülpicher Str. 39, 50674 Köln</p>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <!-- Call to Action -->
+                            <table border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 20px;">
+                                <tr>
+                                    <td align="center" bgcolor="#FFD100" style="border-radius: 30px;">
+                                        <a href="https://secure.wayforpay.com/payment/abramov" target="_blank" class="btn" style="color: #333333; display: inline-block; font-size: 18px; font-weight: bold; padding: 16px 36px; text-decoration: none; text-transform: uppercase; letter-spacing: 1px;">Купити квитки</a>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <p style="color: #666666; font-size: 16px; margin-bottom: 0;">Буде весело, гарантуємо!</p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td align="center" style="padding: 20px; background-color: #f0f0f0; color: #999999; font-size: 14px;">
+                            <p style="margin: 0 0 10px 0;">Клуб «У стендап»</p>
+                            <p style="margin: 0 0 10px 0;">Кельн, Німеччина</p>
+                            <p style="margin: 0;"><a href="#unsubscribe" style="color: #666666; text-decoration: underline;">Відписатися від розсилки</a></p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>`;
