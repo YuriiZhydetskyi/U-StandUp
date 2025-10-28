@@ -3,15 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
     <title>Дякуємо за купівлю квитка | Осінній Стендап</title>
     <meta name="description" content="Дякуємо за купівлю квитка на Осінній Стендап у Кьольні">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/img/favicon full.png">
-    <link rel="shortcut icon" type="image/png" href="/img/favicon full.png">
+    <link rel="icon" type="image/png" href="/img/favicon-full.png">
+    <link rel="shortcut icon" type="image/png" href="/img/favicon-full.png">
     
     <!-- Meta Pixel Code -->
     <script>
+    // Функція для отримання параметрів з URL
+    function getUrlParams() {
+        const params = new URLSearchParams(window.location.search);
+        return {
+            success: params.get('success') || params.get('ok') || params.get('status'),
+            amount: params.get('amount') || params.get('value') || '15.00',
+            currency: params.get('currency') || 'EUR',
+            orderId: params.get('orderReference') || params.get('order_id') || 'order_' + Date.now(),
+            reason: params.get('reason'),
+            // WayForPay може передавати ці параметри
+            reasonCode: params.get('reasonCode')
+        };
+    }
+
+    // Перевіряємо чи це валідний success редірект
+    function isValidPurchase() {
+        const params = getUrlParams();
+        
+        // Перевіряємо чи є параметр success/ok/status
+        const hasSuccessParam = params.success !== null;
+        
+        // Перевіряємо чи це не помилка
+        const isNotError = !params.reason && !params.reasonCode;
+        
+        // Перевіряємо sessionStorage щоб не спрацювало повторно
+        const purchaseTracked = sessionStorage.getItem('fb_purchase_tracked');
+        
+        return hasSuccessParam && isNotError && !purchaseTracked;
+    }
+
+    // Ініціалізуємо Facebook Pixel
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -20,13 +52,65 @@
     t.src=v;s=b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
+    
+    // Ініціалізація Pixel
     fbq('init', '3052217368299588');
+    
+    // Завжди відправляємо PageView
     fbq('track', 'PageView');
-    fbq('track', 'Purchase', {
-        value: 15.00,
-        currency: 'EUR',
-        content_name: 'Осінній Стендап',
-        content_type: 'product'
+    
+    // Відправляємо Purchase тільки якщо це валідна покупка
+    if (isValidPurchase()) {
+        const params = getUrlParams();
+        
+        console.log('✅ Facebook Pixel: Tracking Purchase', {
+            value: parseFloat(params.amount),
+            currency: params.currency,
+            order_id: params.orderId
+        });
+        
+        fbq('track', 'Purchase', {
+            value: parseFloat(params.amount),
+            currency: params.currency,
+            content_name: 'Осінній Стендап',
+            content_type: 'product',
+            content_ids: [params.orderId],
+            num_items: 1
+        });
+        
+        // Також відправляємо ViewContent для кращого трекінгу
+        fbq('track', 'ViewContent', {
+            content_name: 'Осінній Стендап - Thank You Page',
+            content_category: 'Standup Show',
+            content_ids: [params.orderId],
+            content_type: 'product',
+            value: parseFloat(params.amount),
+            currency: params.currency
+        });
+        
+        // Зберігаємо що вже tracked
+        sessionStorage.setItem('fb_purchase_tracked', 'true');
+        sessionStorage.setItem('fb_purchase_time', new Date().toISOString());
+        sessionStorage.setItem('fb_order_id', params.orderId);
+    } else {
+        const params = getUrlParams();
+        console.log('⚠️ Facebook Pixel: Purchase NOT tracked', {
+            hasSuccessParam: params.success !== null,
+            reason: params.reason,
+            reasonCode: params.reasonCode,
+            alreadyTracked: sessionStorage.getItem('fb_purchase_tracked') === 'true'
+        });
+    }
+    
+    // Перевірка чи Pixel завантажився
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            if (typeof fbq === 'function') {
+                console.log('✅ Facebook Pixel loaded successfully');
+            } else {
+                console.error('❌ Facebook Pixel failed to load (AdBlock or network issue?)');
+            }
+        }, 2000);
     });
     </script>
     <noscript>
@@ -643,6 +727,7 @@ body {
     </div>
     
     <script>
+
 // ==========================================
 // Confetti Animation
 // ==========================================
@@ -893,8 +978,23 @@ function showCopyNotification() {
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
+    
     new ConfettiAnimation();
     new FallingLeaves();
+    
+    // URL параметри для дебагу
+    const params = new URLSearchParams(window.location.search);
+    const urlParams = {};
+    for (const [key, value] of params) {
+        urlParams[key] = value;
+    }
+    
+    // Показуємо tracking status
+    const trackingInfo = {
+        purchaseTracked: sessionStorage.getItem('fb_purchase_tracked'),
+        purchaseTime: sessionStorage.getItem('fb_purchase_time'),
+        orderId: sessionStorage.getItem('fb_order_id')
+    };
     
     const detailItems = document.querySelectorAll('.detail-item');
     detailItems.forEach(item => {
@@ -908,7 +1008,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
-    console.log('🎭 Thank You Page загружено успішно!');
+    console.log('🎭 Thank You Page завантажено успішно!');
 });
     </script>
 </body>
