@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Дякуємо за купівлю квитка | Осінній Стендап</title>
+    <meta name="description" content="Дякуємо за купівлю квитка на Осінній Стендап у Кьольні">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/img/favicon-full.png">
+    <link rel="shortcut icon" type="image/png" href="/img/favicon-full.png">
+    
+    <!-- Meta Pixel Code -->
+    <script>
+    // Функція для отримання параметрів з URL
+    function getUrlParams() {
+        const params = new URLSearchParams(window.location.search);
+        return {
+            success: params.get('success') || params.get('ok') || params.get('status'),
+            amount: params.get('amount') || params.get('value') || '15.00',
+            currency: params.get('currency') || 'EUR',
+            orderId: params.get('orderReference') || params.get('order_id') || 'order_' + Date.now(),
+            reason: params.get('reason'),
+            reasonCode: params.get('reasonCode')
+        };
+    }
+
+    // Перевіряємо чи це валідний success редірект
+    function isValidPurchase() {
+        const params = getUrlParams();
+        const hasSuccessParam = params.success !== null;
+        const isNotError = !params.reason && !params.reasonCode;
+        const purchaseTracked = sessionStorage.getItem('fb_purchase_tracked');
+        return hasSuccessParam && isNotError && !purchaseTracked;
+    }
+
+    // Ініціалізуємо Facebook Pixel
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    
+    fbq('init', '3052217368299588');
+    fbq('track', 'PageView');
+    
+    if (isValidPurchase()) {
+        const params = getUrlParams();
+        console.log('✅ Facebook Pixel: Tracking Purchase', {
+            value: parseFloat(params.amount),
+            currency: params.currency,
+            order_id: params.orderId
+        });
+        
+        fbq('track', 'Purchase', {
+            value: parseFloat(params.amount),
+            currency: params.currency,
+            content_name: 'Осінній Стендап',
+            content_type: 'product',
+            content_ids: [params.orderId],
+            num_items: 1
+        });
+        
+        fbq('track', 'ViewContent', {
+            content_name: 'Осінній Стендап - Thank You Page',
+            content_category: 'Standup Show',
+            content_ids: [params.orderId],
+            content_type: 'product',
+            value: parseFloat(params.amount),
+            currency: params.currency
+        });
+        
+        sessionStorage.setItem('fb_purchase_tracked', 'true');
+        sessionStorage.setItem('fb_purchase_time', new Date().toISOString());
+        sessionStorage.setItem('fb_order_id', params.orderId);
+    } else {
+        const params = getUrlParams();
+        console.log('⚠️ Facebook Pixel: Purchase NOT tracked', {
+            hasSuccessParam: params.success !== null,
+            reason: params.reason,
+            reasonCode: params.reasonCode,
+            alreadyTracked: sessionStorage.getItem('fb_purchase_tracked') === 'true'
+        });
+    }
+    
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            if (typeof fbq === 'function') {
+                console.log('✅ Facebook Pixel loaded successfully');
+            } else {
+                console.error('❌ Facebook Pixel failed to load (AdBlock or network issue?)');
+            }
+        }, 2000);
+    });
+    </script>
+    <noscript>
+        <img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id=3052217368299588&ev=PageView&noscript=1"/>
+    </noscript>
+    <!-- End Meta Pixel Code -->
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
+    
+    <style>
+/* === Color Palette === */
+:root {
+    --primary-blue: #5B9BD5;
+    --primary-yellow: #F5D76E;
+    --soft-blue: #7DB3E8;
+    --soft-yellow: #FFE699;
+    --light-blue: #E8F3FC;
+    --light-yellow: #FFF8E1;
+    --dark-text: #2C3E50;
+    --light-text: #6C757D;
+    --white: #FFFFFF;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --success-green: #52C41A;
+    --telegram-blue: #0088cc;
+    --whatsapp-green: #25D366;
+}
+
+/* === Base Styles === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, var(--light-blue) 0%, var(--light-yellow) 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* === Leaves Animation Container === */
+.leaves-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.leaf {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: var(--primary-yellow);
+    opacity: 0.6;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.6;
+    }
+    90% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* === Confetti Canvas === */
+#confetti-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* === Container === */
+.container {
+    max-width: 700px;
+    width: 100%;
+    position: relative;
+    z-index: 3;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* === Content Card === */
+.content-card {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 50px 40px;
+    box-shadow: 0 20px 60px var(--shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+.content-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--primary-blue), var(--primary-yellow));
+}
+
+/* === Success Icon === */
+.success-icon {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.checkmark {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+}
+
+.checkmark-circle {
+    stroke: var(--success-green);
+    stroke-width: 2;
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark-check {
+    stroke: var(--success-green);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.6s forwards;
+}
+
+@keyframes stroke {
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* === Typography === */
+.title {
+    font-family: 'Caveat', cursive;
+    font-size: 3rem;
+    font-weight: 700;
+    text-align: center;
+    background: linear-gradient(135deg, var(--primary-blue), var(--primary-yellow));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+    animation: titlePulse 2s ease-in-out infinite;
+}
+
+@keyframes titlePulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.subtitle {
+    font-size: 1.5rem;
+    color: var(--dark-text);
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+/* === Thank You Message === */
+.thank-you-message {
+    background: linear-gradient(135deg, var(--light-blue), var(--light-yellow));
+    padding: 25px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    border-left: 4px solid var(--primary-blue);
+}
+
+.thank-you-message p {
+    color: var(--dark-text);
+    line-height: 1.7;
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+.thank-you-message p:last-child {
+    margin-bottom: 0;
+}
+
+.instagram-link {
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.instagram-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary-yellow);
+    transition: width 0.3s ease;
+}
+
+.instagram-link:hover::after {
+    width: 100%;
+}
+
+.instagram-link:hover {
+    color: var(--soft-blue);
+}
+
+/* === Event Details === */
+.event-details {
+    background: var(--white);
+    padding: 25px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    border: 2px solid var(--light-blue);
+}
+
+.event-details h3 {
+    color: var(--primary-blue);
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--light-blue);
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: var(--light-text);
+    font-size: 0.95rem;
+}
+
+.detail-value {
+    color: var(--dark-text);
+    font-weight: 600;
+    text-align: right;
+    font-size: 0.95rem;
+}
+
+/* === Action Buttons === */
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.invitation-section {
+    margin-bottom: 30px;
+}
+
+.btn {
+    flex: 1;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.btn-primary {
+    background: var(--primary-blue);
+    color: var(--white);
+    box-shadow: 0 4px 15px rgba(91, 155, 213, 0.3);
+}
+
+.btn-primary:hover {
+    background: var(--soft-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(91, 155, 213, 0.4);
+}
+
+.btn-secondary {
+    background: var(--primary-yellow);
+    color: var(--dark-text);
+    box-shadow: 0 4px 15px rgba(245, 215, 110, 0.3);
+}
+
+.btn-secondary:hover {
+    background: var(--soft-yellow);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(245, 215, 110, 0.4);
+}
+
+.btn-invitation {
+    width: 100%;
+    background: linear-gradient(135deg, var(--primary-blue), var(--primary-yellow));
+    color: var(--white);
+    box-shadow: 0 4px 15px rgba(91, 155, 213, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-invitation::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-invitation:hover::before {
+    left: 100%;
+}
+
+.btn-invitation:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(91, 155, 213, 0.5);
+}
+
+/* === Share Section === */
+.share-section {
+    text-align: center;
+    padding: 25px 0;
+    border-top: 2px dashed var(--light-blue);
+}
+
+.share-text {
+    color: var(--dark-text);
+    font-size: 1.05rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.share-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.share-btn {
+    padding: 12px 24px;
+    border: none;
+    background: var(--white);
+    color: var(--white);
+    border-radius: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.share-btn.telegram {
+    background: var(--telegram-blue);
+}
+
+.share-btn.telegram:hover {
+    background: #006699;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 136, 204, 0.3);
+}
+
+.share-btn.whatsapp {
+    background: var(--whatsapp-green);
+}
+
+.share-btn.whatsapp:hover {
+    background: #20ba5a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(37, 211, 102, 0.3);
+}
+
+.share-btn.copy {
+    background: var(--primary-blue);
+}
+
+.share-btn.copy:hover {
+    background: var(--soft-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(91, 155, 213, 0.3);
+}
+
+.share-icon {
+    font-size: 1.2rem;
+}
+
+/* === Footer Note === */
+.footer-note {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.footer-note p {
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem;
+    color: var(--primary-blue);
+    font-weight: 600;
+}
+
+/* === Responsive Design === */
+@media (max-width: 768px) {
+    .content-card {
+        padding: 40px 25px;
+        border-radius: 20px;
+    }
+    
+    .title {
+        font-size: 2.5rem;
+    }
+    
+    .subtitle {
+        font-size: 1.2rem;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+    
+    .detail-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .detail-value {
+        text-align: left;
+    }
+    
+    .share-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .share-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    
+    .content-card {
+        padding: 30px 20px;
+    }
+    
+    .title {
+        font-size: 2rem;
+    }
+    
+    .subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .checkmark {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .thank-you-message,
+    .event-details {
+        padding: 20px;
+    }
+}
+
+/* === Animation Classes === */
+.fade-in {
+    animation: fadeIn 0.6s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+}
+    </style>
+</head>
+<body>
+    <!-- Animated autumn leaves background -->
+    <div class="leaves-container" id="leavesContainer"></div>
+    
+    <!-- Confetti animation on load -->
+    <canvas id="confetti-canvas"></canvas>
+    
+    <div class="container">
+        <div class="content-card">
+            <!-- Success icon with animation -->
+            <div class="success-icon">
+                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+                    <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                </svg>
+            </div>
+            
+            <h1 class="title">Вітаємо! 🎭</h1>
+            <h2 class="subtitle">Ваш квиток придбано</h2>
+            
+            <div class="thank-you-message">
+                <p>Дякуємо, що долучаєтесь до розвитку українського стендапу у Кьольні. Беріть з собою друзів, а ми зробимо все, що у наших силах, щоб ви гарно провели цей час.</p>
+                <p>Якщо маєте якісь пропозиції — не соромтесь писати нам у <a href="https://www.instagram.com/u_standup_cologne/" target="_blank" class="instagram-link">Інстаграмі</a>. Ми дуже раді зворотному зв'язку.</p>
+            </div>
+            
+            <div class="event-details">
+                <h3>📅 Деталі події</h3>
+                <div class="detail-item">
+                    <span class="detail-label">Подія:</span>
+                    <span class="detail-value">Осінній Стендап</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Дата:</span>
+                    <span class="detail-value">3 листопада 2025</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Час:</span>
+                    <span class="detail-value">19:00</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Місце:</span>
+                    <span class="detail-value">Theatercafé Filmdose</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Адреса:</span>
+                    <span class="detail-value">Zülpicher Str. 39, 50674 Köln</span>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <a href="https://maps.app.goo.gl/wvVGfRpQD9jEhhj76" target="_blank" class="btn btn-primary">
+                    📍 Відкрити на карті
+                </a>
+                <a href="https://www.instagram.com/u_standup_cologne/" target="_blank" class="btn btn-secondary">
+                    📱 Наш Instagram
+                </a>
+            </div>
+            
+            <!-- Invitation Creator Button -->
+            <div class="invitation-section">
+                <button class="btn btn-invitation" onclick="openInvitationCreator()">
+                    ✨ Створити креативне запрошення для друзів
+                </button>
+            </div>
+            
+            <div class="share-section">
+                <p class="share-text">Запроси друзів на стендап! 🎤</p>
+                <div class="share-buttons">
+                    <button class="share-btn telegram" onclick="shareToTelegram()">
+                        <span class="share-icon">📱</span>
+                        <span>Telegram</span>
+                    </button>
+                    <button class="share-btn whatsapp" onclick="shareToWhatsApp()">
+                        <span class="share-icon">💬</span>
+                        <span>WhatsApp</span>
+                    </button>
+                    <button class="share-btn copy" onclick="copyLink()">
+                        <span class="share-icon">🔗</span>
+                        <span>Копіювати</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="footer-note">
+                <p>До зустрічі на стендапі! 🎤✨</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Invitation Creator Modal (буде додано через JS) -->
+    <div id="invitation-modal"></div>
+    
+    <script src="invitation-creator.js"></script>
+    <script>
+
+// ==========================================
+// Confetti Animation
+// ==========================================
+
+class ConfettiAnimation {
+    constructor() {
+        this.canvas = document.getElementById('confetti-canvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        this.colors = ['#5B9BD5', '#F5D76E', '#7DB3E8', '#FFE699', '#52C41A'];
+        
+        this.resizeCanvas();
+        window.addEventListener('resize', () => this.resizeCanvas());
+        
+        this.init();
+    }
+    
+    resizeCanvas() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+    }
+    
+    init() {
+        for (let i = 0; i < 100; i++) {
+            this.particles.push({
+                x: Math.random() * this.canvas.width,
+                y: Math.random() * this.canvas.height - this.canvas.height,
+                r: Math.random() * 6 + 2,
+                d: Math.random() * 100,
+                color: this.colors[Math.floor(Math.random() * this.colors.length)],
+                tilt: Math.floor(Math.random() * 10) - 10,
+                tiltAngleIncremental: Math.random() * 0.07 + 0.05,
+                tiltAngle: 0
+            });
+        }
+        
+        this.animate();
+        
+        setTimeout(() => {
+            this.stop();
+        }, 5000);
+    }
+    
+    draw() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        this.particles.forEach((p, i) => {
+            this.ctx.beginPath();
+            this.ctx.lineWidth = p.r / 2;
+            this.ctx.strokeStyle = p.color;
+            this.ctx.moveTo(p.x + p.tilt + p.r, p.y);
+            this.ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r);
+            this.ctx.stroke();
+        });
+    }
+    
+    update() {
+        this.particles.forEach((p, i) => {
+            p.tiltAngle += p.tiltAngleIncremental;
+            p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
+            p.x += Math.sin(p.d);
+            p.tilt = Math.sin(p.tiltAngle - i / 3) * 15;
+            
+            if (p.y > this.canvas.height) {
+                this.particles[i] = {
+                    x: Math.random() * this.canvas.width,
+                    y: -20,
+                    r: p.r,
+                    d: p.d,
+                    color: p.color,
+                    tilt: Math.floor(Math.random() * 10) - 10,
+                    tiltAngleIncremental: p.tiltAngleIncremental,
+                    tiltAngle: p.tiltAngle
+                };
+            }
+        });
+    }
+    
+    animate() {
+        this.draw();
+        this.update();
+        this.animationFrame = requestAnimationFrame(() => this.animate());
+    }
+    
+    stop() {
+        if (this.animationFrame) {
+            cancelAnimationFrame(this.animationFrame);
+        }
+        
+        let opacity = 1;
+        const fadeOut = setInterval(() => {
+            opacity -= 0.05;
+            this.canvas.style.opacity = opacity;
+            
+            if (opacity <= 0) {
+                clearInterval(fadeOut);
+                this.canvas.style.display = 'none';
+            }
+        }, 50);
+    }
+}
+
+// ==========================================
+// Falling Autumn Leaves
+// ==========================================
+
+class FallingLeaves {
+    constructor() {
+        this.container = document.getElementById('leavesContainer');
+        this.leafCount = 15;
+        this.init();
+    }
+    
+    createLeaf() {
+        const leaf = document.createElement('div');
+        leaf.className = 'leaf';
+        
+        leaf.style.left = Math.random() * 100 + '%';
+        
+        const duration = Math.random() * 10 + 15;
+        leaf.style.animationDuration = duration + 's';
+        
+        const delay = Math.random() * 10;
+        leaf.style.animationDelay = delay + 's';
+        
+        const size = Math.random() * 15 + 15;
+        leaf.style.width = size + 'px';
+        leaf.style.height = size + 'px';
+        
+        const colors = ['#F5D76E', '#FFE699', '#FFD966', '#F4B942', '#FFA500'];
+        leaf.style.background = colors[Math.floor(Math.random() * colors.length)];
+        
+        return leaf;
+    }
+    
+    init() {
+        for (let i = 0; i < this.leafCount; i++) {
+            const leaf = this.createLeaf();
+            this.container.appendChild(leaf);
+        }
+    }
+}
+
+// ==========================================
+// Share Functions
+// ==========================================
+
+const SHARE_URL = 'https://secure.wayforpay.com/payment/herbstcologne';
+const SHARE_TEXT = '🎭 Приєднуйся до Осіннього Стендапу у Кьольні! 3 листопада о 19:00. Український стендап, гарна атмосфера та море сміху!';
+
+function shareToTelegram() {
+    const url = encodeURIComponent(SHARE_URL);
+    const text = encodeURIComponent(SHARE_TEXT);
+    const telegramUrl = `https://t.me/share/url?url=${url}&text=${text}`;
+    window.open(telegramUrl, '_blank', 'width=600,height=600');
+}
+
+function shareToWhatsApp() {
+    const text = encodeURIComponent(`${SHARE_TEXT}\n\n${SHARE_URL}`);
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    let whatsappUrl;
+    if (isMobile) {
+        whatsappUrl = `whatsapp://send?text=${text}`;
+    } else {
+        whatsappUrl = `https://web.whatsapp.com/send?text=${text}`;
+    }
+    
+    window.open(whatsappUrl, '_blank');
+}
+
+function copyLink() {
+    const textToCopy = `${SHARE_TEXT}\n\n${SHARE_URL}`;
+    
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            showCopyNotification();
+        }).catch(err => {
+            console.error('Failed to copy:', err);
+            fallbackCopyTextToClipboard(textToCopy);
+        });
+    } else {
+        fallbackCopyTextToClipboard(textToCopy);
+    }
+}
+
+function fallbackCopyTextToClipboard(text) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed";
+    textArea.style.left = "-999999px";
+    textArea.style.top = "0";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+        document.execCommand('copy');
+        showCopyNotification();
+    } catch (err) {
+        console.error('Fallback: Could not copy text:', err);
+        prompt('Скопіюйте це повідомлення:', text);
+    }
+    
+    document.body.removeChild(textArea);
+}
+
+function showCopyNotification() {
+    const notification = document.createElement('div');
+    notification.innerHTML = '✓ Скопійовано!<br><small>Тепер можна поділитися з друзями</small>';
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #52C41A;
+        color: white;
+        padding: 15px 25px;
+        border-radius: 10px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        z-index: 9999;
+        animation: slideInRight 0.3s ease-out;
+        text-align: center;
+        line-height: 1.5;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.3s ease-out';
+        setTimeout(() => {
+            if (document.body.contains(notification)) {
+                document.body.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
+}
+
+// ==========================================
+// Initialize on DOM Load
+// ==========================================
+
+document.addEventListener('DOMContentLoaded', () => {
+    new ConfettiAnimation();
+    new FallingLeaves();
+    
+    const detailItems = document.querySelectorAll('.detail-item');
+    detailItems.forEach(item => {
+        item.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateX(5px)';
+            this.style.transition = 'transform 0.3s ease';
+        });
+        
+        item.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateX(0)';
+        });
+    });
+    
+    console.log('🎭 Thank You Page завантажено успішно!');
+});
+    </script>
+</body>
+</html>
