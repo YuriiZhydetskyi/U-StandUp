@@ -10,6 +10,24 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/img/favicon-full.png">
     <link rel="shortcut icon" type="image/png" href="/img/favicon-full.png">
+
+    <!-- Google Tag Manager -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      // Базовий контекст сторінки подяки
+      window.dataLayer.push({
+        event: 'page_view',
+        page_type: 'thank_you'
+      });
+    </script>
+    <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-5J239V2K');
+    </script>
+    <!-- End Google Tag Manager -->
     
     <!-- Meta Pixel Code -->
     <script>
@@ -31,7 +49,7 @@
     function isValidPurchase() {
         const params = getUrlParams();
         
-        // Перевіряємо чи є параметр success/ok/status
+        // Перевіряємо чи є параметр success/ок/status
         const hasSuccessParam = params.success !== null;
         
         // Перевіряємо чи це не помилка
@@ -68,7 +86,24 @@
             currency: params.currency,
             order_id: params.orderId
         });
-        
+
+        // --- GTM/GA4 purchase event через dataLayer ---
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: 'purchase',
+          value: parseFloat(params.amount),
+          currency: params.currency,
+          transaction_id: params.orderId,
+          items: [{
+            item_name: 'Осінній Стендап',
+            item_category: 'Standup Show',
+            quantity: 1,
+            price: parseFloat(params.amount),
+            item_id: params.orderId
+          }]
+        });
+        // ----------------------------------------------
+
         fbq('track', 'Purchase', {
             value: parseFloat(params.amount),
             currency: params.currency,
@@ -645,6 +680,13 @@ body {
     </style>
 </head>
 <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5J239V2K"
+              height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
     <!-- Animated autumn leaves background -->
     <div class="leaves-container" id="leavesContainer"></div>
     
