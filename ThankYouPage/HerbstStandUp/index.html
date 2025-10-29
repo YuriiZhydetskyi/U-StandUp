@@ -10,24 +10,6 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/img/favicon-full.png">
     <link rel="shortcut icon" type="image/png" href="/img/favicon-full.png">
-
-    <!-- Google Tag Manager -->
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      // Базовий контекст сторінки подяки
-      window.dataLayer.push({
-        event: 'page_view',
-        page_type: 'thank_you'
-      });
-    </script>
-    <script>
-      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-5J239V2K');
-    </script>
-    <!-- End Google Tag Manager -->
     
     <!-- Meta Pixel Code -->
     <script>
@@ -40,7 +22,6 @@
             currency: params.get('currency') || 'EUR',
             orderId: params.get('orderReference') || params.get('order_id') || 'order_' + Date.now(),
             reason: params.get('reason'),
-            // WayForPay може передавати ці параметри
             reasonCode: params.get('reasonCode')
         };
     }
@@ -48,16 +29,9 @@
     // Перевіряємо чи це валідний success редірект
     function isValidPurchase() {
         const params = getUrlParams();
-        
-        // Перевіряємо чи є параметр success/ок/status
         const hasSuccessParam = params.success !== null;
-        
-        // Перевіряємо чи це не помилка
         const isNotError = !params.reason && !params.reasonCode;
-        
-        // Перевіряємо sessionStorage щоб не спрацювало повторно
         const purchaseTracked = sessionStorage.getItem('fb_purchase_tracked');
-        
         return hasSuccessParam && isNotError && !purchaseTracked;
     }
 
@@ -71,39 +45,17 @@
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
     
-    // Ініціалізація Pixel
     fbq('init', '3052217368299588');
-    
-    // Завжди відправляємо PageView
     fbq('track', 'PageView');
     
-    // Відправляємо Purchase тільки якщо це валідна покупка
     if (isValidPurchase()) {
         const params = getUrlParams();
-        
         console.log('✅ Facebook Pixel: Tracking Purchase', {
             value: parseFloat(params.amount),
             currency: params.currency,
             order_id: params.orderId
         });
-
-        // --- GTM/GA4 purchase event через dataLayer ---
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-          event: 'purchase',
-          value: parseFloat(params.amount),
-          currency: params.currency,
-          transaction_id: params.orderId,
-          items: [{
-            item_name: 'Осінній Стендап',
-            item_category: 'Standup Show',
-            quantity: 1,
-            price: parseFloat(params.amount),
-            item_id: params.orderId
-          }]
-        });
-        // ----------------------------------------------
-
+        
         fbq('track', 'Purchase', {
             value: parseFloat(params.amount),
             currency: params.currency,
@@ -113,7 +65,6 @@
             num_items: 1
         });
         
-        // Також відправляємо ViewContent для кращого трекінгу
         fbq('track', 'ViewContent', {
             content_name: 'Осінній Стендап - Thank You Page',
             content_category: 'Standup Show',
@@ -123,7 +74,6 @@
             currency: params.currency
         });
         
-        // Зберігаємо що вже tracked
         sessionStorage.setItem('fb_purchase_tracked', 'true');
         sessionStorage.setItem('fb_purchase_time', new Date().toISOString());
         sessionStorage.setItem('fb_order_id', params.orderId);
@@ -137,7 +87,6 @@
         });
     }
     
-    // Перевірка чи Pixel завантажився
     window.addEventListener('load', function() {
         setTimeout(function() {
             if (typeof fbq === 'function') {
@@ -443,6 +392,10 @@ body {
 .action-buttons {
     display: flex;
     gap: 15px;
+    margin-bottom: 20px;
+}
+
+.invitation-section {
     margin-bottom: 30px;
 }
 
@@ -483,6 +436,86 @@ body {
     background: var(--soft-yellow);
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(245, 215, 110, 0.4);
+}
+
+.btn-invitation {
+    width: 100%;
+    /* New vibrant gradient to attract attention */
+    background: linear-gradient(90deg, #8E2DE2 0%, #FF416C 100%);
+    color: var(--white);
+    /* stronger base shadow and soft glow */
+    box-shadow: 0 6px 20px rgba(255, 65, 108, 0.25), 0 0 0 0 rgba(142, 45, 226, 0.0);
+    position: relative;
+    overflow: hidden;
+    border: none;
+    /* subtle pulsing animation so it feels alive */
+    animation: invitePulse 2500ms ease-in-out infinite;
+    transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.btn-invitation::before {
+    /* glossy streak that slides on hover */
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.28) 50%, rgba(255,255,255,0) 100%);
+    transform: skewX(-20deg);
+    transition: left 420ms cubic-bezier(.2,.9,.2,1);
+    pointer-events: none;
+}
+
+.btn-invitation::after {
+    /* outer glow layer that becomes visible on hover/focus */
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(255, 65, 108, 0.12), 0 0 60px rgba(142, 45, 226, 0.08);
+    opacity: 0;
+    transition: opacity 240ms ease;
+    pointer-events: none;
+}
+
+.btn-invitation:hover::before {
+    left: 120%;
+}
+
+.btn-invitation:hover::after,
+.btn-invitation:focus::after,
+.btn-invitation:focus-visible::after {
+    opacity: 1;
+}
+
+.btn-invitation:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 18px 40px rgba(255, 65, 108, 0.26), 0 0 50px rgba(142, 45, 226, 0.12);
+}
+
+/* accessible focus style */
+.btn-invitation:focus {
+    outline: none;
+}
+
+.btn-invitation:focus-visible {
+    box-shadow: 0 18px 40px rgba(255, 65, 108, 0.26), 0 0 60px rgba(142, 45, 226, 0.18);
+}
+
+@keyframes invitePulse {
+    0% {
+        transform: translateY(0) scale(1);
+        box-shadow: 0 6px 20px rgba(255, 65, 108, 0.20), 0 0 0 rgba(142, 45, 226, 0);
+    }
+    50% {
+        transform: translateY(-4px) scale(1.01);
+        box-shadow: 0 12px 30px rgba(255, 65, 108, 0.28), 0 0 40px rgba(142, 45, 226, 0.10);
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        box-shadow: 0 6px 20px rgba(255, 65, 108, 0.20), 0 0 0 rgba(142, 45, 226, 0);
+    }
 }
 
 /* === Share Section === */
@@ -680,13 +713,6 @@ body {
     </style>
 </head>
 <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript>
-      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5J239V2K"
-              height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
-    <!-- End Google Tag Manager (noscript) -->
-
     <!-- Animated autumn leaves background -->
     <div class="leaves-container" id="leavesContainer"></div>
     
@@ -744,6 +770,13 @@ body {
                 </a>
             </div>
             
+            <!-- Invitation Creator Button -->
+            <div class="invitation-section">
+                <button class="btn btn-invitation" onclick="openInvitationCreator()">
+                    ✨ Створити креативне запрошення для друзів
+                </button>
+            </div>
+            
             <div class="share-section">
                 <p class="share-text">Запроси друзів на стендап! 🎤</p>
                 <div class="share-buttons">
@@ -768,6 +801,10 @@ body {
         </div>
     </div>
     
+    <!-- Invitation Creator Modal (буде додано через JS) -->
+    <div id="invitation-modal"></div>
+    
+    <script src="invitation-creator.js"></script>
     <script>
 
 // ==========================================
@@ -917,7 +954,6 @@ class FallingLeaves {
 // Share Functions
 // ==========================================
 
-// Посилання для шерінгу - на квитки
 const SHARE_URL = 'https://secure.wayforpay.com/payment/herbstcologne';
 const SHARE_TEXT = '🎭 Приєднуйся до Осіннього Стендапу у Кьольні! 3 листопада о 19:00. Український стендап, гарна атмосфера та море сміху!';
 
@@ -930,16 +966,12 @@ function shareToTelegram() {
 
 function shareToWhatsApp() {
     const text = encodeURIComponent(`${SHARE_TEXT}\n\n${SHARE_URL}`);
-    
-    // Визначаємо, чи це мобільний пристрій
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
     let whatsappUrl;
     if (isMobile) {
-        // Для мобільних пристроїв відкриваємо додаток
         whatsappUrl = `whatsapp://send?text=${text}`;
     } else {
-        // Для десктопу використовуємо web версію
         whatsappUrl = `https://web.whatsapp.com/send?text=${text}`;
     }
     
@@ -976,7 +1008,6 @@ function fallbackCopyTextToClipboard(text) {
         showCopyNotification();
     } catch (err) {
         console.error('Fallback: Could not copy text:', err);
-        // Показуємо текст у промпті, якщо копіювання не спрацювало
         prompt('Скопіюйте це повідомлення:', text);
     }
     
@@ -1020,23 +1051,8 @@ function showCopyNotification() {
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    
     new ConfettiAnimation();
     new FallingLeaves();
-    
-    // URL параметри для дебагу
-    const params = new URLSearchParams(window.location.search);
-    const urlParams = {};
-    for (const [key, value] of params) {
-        urlParams[key] = value;
-    }
-    
-    // Показуємо tracking status
-    const trackingInfo = {
-        purchaseTracked: sessionStorage.getItem('fb_purchase_tracked'),
-        purchaseTime: sessionStorage.getItem('fb_purchase_time'),
-        orderId: sessionStorage.getItem('fb_order_id')
-    };
     
     const detailItems = document.querySelectorAll('.detail-item');
     detailItems.forEach(item => {
