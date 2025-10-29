@@ -440,31 +440,82 @@ body {
 
 .btn-invitation {
     width: 100%;
-    background: linear-gradient(135deg, var(--primary-blue), var(--primary-yellow));
+    /* New vibrant gradient to attract attention */
+    background: linear-gradient(90deg, #8E2DE2 0%, #FF416C 100%);
     color: var(--white);
-    box-shadow: 0 4px 15px rgba(91, 155, 213, 0.3);
+    /* stronger base shadow and soft glow */
+    box-shadow: 0 6px 20px rgba(255, 65, 108, 0.25), 0 0 0 0 rgba(142, 45, 226, 0.0);
     position: relative;
     overflow: hidden;
+    border: none;
+    /* subtle pulsing animation so it feels alive */
+    animation: invitePulse 2500ms ease-in-out infinite;
+    transition: transform 160ms ease, box-shadow 160ms ease;
 }
 
 .btn-invitation::before {
+    /* glossy streak that slides on hover */
     content: '';
     position: absolute;
     top: 0;
-    left: -100%;
-    width: 100%;
+    left: -120%;
+    width: 60%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: left 0.5s ease;
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.28) 50%, rgba(255,255,255,0) 100%);
+    transform: skewX(-20deg);
+    transition: left 420ms cubic-bezier(.2,.9,.2,1);
+    pointer-events: none;
+}
+
+.btn-invitation::after {
+    /* outer glow layer that becomes visible on hover/focus */
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(255, 65, 108, 0.12), 0 0 60px rgba(142, 45, 226, 0.08);
+    opacity: 0;
+    transition: opacity 240ms ease;
+    pointer-events: none;
 }
 
 .btn-invitation:hover::before {
-    left: 100%;
+    left: 120%;
+}
+
+.btn-invitation:hover::after,
+.btn-invitation:focus::after,
+.btn-invitation:focus-visible::after {
+    opacity: 1;
 }
 
 .btn-invitation:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(91, 155, 213, 0.5);
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 18px 40px rgba(255, 65, 108, 0.26), 0 0 50px rgba(142, 45, 226, 0.12);
+}
+
+/* accessible focus style */
+.btn-invitation:focus {
+    outline: none;
+}
+
+.btn-invitation:focus-visible {
+    box-shadow: 0 18px 40px rgba(255, 65, 108, 0.26), 0 0 60px rgba(142, 45, 226, 0.18);
+}
+
+@keyframes invitePulse {
+    0% {
+        transform: translateY(0) scale(1);
+        box-shadow: 0 6px 20px rgba(255, 65, 108, 0.20), 0 0 0 rgba(142, 45, 226, 0);
+    }
+    50% {
+        transform: translateY(-4px) scale(1.01);
+        box-shadow: 0 12px 30px rgba(255, 65, 108, 0.28), 0 0 40px rgba(142, 45, 226, 0.10);
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        box-shadow: 0 6px 20px rgba(255, 65, 108, 0.20), 0 0 0 rgba(142, 45, 226, 0);
+    }
 }
 
 /* === Share Section === */
