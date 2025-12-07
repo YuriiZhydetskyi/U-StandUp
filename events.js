@@ -1,10 +1,10 @@
 define(function () {
     const events = [
         {
-            "id": "winter-standup-2025-12-21",
+            "id": "winter-standup-2025-12-15",
             "name": "Зимовий стендап у Кельні",
-            "date": "2025-12-21",
-            "time": "19:00",
+            "date": "2025-12-15",
+            "time": "19:30",
             "location": "Theatercafé Filmdose, Köln",
             "locationForCalendar": "Zülpicher Str. 39, 50674 Köln",
             "linkToMaps": "https://maps.app.goo.gl/BPHbnNLBU87iRAmM9",
