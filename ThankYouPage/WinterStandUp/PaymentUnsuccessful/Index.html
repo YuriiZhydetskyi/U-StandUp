@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Помилка оплати | Зимовий Стендап</title>
+    <meta name="description" content="Помилка при оплаті квитка на Зимовий Стендап у Кельні">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/img/favicon-full.png">
+    <link rel="shortcut icon" type="image/png" href="/img/favicon-full.png">
+
+    <!-- Google Tag Manager -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      // Базовий контекст сторінки помилки
+      window.dataLayer.push({
+        event: 'page_view',
+        page_type: 'payment_error'
+      });
+    </script>
+    <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-5J239V2K');
+    </script>
+    <!-- End Google Tag Manager -->
+
+    <!-- Meta Pixel Code -->
+    <script>
+    // --- Допоміжні функції параметрів URL та перевірки невдачі ---
+    function getUrlParams() {
+        const params = new URLSearchParams(window.location.search);
+        return {
+            // status/ok/success можуть приходити з різних сервісів
+            status: params.get('status') || params.get('ok') || params.get('success'),
+            amount: params.get('amount') || params.get('value') || '0.00',
+            currency: params.get('currency') || 'EUR',
+            orderId: params.get('orderReference') || params.get('order_id') || 'order_' + Date.now(),
+            reason: params.get('reason'),
+            reasonCode: params.get('reasonCode'),
+        };
+    }
+
+    function isFailure() {
+        const p = getUrlParams();
+        // вважаємо невдачею, якщо є reason/reasonCode або статус явно "0/false/failed/error"
+        const statusStr = (p.status || '').toString().toLowerCase();
+        const statusIsFail = ['0','false','failed','error','declined','canceled','cancelled','fail'].includes(statusStr);
+        return !!(p.reason || p.reasonCode || statusIsFail);
+    }
+
+    // --- Підключення Meta Pixel ---
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+
+    // Ініціалізація Pixel (замініть на ваш Pixel ID якщо потрібно)
+    fbq('init', '3052217368299588');
+    // Завжди шлемо перегляд сторінки
+    fbq('track', 'PageView');
+
+    // Лише для невдалих оплат шлемо кастомну подію
+    (function(){
+        const FAILURE_FLAG = 'fb_failure_tracked';
+        if (isFailure() && !sessionStorage.getItem(FAILURE_FLAG)) {
+            const p = getUrlParams();
+            console.log('❗ Facebook Pixel: Tracking PaymentFailed', {
+                reason: p.reason, reasonCode: p.reasonCode, order_id: p.orderId
+            });
+
+            // Кастомна подія в Pixel
+            fbq('trackCustom', 'PaymentFailed', {
+                value: parseFloat(p.amount) || 0,
+                currency: p.currency,
+                content_name: 'Зимовий Стендап - Payment Error',
+                content_type: 'product',
+                content_ids: [p.orderId],
+                num_items: 1,
+                reason: p.reason || '',
+                reason_code: p.reasonCode || ''
+            });
+
+            // Подія в GTM/GA4
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+              event: 'payment_failure',
+              value: parseFloat(p.amount) || 0,
+              currency: p.currency,
+              transaction_id: p.orderId,
+              reason: p.reason || '',
+              reason_code: p.reasonCode || ''
+            });
+
+            sessionStorage.setItem(FAILURE_FLAG, 'true');
+            sessionStorage.setItem('fb_failure_time', new Date().toISOString());
+            sessionStorage.setItem('fb_failure_order_id', p.orderId);
+        } else {
+            const p = getUrlParams();
+            console.log('ℹ️ Payment failure NOT tracked this time', {
+                isFailure: isFailure(),
+                alreadyTracked: sessionStorage.getItem('fb_failure_tracked') === 'true',
+                reason: p.reason, reasonCode: p.reasonCode
+            });
+        }
+    })();
+
+    // Перевірка завантаження Pixel
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            if (typeof fbq === 'function') {
+                console.log('✅ Facebook Pixel loaded successfully');
+            } else {
+                console.error('❌ Facebook Pixel failed to load (AdBlock або мережа)');
+            }
+        }, 1500);
+    });
+    </script>
+    <noscript>
+        <img height="1" width="1" style="display:none"
+             src="https://www.facebook.com/tr?id=3052217368299588&ev=PageView&noscript=1"/>
+    </noscript>
+    <!-- End Meta Pixel Code -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
+
+    <style>
+/* === Color Palette === */
+:root {
+    --primary-blue: #5B9BD5;
+    --primary-silver: #C0C0C0;
+    --soft-blue: #7DB3E8;
+    --soft-silver: #E8E8E8;
+    --light-blue: #E8F3FC;
+    --light-silver: #F5F5F5;
+    --ice-blue: #D6EAF8;
+    --snow-white: #FAFCFF;
+    --dark-text: #2C3E50;
+    --light-text: #6C757D;
+    --white: #FFFFFF;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --warning-orange: #FF9800;
+    --error-red: #F44336;
+    --instagram-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+}
+
+/* === Base Styles === */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, var(--ice-blue) 0%, var(--snow-white) 50%, var(--light-blue) 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* === Container === */
+.container { max-width: 700px; width: 100%; position: relative; z-index: 3; animation: fadeInUp 0.8s ease-out; }
+@keyframes fadeInUp { from{opacity:0;transform:translateY(30px);} to{opacity:1;transform:translateY(0);} }
+
+/* === Content Card === */
+.content-card {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 50px 40px;
+    box-shadow: 0 20px 60px var(--shadow);
+    position: relative;
+    overflow: hidden;
+}
+.content-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px;
+    background: linear-gradient(90deg, var(--warning-orange), var(--primary-silver));
+}
+
+/* === Warning Icon === */
+.warning-icon { text-align: center; margin-bottom: 30px; }
+.warning-mark { width: 80px; height: 80px; margin: 0 auto; }
+.warning-circle { stroke: var(--warning-orange); stroke-width: 2; stroke-dasharray: 166; stroke-dashoffset: 166; animation: stroke 0.6s cubic-bezier(0.65,0,0.45,1) forwards; }
+.warning-exclamation { fill: var(--warning-orange); opacity: 0; animation: fadeIn 0.3s ease-in 0.6s forwards; }
+@keyframes stroke { 100% { stroke-dashoffset: 0; } }
+@keyframes fadeIn { 100% { opacity: 1; } }
+
+/* === Typography === */
+.title { font-family: 'Caveat', cursive; font-size: 3rem; font-weight: 700; text-align: center; color: var(--dark-text); margin-bottom: 10px; }
+.subtitle { font-size: 1.5rem; color: var(--warning-orange); text-align: center; margin-bottom: 30px; font-weight: 600; }
+
+/* === Message Box === */
+.message-box {
+    background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+    padding: 25px; border-radius: 16px; margin-bottom: 30px; border-left: 4px solid var(--warning-orange);
+}
+.message-box p { color: var(--dark-text); line-height: 1.7; margin-bottom: 15px; font-size: 1rem; }
+.message-box p:last-child { margin-bottom: 0; }
+.message-box .highlight { font-weight: 600; color: var(--warning-orange); }
+
+/* === Info Box === */
+.info-box { background: var(--light-blue); padding: 20px; border-radius: 12px; margin-bottom: 30px; border-left: 4px solid var(--primary-blue); }
+.info-box p { color: var(--dark-text); line-height: 1.6; font-size: 0.95rem; margin: 0; }
+.info-box strong { color: var(--primary-blue); font-weight: 600; }
+
+/* === Action Buttons === */
+.action-buttons { display: flex; gap: 15px; margin-bottom: 20px; }
+.btn {
+    flex: 1; padding: 15px 25px; border: none; border-radius: 12px; font-family: 'Montserrat', sans-serif;
+    font-size: 1rem; font-weight: 600; text-decoration: none; text-align: center; cursor: pointer; transition: all 0.3s ease;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-primary { background: var(--primary-blue); color: var(--white); box-shadow: 0 4px 15px rgba(91,155,213,0.3); }
+.btn-primary:hover { background: var(--soft-blue); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(91,155,213,0.4); }
+.btn-instagram { background: var(--instagram-gradient); color: var(--white); box-shadow: 0 4px 15px rgba(188,24,136,0.3); }
+.btn-instagram:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(188,24,136,0.4); filter: brightness(1.1); }
+
+/* === Help Section === */
+.help-section { text-align: center; padding: 20px; background: var(--white); border-radius: 12px; border: 2px dashed var(--primary-silver); margin-bottom: 20px; }
+.help-section h3 { color: var(--primary-blue); font-size: 1.2rem; margin-bottom: 15px; }
+.help-section p { color: var(--light-text); line-height: 1.6; margin-bottom: 15px; }
+.help-section .contact-link { color: var(--primary-blue); text-decoration: none; font-weight: 600; transition: color 0.3s ease; }
+.help-section .contact-link:hover { color: var(--soft-blue); }
+
+/* === Footer Note === */
+.footer-note { text-align: center; margin-top: 20px; }
+.footer-note p { font-family: 'Caveat', cursive; font-size: 1.3rem; color: var(--light-text); font-weight: 600; }
+
+/* === Sound Control === */
+.sound-control {
+    position: fixed; bottom: 20px; right: 20px; background: var(--white); padding: 10px 15px; border-radius: 10px;
+    box-shadow: 0 4px 12px var(--shadow); font-size: 0.85rem; color: var(--light-text); display: none; align-items: center; gap: 8px; z-index: 1000;
+}
+.sound-control.show { display: flex; animation: slideInRight 0.3s ease-out; }
+@keyframes slideInRight { from{transform:translateX(400px);opacity:0;} to{transform:translateX(0);opacity:1;} }
+
+/* === Responsive Design === */
+@media (max-width: 768px) {
+    .content-card { padding: 40px 25px; border-radius: 20px; }
+    .title { font-size: 2.5rem; }
+    .subtitle { font-size: 1.2rem; }
+    .action-buttons { flex-direction: column; }
+    .btn { width: 100%; }
+}
+@media (max-width: 480px) {
+    body { padding: 10px; }
+    .content-card { padding: 30px 20px; }
+    .title { font-size: 2rem; }
+    .subtitle { font-size: 1.1rem; }
+    .warning-mark { width: 60px; height: 60px; }
+    .message-box, .info-box, .help-section { padding: 20px; }
+    .sound-control { bottom: 10px; right: 10px; font-size: 0.75rem; padding: 8px 12px; }
+}
+
+/* === Shake Animation for Icon === */
+@keyframes shake { 0%,100%{transform:translateX(0);} 10%,30%,50%,70%,90%{transform:translateX(-5px);} 20%,40%,60%,80%{transform:translateX(5px);} }
+.warning-mark { animation: shake 0.5s ease-in-out 0.6s; }
+    </style>
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5J239V2K"
+              height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <div class="container">
+        <div class="content-card">
+            <!-- Warning icon with animation -->
+            <div class="warning-icon">
+                <svg class="warning-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <circle class="warning-circle" cx="26" cy="26" r="25" fill="none"/>
+                    <g class="warning-exclamation">
+                        <rect x="24" y="12" width="4" height="18" rx="2"/>
+                        <circle cx="26" cy="36" r="2.5"/>
+                    </g>
+                </svg>
+            </div>
+
+            <h1 class="title">Ой! 😕</h1>
+            <h2 class="subtitle">На жаль, оплата не пройшла</h2>
+
+            <div class="message-box">
+                <p>На жаль, не вдалось оплатити. <span class="highlight">Таке інколи трапляється</span> — це не страшно!</p>
+            </div>
+
+            <div class="info-box">
+                <p><strong>💡 Гарна новина:</strong> Ви можете написати нам у Інстаграмі і ми відкладемо вам квитки. Ви зможете заплатити за квитки готівкою на вході перед початком шоу!</p>
+            </div>
+
+            <div class="action-buttons">
+                <a href="https://secure.wayforpay.com/payment/winterstandup" class="btn btn-primary">
+                    🔄 Спробувати ще раз
+                </a>
+                <a href="https://www.instagram.com/u_standup_cologne/" target="_blank" class="btn btn-instagram">
+                    📱 Написати в Instagram
+                </a>
+            </div>
+
+            <div class="help-section">
+                <h3>❄️ Деталі події</h3>
+                <p><strong>Зимовий Стендап</strong><br>
+                21 грудня 2025 о 19:00<br>
+                Theatercafé Filmdose, Köln<br>
+                <a href="https://maps.app.goo.gl/BPHbnNLBU87iRAmM9" target="_blank" class="contact-link">📍 Zülpicher Str. 39, 50674 Köln</a></p>
+            </div>
+
+            <div class="footer-note">
+                <p>Сподіваємось побачити вас на стендапі! 🎤❄️</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sound Control Info -->
+    <div class="sound-control" id="soundControl">
+        <span>🔊</span>
+        <span>Звук програється</span>
+    </div>
+
+    <script>
+// ==========================================
+// Sound Effect
+// ==========================================
+function playWahWahSound() {
+    const audio = new Audio('wah-wah-waaah.mp3');
+    const soundControl = document.getElementById('soundControl');
+    soundControl.classList.add('show');
+    audio.play().then(() => {
+        console.log('🔊 Звуковий ефект програється');
+        audio.addEventListener('ended', () => {
+            setTimeout(() => { soundControl.classList.remove('show'); }, 1000);
+        });
+    }).catch(error => {
+        console.log('⚠️ Не вдалось програти звук (можливо, браузер блокує автоплей):', error);
+        soundControl.classList.remove('show');
+        document.body.addEventListener('click', function playOnClick() {
+            audio.play().catch(e => console.log('Помилка при програванні звуку:', e));
+            document.body.removeEventListener('click', playOnClick);
+        }, { once: true });
+    });
+}
+
+// ==========================================
+// Add hover effects to buttons
+// ==========================================
+function addButtonEffects() {
+    const buttons = document.querySelectorAll('.btn');
+    buttons.forEach(button => {
+        button.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px) scale(1.02)';
+        });
+        button.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+    });
+}
+
+// ==========================================
+// Initialize on DOM Load
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => { playWahWahSound(); }, 800);
+    addButtonEffects();
+    console.log('😕 Payment Unsuccessful Page завантажено');
+});
+
+// ==========================================
+// Tracking console debug
+// ==========================================
+const params = new URLSearchParams(window.location.search);
+const urlParams = {};
+for (const [key, value] of params) { urlParams[key] = value; }
+console.log('URL параметри:', urlParams);
+if (urlParams.reason || urlParams.reasonCode) {
+    console.log('Причина помилки:', { reason: urlParams.reason, reasonCode: urlParams.reasonCode });
+}
+    </script>
+</body>
+</html>
