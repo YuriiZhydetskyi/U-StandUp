@@ -1,26 +1,225 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <!-- Main Pages -->
     <url>
         <loc>https://www.ustandup.club/</loc>
-        <lastmod>2024-12-09</lastmod>
+        <lastmod>2025-12-10</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
     </url>
     <url>
         <loc>https://www.ustandup.club/other-clubs.html</loc>
-        <lastmod>2024-12-09</lastmod>
+        <lastmod>2025-12-10</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
+
+    <!-- Upcoming Events -->
+    <url>
+        <loc>https://www.ustandup.club/events/winter-standup-2025-12-15/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/masterclass-voice-lev-2025/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/open-mic-26-06-25/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/open-mic-bonn-2025-10-24/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/open-mic-dusseldorf-2025-10-18/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/herbst-standup-2025-11-03/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/open-mic-bonn-2025-05-29/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/may-standup-2025-05-13/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/open-mic-dusseldorf-2025-04-28/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/abramov-solo-2025-03-18/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/spring-standup-2025-03-06/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/open-mic-26-02-25/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <!-- Past Events -->
+    <url>
+        <loc>https://www.ustandup.club/events/concert-december-2024/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/openMic-4/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/openMic-3/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/concert-october/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/openMic-1/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/openMic-2/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/meeting-22/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/meeting-21/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/meeting-20/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/meeting-16/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/meeting-15/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/meeting-14/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/meeting-13/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/meeting-12/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/meeting-11/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/meeting-10/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/meeting-4/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/meeting-3/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/meeting-2/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/events/meeting-1/</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
+    </url>
+
+    <!-- Resources -->
     <url>
         <loc>https://www.ustandup.club/data/events.json</loc>
-        <lastmod>2024-12-09</lastmod>
+        <lastmod>2025-12-10</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>https://www.ustandup.club/llms.txt</loc>
-        <lastmod>2024-12-09</lastmod>
+        <lastmod>2025-12-10</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.3</priority>
     </url>
