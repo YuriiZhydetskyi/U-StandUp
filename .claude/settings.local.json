@@ -11,7 +11,8 @@
       "Bash(npm --version:*)",
       "Bash(npm run optimize-images:*)",
       "Bash(del \"c:\\Users\\Yurii-PC\\Documents\\GitHub\\U-StandUp\\img\\logo.png\")",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(node:*)"
     ],
     "deny": [],
     "ask": []

@@ -1,5 +1,4 @@
-define(function () {
-    const events = [
+const events = [
         {
             "id": "winter-standup-2025-12-15",
             "name": "Зимовий стендап у Кельні",
@@ -404,7 +403,6 @@ define(function () {
             "googleFormLink": "",
             "isFavorite": true
         }
-    ];
+];
 
-    return events;
-});
+export default events;

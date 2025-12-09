@@ -4148,3 +4148,7 @@ exports.string = create$6;
 exports.tuple = create$1;
 
 },{"property-expr":26,"tiny-case":30,"toposort":31}]},{},[2]);
+
+
+// ES6 module export
+export default window.ics;

@@ -1,6 +1,4 @@
-define(function () {
-
-    const aboutUs = `
+const aboutUs = `
 
         <h2>Місія</h2>
 
@@ -22,5 +20,4 @@ define(function () {
 
     `;
 
-    return aboutUs;
-});
+export default aboutUs;
