@@ -38,6 +38,10 @@ section {
     margin-bottom: 20px;
 }
 
+.event .card-text {
+    white-space: pre-line;
+}
+
 #about-us-content {
     font-size: 18px;
     line-height: 1.6;
