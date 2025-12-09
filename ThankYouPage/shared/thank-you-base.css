@@ -1,0 +1,606 @@
+/* ==========================================
+   ThankYouPage Base Styles
+   Theme colors are defined via CSS variables in each page
+   ========================================== */
+
+/* === Base Styles === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-middle, var(--bg-end)) 50%, var(--bg-end) 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* === Animation Container === */
+.animation-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+/* Snowflakes */
+.snowflake {
+    position: absolute;
+    color: #fff;
+    font-size: 1rem;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    opacity: 0.8;
+    animation: fall linear infinite;
+}
+
+/* Leaves */
+.leaf {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: var(--accent-color);
+    opacity: 0.6;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.8;
+    }
+    90% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* === Confetti Canvas === */
+#confetti-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* === Container === */
+.container {
+    max-width: 700px;
+    width: 100%;
+    position: relative;
+    z-index: 3;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* === Content Card === */
+.content-card {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 50px 40px;
+    box-shadow: 0 20px 60px var(--shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+.content-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+}
+
+/* === Success Icon === */
+.success-icon {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.checkmark {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+}
+
+.checkmark-circle {
+    stroke: var(--success-green);
+    stroke-width: 2;
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark-check {
+    stroke: var(--success-green);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.6s forwards;
+}
+
+@keyframes stroke {
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* === Typography === */
+.title {
+    font-family: 'Caveat', cursive;
+    font-size: 3rem;
+    font-weight: 700;
+    text-align: center;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+    animation: titlePulse 2s ease-in-out infinite;
+}
+
+@keyframes titlePulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.subtitle {
+    font-size: 1.5rem;
+    color: var(--dark-text);
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+/* === Thank You Message === */
+.thank-you-message {
+    background: linear-gradient(135deg, var(--light-primary), var(--light-accent, var(--light-primary)));
+    padding: 25px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.thank-you-message p {
+    color: var(--dark-text);
+    line-height: 1.7;
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+.thank-you-message p:last-child {
+    margin-bottom: 0;
+}
+
+.instagram-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.instagram-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--accent-color);
+    transition: width 0.3s ease;
+}
+
+.instagram-link:hover::after {
+    width: 100%;
+}
+
+.instagram-link:hover {
+    color: var(--soft-primary);
+}
+
+/* === Event Details === */
+.event-details {
+    background: var(--white);
+    padding: 25px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    border: 2px solid var(--light-primary);
+}
+
+.event-details h3 {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--light-primary);
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: var(--light-text);
+    font-size: 0.95rem;
+}
+
+.detail-value {
+    color: var(--dark-text);
+    font-weight: 600;
+    text-align: right;
+    font-size: 0.95rem;
+}
+
+/* === Action Buttons === */
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.invitation-section {
+    margin-bottom: 30px;
+}
+
+.btn {
+    flex: 1;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: var(--white);
+    box-shadow: 0 4px 15px rgba(91, 155, 213, 0.3);
+}
+
+.btn-primary:hover {
+    background: var(--soft-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(91, 155, 213, 0.4);
+}
+
+.btn-secondary {
+    background: var(--accent-color);
+    color: var(--dark-text);
+    box-shadow: 0 4px 15px var(--accent-shadow);
+}
+
+.btn-secondary:hover {
+    background: var(--soft-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--accent-shadow);
+}
+
+.btn-invitation {
+    width: 100%;
+    background: var(--invitation-gradient);
+    color: var(--white);
+    box-shadow: var(--invitation-shadow);
+    position: relative;
+    overflow: hidden;
+    border: none;
+    animation: invitePulse 2500ms ease-in-out infinite;
+    transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.btn-invitation::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.28) 50%, rgba(255,255,255,0) 100%);
+    transform: skewX(-20deg);
+    transition: left 420ms cubic-bezier(.2,.9,.2,1);
+    pointer-events: none;
+}
+
+.btn-invitation::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    box-shadow: var(--invitation-glow);
+    opacity: 0;
+    transition: opacity 240ms ease;
+    pointer-events: none;
+}
+
+.btn-invitation:hover::before {
+    left: 120%;
+}
+
+.btn-invitation:hover::after,
+.btn-invitation:focus::after,
+.btn-invitation:focus-visible::after {
+    opacity: 1;
+}
+
+.btn-invitation:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: var(--invitation-hover-shadow);
+}
+
+.btn-invitation:focus {
+    outline: none;
+}
+
+.btn-invitation:focus-visible {
+    box-shadow: var(--invitation-hover-shadow);
+}
+
+@keyframes invitePulse {
+    0% {
+        transform: translateY(0) scale(1);
+        box-shadow: var(--invitation-shadow);
+    }
+    50% {
+        transform: translateY(-4px) scale(1.01);
+        box-shadow: var(--invitation-pulse-shadow);
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        box-shadow: var(--invitation-shadow);
+    }
+}
+
+/* === Share Section === */
+.share-section {
+    text-align: center;
+    padding: 25px 0;
+    border-top: 2px dashed var(--light-primary);
+}
+
+.share-text {
+    color: var(--dark-text);
+    font-size: 1.05rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.share-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.share-btn {
+    padding: 12px 24px;
+    border: none;
+    background: var(--white);
+    color: var(--white);
+    border-radius: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.share-btn.telegram {
+    background: var(--telegram-blue);
+}
+
+.share-btn.telegram:hover {
+    background: #006699;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 136, 204, 0.3);
+}
+
+.share-btn.whatsapp {
+    background: var(--whatsapp-green);
+}
+
+.share-btn.whatsapp:hover {
+    background: #20ba5a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(37, 211, 102, 0.3);
+}
+
+.share-btn.copy {
+    background: var(--primary-color);
+}
+
+.share-btn.copy:hover {
+    background: var(--soft-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(91, 155, 213, 0.3);
+}
+
+.share-icon {
+    font-size: 1.2rem;
+}
+
+/* === Footer Note === */
+.footer-note {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.footer-note p {
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* === Responsive Design === */
+@media (max-width: 768px) {
+    .content-card {
+        padding: 40px 25px;
+        border-radius: 20px;
+    }
+
+    .title {
+        font-size: 2.5rem;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .detail-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .detail-value {
+        text-align: left;
+    }
+
+    .share-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .share-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    .content-card {
+        padding: 30px 20px;
+    }
+
+    .title {
+        font-size: 2rem;
+    }
+
+    .subtitle {
+        font-size: 1.1rem;
+    }
+
+    .checkmark {
+        width: 60px;
+        height: 60px;
+    }
+
+    .thank-you-message,
+    .event-details {
+        padding: 20px;
+    }
+}
+
+/* === Animation Classes === */
+.fade-in {
+    animation: fadeIn 0.6s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+}
+
+/* === Common Variables (defaults, can be overridden) === */
+:root {
+    --white: #FFFFFF;
+    --dark-text: #2C3E50;
+    --light-text: #6C757D;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --success-green: #52C41A;
+    --telegram-blue: #0088cc;
+    --whatsapp-green: #25D366;
+}

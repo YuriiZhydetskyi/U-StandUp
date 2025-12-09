@@ -1,5 +1,6 @@
-define(['./events', './about-us', './otherClubs', './ics-browserified'], function (events, aboutUs, otherClubs, ics) {
+define(['./events', './about-us', './otherClubs'], function (events, aboutUs, otherClubs) {
     let generateICS;
+    let icsModule = null; // Lazy loaded
 
     function displayEvents() {
         const eventsContainer = document.getElementById('events-container');
@@ -62,7 +63,7 @@ define(['./events', './about-us', './otherClubs', './ics-browserified'], functio
                 <p class="card-text"><strong>Час:</strong> ${event.time}</p>
                 ${locationElement}
                 <p class="card-text">${event.description}</p>
-                ${event.image ? `<img src="${event.image}" alt="${event.name}" class="img-fluid mb-3">` : ''}
+                ${event.image ? `<img src="${event.image}" alt="${event.name}" class="img-fluid mb-3" loading="lazy">` : ''}
                 <div class="row">
                     <div class="col-12 col-sm-6 col-md-4 mb-2">
                         ${event.googleFormLink ? `<a href="${event.googleFormLink}" target="_blank" class="btn btn-primary w-100">Зареєструватися</a>` : ''}
@@ -103,46 +104,59 @@ define(['./events', './about-us', './otherClubs', './ics-browserified'], functio
         const event = events.find(e => e.id === eventId);
         if (!event) return;
 
-        const startDate = new Date(`${event.date}T${event.time}`);
+        // Lazy load ics module on first use
+        function createICSFile(ics) {
+            const startDate = new Date(`${event.date}T${event.time}`);
 
-        const icsEvent = {
-            start: [startDate.getFullYear(), startDate.getMonth() + 1, startDate.getDate(), startDate.getHours(), startDate.getMinutes()],
-            duration: { hours: 2 },
-            title: event.name,
-            description: getDescriptionForCalendar(event),
-            location: event.locationForCalendar ?? event.location,
-            url: event.linkToMaps,
-            status: 'CONFIRMED',
-            busyStatus: 'BUSY',
-            productId: 'adamgibbons/ics',
-            alarms: []
-        };
+            const icsEvent = {
+                start: [startDate.getFullYear(), startDate.getMonth() + 1, startDate.getDate(), startDate.getHours(), startDate.getMinutes()],
+                duration: { hours: 2 },
+                title: event.name,
+                description: getDescriptionForCalendar(event),
+                location: event.locationForCalendar ?? event.location,
+                url: event.linkToMaps,
+                status: 'CONFIRMED',
+                busyStatus: 'BUSY',
+                productId: 'adamgibbons/ics',
+                alarms: []
+            };
 
-        if (event.isFavorite) {
-            icsEvent.alarms.push(
-                { action: 'display', trigger: { days: 2, before: true } },
-                { action: 'display', trigger: { hours: 2, before: true } }
-            );
-        } else {
-            icsEvent.alarms.push(
-                { action: 'display', trigger: { hours: 3, before: true } }
-            );
-        }
-
-        ics.createEvent(icsEvent, (error, value) => {
-            if (error) {
-                console.log(error);
-                return;
+            if (event.isFavorite) {
+                icsEvent.alarms.push(
+                    { action: 'display', trigger: { days: 2, before: true } },
+                    { action: 'display', trigger: { hours: 2, before: true } }
+                );
+            } else {
+                icsEvent.alarms.push(
+                    { action: 'display', trigger: { hours: 3, before: true } }
+                );
             }
 
-            const blob = new Blob([value], { type: 'text/calendar;charset=utf-8' });
-            const link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            link.download = `${event.name}.ics`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        });
+            ics.createEvent(icsEvent, (error, value) => {
+                if (error) {
+                    console.log(error);
+                    return;
+                }
+
+                const blob = new Blob([value], { type: 'text/calendar;charset=utf-8' });
+                const link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = `${event.name}.ics`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+        }
+
+        if (icsModule) {
+            createICSFile(icsModule);
+        } else {
+            // Lazy load ics-browserified.js
+            require(['./ics-browserified'], function(ics) {
+                icsModule = ics;
+                createICSFile(ics);
+            });
+        }
     };
 
     function displayOtherClubs() {
@@ -163,7 +177,7 @@ define(['./events', './about-us', './otherClubs', './ics-browserified'], functio
         clubDiv.innerHTML = `
             <div class="row">
                 <div class="col-md-3">
-                    ${club.picture ? `<img src="${club.picture}" alt="${club.title}" class="club-logo">` : ''}
+                    ${club.picture ? `<img src="${club.picture}" alt="${club.title}" class="club-logo" loading="lazy">` : ''}
                 </div>
                 <div class="col-md-9">
                     <h3>${club.title}</h3>
