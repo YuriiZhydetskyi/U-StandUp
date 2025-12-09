@@ -11,6 +11,10 @@
     <link rel="icon" type="image/png" href="/img/favicon-full.png">
     <link rel="shortcut icon" type="image/png" href="/img/favicon-full.png">
 
+    <!-- Cloudflare Web Analytics -->
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "e9e3d01d906d4f06946bb1f72ba15410"}'></script>
+    <!-- End Cloudflare Web Analytics -->
+
     <!-- Google Tag Manager -->
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -1106,8 +1110,45 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('❄️ Thank You Page завантажено успішно!');
 });
     </script>
-<!-- Cloudflare Web Analytics -->
-<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "e9e3d01d906d4f06946bb1f72ba15410"}'></script>
-<!-- End Cloudflare Web Analytics -->
+
+
+<script>
+        const startTime = Date.now();
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxaI9W6B2782WKEOC8dqkoxzEfxjkCSdQUCQ5Nkp6v4uDQQ4_CX2tQbyYUPSHctuZ1Trg/exec';
+        
+        function sendAnalytics() {
+            const timeSpent = Math.round((Date.now() - startTime) / 1000);
+            
+            const data = new URLSearchParams({
+                timestamp: new Date().toISOString(),
+                page: window.location.pathname, 
+                time: timeSpent,
+                referrer: document.referrer || 'Direct',
+                userAgent: navigator.userAgent,
+                language: navigator.language,
+                screenSize: window.screen.width + 'x' + window.screen.height
+            });
+            
+            if (navigator.sendBeacon) {
+                navigator.sendBeacon(GOOGLE_SCRIPT_URL, data);
+            } else {
+                fetch(GOOGLE_SCRIPT_URL + '?' + data.toString(), { 
+                    method: 'GET',
+                    mode: 'no-cors'
+                }).catch(() => {});
+            }
+        }
+        
+        window.addEventListener('beforeunload', sendAnalytics);
+        
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                sendAnalytics();
+            }
+        });
+        
+        setTimeout(sendAnalytics, 10000);
+</script>
+
 </body>
 </html>
