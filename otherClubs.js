@@ -19,7 +19,7 @@ define(function () {
             "title": "Stand-Up Loch",
             "city": "Лейпциг",
             "country": "Німеччина",
-            "picture": "img/standup loch logo.jpg",
+            "picture": "img/standup loch logo.webp",
             "description": "",
             "links": [
                 {
@@ -33,7 +33,7 @@ define(function () {
             "title": "Stand up from UA",
             "city": "Таллінн",
             "country": "Естонія",
-            "picture": "img/standup from ua logo.jpg",
+            "picture": "img/standup from ua logo.webp",
             "description": "Україномовний стенд ап в Естонії",
             "links": [
                 {
@@ -47,7 +47,7 @@ define(function () {
             "title": "СТЕНДАП КЛУБ UKROP",
             "city": "Варшава",
             "country": "Польща",
-            "picture": "img/ukrop logo.jpg",
+            "picture": "img/ukrop logo.webp",
             "description": "",
             "links": [
                 {
@@ -61,7 +61,7 @@ define(function () {
             "title": "ТЮ!",
             "city": "Барселона",
             "country": "Іспанія",
-            "picture": "img/tu-stand-up.jpg",
+            "picture": "img/tu-stand-up.webp",
             "description": "ТЮ! Стендап-комедія українською в Барселоні",
             "links": [
                 {
@@ -75,7 +75,7 @@ define(function () {
             "title": "Гучно",
             "city": "",
             "country": "Польща",
-            "picture": "img/huchno logo.jpg",
+            "picture": "img/huchno logo.webp",
             "description": "Український стендап в Польщі 🫶🏻🔆<p>Творче обʼєднання, що створює гумористичний та гучний контент",
             "links": [
                 {
@@ -89,7 +89,7 @@ define(function () {
             "title": "Стендап Простір",
             "city": "Вроцлав",
             "country": "Польща",
-            "picture": "img/stand up prostir logo.jpg",
+            "picture": "img/stand up prostir logo.webp",
             "description": "",
             "links": [
                 {
@@ -103,7 +103,7 @@ define(function () {
             "title": "Úžasný стенд ап ",
             "city": "Братислава Кошице Прешов",
             "country": "Словаччина",
-            "picture": "img/usasny stand up logo.jpg",
+            "picture": "img/usasny stand up logo.webp",
             "description": "",
             "links": [
                 {
@@ -117,7 +117,7 @@ define(function () {
             "title": "SUCK",
             "city": "Краків",
             "country": "Польща",
-            "picture": "img/suck logo.jpg",
+            "picture": "img/suck logo.webp",
             "description": "Stand Up Club Krakow - перший український стендап клуб у Польщі.",
             "links": [
                 {

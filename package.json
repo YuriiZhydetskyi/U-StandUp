@@ -1,0 +1,25 @@
+{
+  "name": "u-standup",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "optimize-images": "node scripts/optimize-images.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YuriiZhydetskyi/U-StandUp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/YuriiZhydetskyi/U-StandUp/issues"
+  },
+  "homepage": "https://github.com/YuriiZhydetskyi/U-StandUp#readme",
+  "devDependencies": {
+    "sharp": "^0.34.5"
+  }
+}
