@@ -1,10 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset
-      xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
-
-<url>
-  <loc>https://www.ustandup.club/</loc>
-  <lastmod>2025-09-12T09:35:51+00:00</lastmod>
-</url>
-
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://www.ustandup.club/</loc>
+        <lastmod>2024-12-09</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/other-clubs.html</loc>
+        <lastmod>2024-12-09</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/data/events.json</loc>
+        <lastmod>2024-12-09</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://www.ustandup.club/llms.txt</loc>
+        <lastmod>2024-12-09</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.3</priority>
+    </url>
 </urlset>

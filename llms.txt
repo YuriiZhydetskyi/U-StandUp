@@ -1,0 +1,66 @@
+# У Стендап - Ukrainian Standup Comedy Club in Cologne
+
+> Ukrainian standup comedy club based in Cologne (Köln), Germany. We organize standup shows, open mics, and weekly writing sessions in Ukrainian language.
+
+## Quick Facts
+
+- **Name**: У Стендап (U Standup)
+- **Location**: Cologne (Köln), Germany
+- **Language**: Ukrainian (primary), German and English (secondary)
+- **Founded**: 2024
+- **Type**: Non-profit comedy club / community
+
+## What We Do
+
+### Standup Shows
+Professional standup comedy concerts featuring Ukrainian comedians living in Germany and Europe. Events typically held at Theatercafé Filmdose in Cologne.
+
+### Open Mics (Відкриті мікрофони)
+Free entry events where anyone can try standup comedy. Great for beginners and experienced comedians testing new material.
+
+### Writing Sessions (Читки)
+Weekly meetings where comedians work on their material together, give feedback, and improve their jokes.
+
+## Contact & Social Media
+
+- **Instagram**: https://www.instagram.com/u_standup_cologne/
+- **WhatsApp Group**: https://chat.whatsapp.com/BXBNeksXPrJ29btgeo9BZZ
+- **Website**: https://www.ustandup.club
+
+## Typical Venue
+
+**Theatercafé Filmdose**
+Address: Zülpicher Str. 39, 50674 Köln, Germany
+
+## Target Audience
+
+- Ukrainians living in Germany/Europe who want to enjoy comedy in their native language
+- People interested in trying standup comedy
+- Anyone who wants to support Ukrainian culture and community abroad
+
+## Related Clubs (Ukrainian Standup in Europe)
+
+- Єстендпап Берлін (Berlin, Germany)
+- UKROP (Warsaw, Poland)
+- Stand up from UA (Tallinn, Estonia)
+- ТЮ! (Barcelona, Spain)
+- Стендап Простір (Wrocław, Poland)
+- SUCK - Stand Up Club Krakow (Krakow, Poland)
+
+## Events Data
+
+For structured event data, see: https://www.ustandup.club/data/events.json
+
+## FAQ
+
+**Q: How can I perform at your open mic?**
+A: Send us a direct message on Instagram or join our WhatsApp group.
+
+**Q: Do I need experience to perform?**
+A: No! We welcome complete beginners. Join our weekly writing sessions for support.
+
+**Q: Is entrance free?**
+A: Open mics are usually free or pay-what-you-can. Concerts have ticket prices (typically €10-15).
+
+**Q: What language are the shows in?**
+A: Primarily Ukrainian. Some comedians also perform in German or English.

@@ -1,3 +1,9 @@
 User-agent: *
+Allow: /
 
+# Sitemap
 Sitemap: https://www.ustandup.club/sitemap.xml
+
+# LLMs.txt for AI agents
+# See: https://llmstxt.org/
+# File: https://www.ustandup.club/llms.txt

@@ -1,6 +1,9 @@
 {
   "permissions": {
     "allow": [
+      "Read",
+      "Write",
+      "Bash(*)",
       "Bash(powershell:*)",
       "Bash(cat:*)",
       "Bash(wc:*)",
@@ -12,9 +15,18 @@
       "Bash(npm run optimize-images:*)",
       "Bash(del \"c:\\Users\\Yurii-PC\\Documents\\GitHub\\U-StandUp\\img\\logo.png\")",
       "Bash(git checkout:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run convert-events:*)",
+      "Bash(npm run build-events:*)",
+      "Bash(npm run build-pages:*)",
+      "Bash(npm run start:*)",
+      "Bash(npm run build:*)"
     ],
-    "deny": [],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(sudo *)"
+    ],
     "ask": []
   }
 }

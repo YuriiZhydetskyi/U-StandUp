@@ -1,0 +1,41 @@
+# Site configuration for У Стендап
+# Ukrainian Standup Club in Cologne
+
+organization:
+  name: У Стендап
+  name_en: U Standup
+  tagline: Український стендап у Кельні
+  tagline_en: Ukrainian Standup Comedy in Cologne
+  description: |
+    Український стендап-клуб у Кельні. Ми проводимо стендап-концерти,
+    відкриті мікрофони та щотижневі читки для розвитку українських комедійних талантів.
+  description_en: |
+    Ukrainian standup comedy club in Cologne, Germany. We host standup shows,
+    open mics, and weekly writing sessions to develop Ukrainian comedy talent.
+  founded: 2024
+  city: Köln
+  city_uk: Кельн
+  country: Germany
+  country_uk: Німеччина
+
+contact:
+  instagram: https://www.instagram.com/u_standup_cologne/
+  whatsapp: https://chat.whatsapp.com/BXBNeksXPrJ29btgeo9BZZ
+  facebook: # TODO: add Facebook page URL
+
+# Default venue for most events
+default_venue:
+  name: Theatercafé Filmdose
+  address: Zülpicher Str. 39, 50674 Köln
+  maps_link: https://maps.app.goo.gl/BPHbnNLBU87iRAmM9
+
+seo:
+  domain: u-standup.de
+  locale: uk_UA
+  twitter_handle: # TODO: add if exists
+
+# Questions for you to answer:
+# 1. What is the Facebook page URL?
+# 2. When exactly was the club founded? (month/year)
+# 3. Any Twitter/X account?
+# 4. Who are the main organizers? (names for Schema.org)
