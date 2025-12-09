@@ -35,4 +35,26 @@ export function renderFooter() {
 
 export function initFooter() {
     document.body.insertAdjacentHTML('beforeend', renderFooter());
+    initAnalytics();
+}
+
+/**
+ * Initialize analytics scripts
+ */
+function initAnalytics() {
+    // Cloudflare Web Analytics
+    if (!document.querySelector('script[data-cf-beacon]')) {
+        const cfScript = document.createElement('script');
+        cfScript.defer = true;
+        cfScript.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+        cfScript.setAttribute('data-cf-beacon', '{"token": "e9e3d01d906d4f06946bb1f72ba15410"}');
+        document.body.appendChild(cfScript);
+    }
+
+    // Custom Analytics
+    if (!document.querySelector('script[src*="analytics.js"]')) {
+        const analyticsScript = document.createElement('script');
+        analyticsScript.src = '/js/analytics.js';
+        document.body.appendChild(analyticsScript);
+    }
 }

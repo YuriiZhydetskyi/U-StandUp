@@ -357,6 +357,10 @@ ${event.description || ''}
             });
         }
     </script>
+
+    <!-- Analytics -->
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "e9e3d01d906d4f06946bb1f72ba15410"}'></script>
+    <script src="/js/analytics.js"></script>
 </body>
 </html>`;
 }
