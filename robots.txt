@@ -1,4 +1,3 @@
 User-agent: *
-Allow: /prerendered-index
 
 Sitemap: https://www.ustandup.club/sitemap.xml
