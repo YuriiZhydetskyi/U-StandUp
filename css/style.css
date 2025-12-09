@@ -171,6 +171,14 @@ a {
     z-index: 100;
 }
 
+.filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
 .filter-chips {
     display: flex;
     flex-wrap: wrap;
@@ -258,7 +266,24 @@ section {
 }
 
 .event-card--past {
-    opacity: 0.7;
+    opacity: 0.65;
+}
+
+.event-card--past .event-card__image-wrapper::after {
+    content: 'Минула подія';
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    background: rgba(0,0,0,0.75);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.event-card--past:hover {
+    opacity: 0.85;
 }
 
 .event-card__inner {
@@ -569,63 +594,26 @@ footer {
     text-decoration: underline;
 }
 
-/* ===== PAST EVENTS SECTION ===== */
-.past-events-section {
-    background: var(--color-bg-alt);
-    padding: 2rem 0;
-}
-
-.past-events-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.past-event-item {
-    display: flex;
+/* ===== PAST EVENTS TOGGLE ===== */
+.past-events-checkbox {
+    display: inline-flex;
     align-items: center;
-    gap: 1rem;
-    padding: 0.75rem 1rem;
-    background: white;
-    border-radius: var(--radius-md);
-    transition: box-shadow var(--transition);
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    white-space: nowrap;
 }
 
-.past-event-item:hover {
-    box-shadow: var(--shadow-sm);
+.past-events-checkbox input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: var(--color-primary);
 }
 
-.past-event-item__date {
-    min-width: 50px;
-    text-align: center;
-}
-
-.past-event-item__day {
-    font-size: 1.25rem;
-    font-weight: 700;
+.past-events-checkbox:hover {
     color: var(--color-primary);
-}
-
-.past-event-item__month {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    color: var(--color-text-light);
-}
-
-.past-event-item__info {
-    flex: 1;
-}
-
-.past-event-item__title {
-    font-weight: 600;
-    margin: 0;
-    font-size: 0.95rem;
-}
-
-.past-event-item__meta {
-    font-size: 0.85rem;
-    color: var(--color-text-light);
-    margin: 0;
 }
 
 /* ===== RESPONSIVE ===== */

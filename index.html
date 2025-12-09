@@ -109,19 +109,25 @@
         <!-- Filter Chips -->
         <section class="filter-section">
             <div class="container">
-                <div class="filter-chips" id="filter-chips">
-                    <button class="filter-chip active" data-filter="all">
-                        Всі події <span class="filter-chip__count" id="count-all">0</span>
-                    </button>
-                    <button class="filter-chip" data-filter="concert">
-                        Концерти <span class="filter-chip__count" id="count-concert">0</span>
-                    </button>
-                    <button class="filter-chip" data-filter="open-mic">
-                        Відкриті мікрофони <span class="filter-chip__count" id="count-open-mic">0</span>
-                    </button>
-                    <button class="filter-chip" data-filter="workshop">
-                        Читки <span class="filter-chip__count" id="count-workshop">0</span>
-                    </button>
+                <div class="filter-row">
+                    <div class="filter-chips" id="filter-chips">
+                        <button class="filter-chip active" data-filter="all">
+                            Всі події <span class="filter-chip__count" id="count-all">0</span>
+                        </button>
+                        <button class="filter-chip" data-filter="concert">
+                            Концерти <span class="filter-chip__count" id="count-concert">0</span>
+                        </button>
+                        <button class="filter-chip" data-filter="open-mic">
+                            Відкриті мікрофони <span class="filter-chip__count" id="count-open-mic">0</span>
+                        </button>
+                        <button class="filter-chip" data-filter="workshop">
+                            Читки <span class="filter-chip__count" id="count-workshop">0</span>
+                        </button>
+                    </div>
+                    <label class="past-events-checkbox">
+                        <input type="checkbox" id="show-past-events">
+                        <span>Показати минулі</span>
+                    </label>
                 </div>
             </div>
         </section>
@@ -136,16 +142,6 @@
                 <p id="no-events-message" class="text-muted text-center mt-4" style="display: none;">
                     Немає подій у цій категорії
                 </p>
-            </div>
-        </section>
-
-        <!-- Past Events (last 2 weeks) -->
-        <section id="past-events" class="past-events-section" style="display: none;">
-            <div class="container">
-                <div class="section-header">
-                    <h2 class="section-title">Нещодавні події</h2>
-                </div>
-                <div class="past-events-list" id="past-events-list"></div>
             </div>
         </section>
 

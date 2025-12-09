@@ -5,10 +5,11 @@
 import events from './events.js';
 import { initHeader } from './components/header.js';
 import { initFooter } from './components/footer.js';
-import { renderEventCard, renderPastEventItem, createGoogleCalendarLink, formatDateFull, getCategoryLabel } from './components/event-card.js';
+import { renderEventCard, createGoogleCalendarLink, formatDateFull, getCategoryLabel } from './components/event-card.js';
 
 let icsModule = null;
 let currentFilter = 'all';
+let showPastEvents = false;
 let upcomingEvents = [];
 let pastEvents = [];
 
@@ -138,11 +139,13 @@ function displayHeroEvent() {
  * Update filter chip counts
  */
 function updateFilterCounts() {
+    const eventsToCount = showPastEvents ? [...upcomingEvents, ...pastEvents] : upcomingEvents;
+
     const counts = {
-        all: upcomingEvents.length,
-        concert: upcomingEvents.filter(e => e.category === 'concert').length,
-        'open-mic': upcomingEvents.filter(e => e.category === 'open-mic').length,
-        workshop: upcomingEvents.filter(e => e.category === 'workshop').length
+        all: eventsToCount.length,
+        concert: eventsToCount.filter(e => e.category === 'concert').length,
+        'open-mic': eventsToCount.filter(e => e.category === 'open-mic').length,
+        workshop: eventsToCount.filter(e => e.category === 'workshop').length
     };
 
     document.getElementById('count-all').textContent = counts.all;
@@ -155,43 +158,33 @@ function updateFilterCounts() {
  * Filter and display events
  */
 function displayEvents(filter = 'all') {
-    const upcomingContainer = document.getElementById('upcoming-events-list');
+    const eventsContainer = document.getElementById('upcoming-events-list');
     const noEventsMessage = document.getElementById('no-events-message');
 
-    if (!upcomingContainer) return;
+    if (!eventsContainer) return;
 
-    // Filter upcoming events
+    // Combine upcoming and past events if checkbox is checked
+    // Upcoming events first (sorted by date ascending), then past events (sorted by date descending)
+    let allEvents = [...upcomingEvents];
+    if (showPastEvents) {
+        allEvents = [...upcomingEvents, ...pastEvents];
+    }
+
+    // Apply category filter
     const filteredEvents = filter === 'all'
-        ? upcomingEvents
-        : upcomingEvents.filter(e => e.category === filter);
+        ? allEvents
+        : allEvents.filter(e => e.category === filter);
 
     // Render cards
     if (filteredEvents.length === 0) {
-        upcomingContainer.innerHTML = '';
+        eventsContainer.innerHTML = '';
         noEventsMessage.style.display = 'block';
     } else {
-        upcomingContainer.innerHTML = filteredEvents.map(event => renderEventCard(event)).join('');
+        eventsContainer.innerHTML = filteredEvents.map(event => renderEventCard(event)).join('');
         noEventsMessage.style.display = 'none';
     }
 }
 
-/**
- * Display past events (only last 2 weeks)
- */
-function displayPastEvents() {
-    const pastContainer = document.getElementById('past-events-list');
-    const pastSection = document.getElementById('past-events');
-
-    if (!pastContainer || !pastSection) return;
-
-    if (pastEvents.length === 0) {
-        pastSection.style.display = 'none';
-        return;
-    }
-
-    pastContainer.innerHTML = pastEvents.map(event => renderPastEventItem(event)).join('');
-    pastSection.style.display = 'block';
-}
 
 /**
  * Initialize filter chips
@@ -217,10 +210,8 @@ function initFilterChips() {
  */
 function categorizeEvents() {
     const now = new Date();
-    const twoWeeksAgo = new Date();
-    twoWeeksAgo.setDate(now.getDate() - 14);
 
-    // Sort by date ascending
+    // Sort by date ascending for upcoming
     const sortedEvents = [...events].sort((a, b) => new Date(a.date) - new Date(b.date));
 
     upcomingEvents = [];
@@ -230,14 +221,28 @@ function categorizeEvents() {
         const eventDate = new Date(`${event.date}T${event.time}`);
         if (eventDate >= now) {
             upcomingEvents.push(event);
-        } else if (eventDate >= twoWeeksAgo) {
-            // Only show past events from last 2 weeks
+        } else {
             pastEvents.push(event);
         }
     });
 
-    // Sort past events newest first
+    // Sort past events newest first (most recent past event first)
     pastEvents.reverse();
+}
+
+/**
+ * Initialize past events toggle
+ */
+function initPastEventsToggle() {
+    const checkbox = document.getElementById('show-past-events');
+
+    if (!checkbox) return;
+
+    checkbox.addEventListener('change', () => {
+        showPastEvents = checkbox.checked;
+        updateFilterCounts();
+        displayEvents(currentFilter);
+    });
 }
 
 function init() {
@@ -257,9 +262,11 @@ function init() {
     // Initialize filter chips
     initFilterChips();
 
-    // Display events
+    // Initialize past events toggle
+    initPastEventsToggle();
+
+    // Display upcoming events
     displayEvents();
-    displayPastEvents();
 }
 
 // Initialize when DOM is ready
