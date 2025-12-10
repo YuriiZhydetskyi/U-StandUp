@@ -59,6 +59,15 @@ const EXTENSIONS_TO_COPY = ['.svg', '.gif', '.ico'];
 // Map: imagePath -> { width, height }
 let imageDimensionsMap = new Map();
 
+// Store generated image sizes for srcset
+// Map: imagePath -> number[] (array of widths)
+let generatedSizesMap = new Map();
+
+// Target sizes for responsive images (will filter by original size)
+const RESPONSIVE_SIZES = [400, 600, 800, 1000, 1200];
+// For small images like logos, use smaller steps
+const SMALL_IMAGE_SIZES = [80, 120, 160, 240];
+
 /**
  * Recursively copy a directory
  */
@@ -193,8 +202,8 @@ function parseHtmlForImageDimensions() {
 
 /**
  * Parse YAML event files to extract image paths
- * Event images are displayed at 600x800 (hero) or 350x220 (cards)
- * We use 600x800 as the target since hero is more prominent
+ * Hero section CSS: 400px on desktop, max 450px on mobile
+ * We use 400px as base (generates 400w + 800w for retina)
  */
 function parseEventImagesFromYaml() {
     const eventFiles = fs.readdirSync(EVENTS_SOURCE)
@@ -219,10 +228,11 @@ function parseEventImagesFromYaml() {
                 // Check if file exists
                 const fullPath = path.join(SRC_DIR, imagePath);
                 if (fs.existsSync(fullPath)) {
-                    // Use 600x800 for hero display (largest usage)
+                    // Use 400px for hero (CSS: 400px desktop, 450px mobile max)
+                    // This generates 400w + 800w (retina) versions
                     const existing = imageDimensionsMap.get(imagePath);
-                    if (!existing || existing.width < 600) {
-                        imageDimensionsMap.set(imagePath, { width: 600, height: 800 });
+                    if (!existing || existing.width < 400) {
+                        imageDimensionsMap.set(imagePath, { width: 400, height: 533 });
                     }
                 }
             }
@@ -268,7 +278,8 @@ function parseClubLogosFromHtml() {
 }
 
 /**
- * Generate responsive images (1x and 2x versions)
+ * Generate responsive images with multiple sizes
+ * Dynamically generates sizes based on original image dimensions
  */
 async function generateResponsiveImages() {
     console.log('Generating responsive images...');
@@ -312,47 +323,56 @@ async function generateResponsiveImages() {
             const metadata = await sharp(srcPath).metadata();
             const originalWidth = metadata.width;
             const originalHeight = metadata.height;
+            const aspectRatio = originalWidth / originalHeight;
 
             if (dimensions) {
-                const { width, height } = dimensions;
+                const baseWidth = dimensions.width;
 
-                // Calculate aspect ratio to maintain proportions
-                const aspectRatio = originalWidth / originalHeight;
+                // Determine which size set to use based on base width
+                const targetSizes = baseWidth <= 160 ? SMALL_IMAGE_SIZES : RESPONSIVE_SIZES;
 
-                // Generate 1x version
-                const width1x = width;
-                const height1x = Math.round(width1x / aspectRatio);
-                const dest1x = path.join(destImgDir, `${nameWithoutExt}-${width1x}.webp`);
+                // Filter sizes: >= base width AND <= original width
+                const sizesToGenerate = targetSizes.filter(
+                    size => size >= baseWidth && size <= originalWidth
+                );
 
-                await sharp(srcPath)
-                    .resize(width1x, height1x, { fit: 'cover' })
-                    .webp({ quality: WEBP_QUALITY })
-                    .toFile(dest1x);
-
-                const size1x = fs.statSync(dest1x).size;
-
-                // Generate 2x version (only if original is large enough)
-                const width2x = width * 2;
-                const height2x = Math.round(width2x / aspectRatio);
-                let size2x = 0;
-
-                if (originalWidth >= width2x) {
-                    const dest2x = path.join(destImgDir, `${nameWithoutExt}-${width2x}.webp`);
-                    await sharp(srcPath)
-                        .resize(width2x, height2x, { fit: 'cover' })
-                        .webp({ quality: WEBP_QUALITY })
-                        .toFile(dest2x);
-                    size2x = fs.statSync(dest2x).size;
-
-                    const savings = ((1 - (size1x + size2x) / inputSize) * 100).toFixed(0);
-                    totalSaved += inputSize - (size1x + size2x);
-                    console.log(`  ✓ ${file} → ${nameWithoutExt}-${width1x}.webp + ${nameWithoutExt}-${width2x}.webp (${savings}% saved)`);
-                } else {
-                    // Only 1x, original too small for 2x
-                    const savings = ((1 - size1x / inputSize) * 100).toFixed(0);
-                    totalSaved += inputSize - size1x;
-                    console.log(`  ✓ ${file} → ${nameWithoutExt}-${width1x}.webp (${savings}% saved, no 2x - original too small)`);
+                // Always include base size if not in list
+                if (!sizesToGenerate.includes(baseWidth) && baseWidth <= originalWidth) {
+                    sizesToGenerate.unshift(baseWidth);
                 }
+
+                // Sort sizes
+                sizesToGenerate.sort((a, b) => a - b);
+
+                // Generate all sizes
+                let totalOutputSize = 0;
+                const generatedFiles = [];
+
+                for (const width of sizesToGenerate) {
+                    const height = Math.round(width / aspectRatio);
+                    const destPath = path.join(destImgDir, `${nameWithoutExt}-${width}.webp`);
+
+                    await sharp(srcPath)
+                        .resize(width, height, { fit: 'cover' })
+                        .webp({ quality: WEBP_QUALITY })
+                        .toFile(destPath);
+
+                    totalOutputSize += fs.statSync(destPath).size;
+                    generatedFiles.push(`${nameWithoutExt}-${width}.webp`);
+                }
+
+                // Store generated sizes for srcset building
+                generatedSizesMap.set(imagePath, sizesToGenerate);
+
+                // Calculate savings: compare smallest generated vs original
+                const smallestSize = fs.statSync(
+                    path.join(destImgDir, `${nameWithoutExt}-${sizesToGenerate[0]}.webp`)
+                ).size;
+                const savings = ((1 - smallestSize / inputSize) * 100).toFixed(0);
+                totalSaved += inputSize - smallestSize;
+
+                const sizesStr = sizesToGenerate.join('w, ') + 'w';
+                console.log(`  ✓ ${file} → [${sizesStr}] (${savings}% saved for 1x)`);
 
                 generated++;
             } else {
@@ -631,12 +651,15 @@ function getDayOfWeek(dateString) {
 
 /**
  * Get responsive image attributes for event images
+ * Returns src, srcset with w descriptors, and sizes for hero section
+ * Uses generatedSizesMap to include all available sizes in srcset
  */
-function getEventImageAttributes(imagePath) {
-    if (!imagePath) return { src: '', srcset: '' };
+function getEventImageAttributes(imagePath, options = {}) {
+    if (!imagePath) return { src: '', srcset: '', sizes: '' };
 
     const normalizedPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
     const dimensions = imageDimensionsMap.get(normalizedPath);
+    const generatedSizes = generatedSizesMap.get(normalizedPath);
 
     if (!dimensions) {
         // No dimensions, just convert extension to webp
@@ -644,23 +667,35 @@ function getEventImageAttributes(imagePath) {
         const webpPath = normalizedPath.replace(ext, '.webp');
         return {
             src: `/${webpPath}`,
-            srcset: ''
+            srcset: '',
+            sizes: ''
         };
     }
 
     const ext = path.extname(normalizedPath);
     const nameWithoutExt = normalizedPath.replace(ext, '');
+    const baseWidth = dimensions.width;
 
-    const src1x = `/${nameWithoutExt}-${dimensions.width}.webp`;
-    const src2x = `/${nameWithoutExt}-${dimensions.width * 2}.webp`;
+    // Default src is the base size
+    const src = `/${nameWithoutExt}-${baseWidth}.webp`;
 
-    // Check if 2x exists
-    const dest2x = path.join(DIST_DIR, `${nameWithoutExt}-${dimensions.width * 2}.webp`);
-    const srcset = fs.existsSync(dest2x)
-        ? `${src1x} 1x, ${src2x} 2x`
-        : `${src1x} 1x`;
+    // Build srcset from all generated sizes
+    let srcset = '';
+    if (generatedSizes && generatedSizes.length > 0) {
+        srcset = generatedSizes
+            .map(w => `/${nameWithoutExt}-${w}.webp ${w}w`)
+            .join(', ');
+    } else {
+        // Fallback to just base size
+        srcset = `${src} ${baseWidth}w`;
+    }
 
-    return { src: src1x, srcset };
+    // Hero section sizes: 400px on desktop (>=768px), max 450px on mobile
+    const sizes = options.isHero
+        ? '(min-width: 768px) 400px, min(450px, 100vw)'
+        : '';
+
+    return { src, srcset, sizes };
 }
 
 /**
@@ -691,7 +726,7 @@ function preRenderHeroSection(events) {
         return;
     }
 
-    const imageAttrs = getEventImageAttributes(heroEvent.image);
+    const imageAttrs = getEventImageAttributes(heroEvent.image, { isHero: true });
     const categoryLabel = categoryLabels[heroEvent.category] || 'Подія';
     const dateFormatted = `${getDayOfWeek(heroEvent.date)}, ${formatDate(heroEvent.date)}`;
     const description = stripHtml(heroEvent.description || '').substring(0, 200) + '...';
@@ -713,12 +748,14 @@ function preRenderHeroSection(events) {
     const indexPath = path.join(DIST_DIR, 'index.html');
     let html = fs.readFileSync(indexPath, 'utf8');
 
-    // Add preload link for hero image (before </head>)
-    const preloadLink = `<link rel="preload" href="${imageAttrs.src}" as="image" fetchpriority="high">\n</head>`;
+    // Add preload link for hero image with srcset support (before </head>)
+    const preloadSrcset = imageAttrs.srcset ? ` imagesrcset="${imageAttrs.srcset}" imagesizes="${imageAttrs.sizes}"` : '';
+    const preloadLink = `<link rel="preload" href="${imageAttrs.src}" as="image"${preloadSrcset} fetchpriority="high">\n</head>`;
     html = html.replace('</head>', preloadLink);
 
-    // Build srcset attribute
+    // Build srcset and sizes attributes
     const srcsetAttr = imageAttrs.srcset ? ` srcset="${imageAttrs.srcset}"` : '';
+    const sizesAttr = imageAttrs.sizes ? ` sizes="${imageAttrs.sizes}"` : '';
 
     // Replace hero section (remove display:none and populate content)
     const heroSectionRegex = /<section class="hero-event" id="hero-event" style="display: none;">[\s\S]*?<\/section>\s*<!-- Filter/;
@@ -727,7 +764,7 @@ function preRenderHeroSection(events) {
             <div class="container">
                 <div class="hero-event__inner">
                     <div class="hero-event__image">
-                        <img id="hero-event-image" src="${imageAttrs.src}"${srcsetAttr} alt="${heroEvent.name}" onclick="openLightbox(this.src)" style="cursor: pointer;" fetchpriority="high" width="600" height="800">
+                        <img id="hero-event-image" src="${imageAttrs.src}"${srcsetAttr}${sizesAttr} alt="${heroEvent.name}" onclick="openLightbox(this.src)" style="cursor: pointer;" fetchpriority="high" width="400" height="533">
                     </div>
                     <div class="hero-event__content">
                         <span class="hero-event__badge" id="hero-event-badge">${categoryLabel}</span>
