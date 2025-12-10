@@ -175,14 +175,96 @@ function parseHtmlForImageDimensions() {
         }
     }
 
+    // Parse YAML event files for image paths
+    // Event images are displayed at 600x800 in hero section
+    parseEventImagesFromYaml();
+
+    // Parse club logos from other-clubs.html JS data
+    // Club logos are displayed at 80x80
+    parseClubLogosFromHtml();
+
     // Add known dimensions for images used via JS variables
     // Logo in header.js: width="120" height="50"
     imageDimensionsMap.set('img/logo.webp', { width: 120, height: 50 });
-    // Hero event images: width="600" height="800" (from index.html template)
-    imageDimensionsMap.set('img/winter_standup.webp', { width: 600, height: 800 });
 
     console.log(`  Found ${imageDimensionsMap.size} images with dimensions\n`);
     return imageDimensionsMap;
+}
+
+/**
+ * Parse YAML event files to extract image paths
+ * Event images are displayed at 600x800 (hero) or 350x220 (cards)
+ * We use 600x800 as the target since hero is more prominent
+ */
+function parseEventImagesFromYaml() {
+    const eventFiles = fs.readdirSync(EVENTS_SOURCE)
+        .filter(f => f.endsWith('.yaml') || f.endsWith('.yml'));
+
+    for (const file of eventFiles) {
+        const filePath = path.join(EVENTS_SOURCE, file);
+        const content = fs.readFileSync(filePath, 'utf8');
+
+        try {
+            const event = yaml.load(content);
+            if (event.image) {
+                // Normalize path: add img/ prefix if missing, remove leading /
+                let imagePath = event.image;
+                if (imagePath.startsWith('/')) {
+                    imagePath = imagePath.slice(1);
+                }
+                if (!imagePath.startsWith('img/')) {
+                    imagePath = `img/${imagePath}`;
+                }
+
+                // Check if file exists
+                const fullPath = path.join(SRC_DIR, imagePath);
+                if (fs.existsSync(fullPath)) {
+                    // Use 600x800 for hero display (largest usage)
+                    const existing = imageDimensionsMap.get(imagePath);
+                    if (!existing || existing.width < 600) {
+                        imageDimensionsMap.set(imagePath, { width: 600, height: 800 });
+                    }
+                }
+            }
+        } catch (err) {
+            // Skip invalid YAML
+        }
+    }
+}
+
+/**
+ * Parse club logos from other-clubs.html JavaScript data
+ * Club logos are displayed at 80x80
+ */
+function parseClubLogosFromHtml() {
+    const clubsHtmlPath = path.join(SRC_DIR, 'other-clubs.html');
+    if (!fs.existsSync(clubsHtmlPath)) return;
+
+    const content = fs.readFileSync(clubsHtmlPath, 'utf8');
+
+    // Extract picture paths from the clubs array in JS
+    // Matches: picture: "img/something.webp"
+    const pictureRegex = /picture:\s*["']([^"']+)["']/g;
+    let match;
+
+    while ((match = pictureRegex.exec(content)) !== null) {
+        let imagePath = match[1];
+
+        // Normalize path
+        if (imagePath.startsWith('/')) {
+            imagePath = imagePath.slice(1);
+        }
+
+        // Skip non-image files
+        if (!imagePath.match(/\.(webp|jpg|jpeg|png)$/i)) continue;
+
+        // Check if file exists
+        const fullPath = path.join(SRC_DIR, imagePath);
+        if (fs.existsSync(fullPath)) {
+            // Club logos are 80x80
+            imageDimensionsMap.set(imagePath, { width: 80, height: 80 });
+        }
+    }
 }
 
 /**
