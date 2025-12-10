@@ -30,7 +30,8 @@
       "Bash(npm run build:css:*)",
       "Bash(mkdir:*)",
       "Bash(node -e:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(dir \"c:\\Users\\Yurii-PC\\Documents\\GitHub\\U-StandUp\\dist\\img\\winter_standup*\")"
     ],
     "deny": [
       "Bash(rm -rf *)",

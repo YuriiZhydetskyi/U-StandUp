@@ -64,7 +64,8 @@ let imageDimensionsMap = new Map();
 let generatedSizesMap = new Map();
 
 // Target sizes for responsive images (will filter by original size)
-const RESPONSIVE_SIZES = [400, 600, 800, 1000, 1200];
+// Includes smaller sizes for mobile 1x DPR devices
+const RESPONSIVE_SIZES = [300, 400, 600, 800, 1000, 1200];
 // For small images like logos, use smaller steps
 const SMALL_IMAGE_SIZES = [80, 120, 160, 240];
 
@@ -331,14 +332,15 @@ async function generateResponsiveImages() {
                 // Determine which size set to use based on base width
                 const targetSizes = baseWidth <= 160 ? SMALL_IMAGE_SIZES : RESPONSIVE_SIZES;
 
-                // Filter sizes: >= base width AND <= original width
+                // Filter sizes: include all sizes up to original width
+                // This provides smaller sizes for 1x DPR mobile devices
                 const sizesToGenerate = targetSizes.filter(
-                    size => size >= baseWidth && size <= originalWidth
+                    size => size <= originalWidth
                 );
 
                 // Always include base size if not in list
                 if (!sizesToGenerate.includes(baseWidth) && baseWidth <= originalWidth) {
-                    sizesToGenerate.unshift(baseWidth);
+                    sizesToGenerate.push(baseWidth);
                 }
 
                 // Sort sizes
