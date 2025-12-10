@@ -194,6 +194,10 @@ process.umask = function() { return 0; };
         // only CommonJS-like environments that support module.exports,
         // like Node.
         module.exports = factory();
+        // Also set browser global for browserified bundles
+        if (typeof window !== 'undefined') {
+            window.ics = module.exports;
+        }
     } else {
         // Browser globals (root is window)
         root.ics = factory();
@@ -4148,7 +4152,3 @@ exports.string = create$6;
 exports.tuple = create$1;
 
 },{"property-expr":26,"tiny-case":30,"toposort":31}]},{},[2]);
-
-
-// ES6 module export
-export default window.ics;

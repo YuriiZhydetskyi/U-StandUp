@@ -384,16 +384,15 @@ function generateEventPage(event) {
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/ics-browserified.js"></script>
     <script>
         function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').classList.add('active'); document.body.style.overflow = 'hidden'; }
         function closeLightbox() { document.getElementById('lightbox').classList.remove('active'); document.body.style.overflow = ''; }
         document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
-        async function generateICS() {
+        function generateICS() {
             const event = ${JSON.stringify({ id: event.id, name: event.name, date: event.date, time: event.time, description: stripHtml(event.description || ''), location: event.locationForCalendar || event.location, linkToMaps: event.linkToMaps })};
-            const ics = await import('/ics-browserified.js');
-            const icsModule = ics.default || ics;
             const startDate = new Date(event.date + 'T' + event.time);
-            icsModule.createEvent({ start: [startDate.getFullYear(), startDate.getMonth() + 1, startDate.getDate(), startDate.getHours(), startDate.getMinutes()], duration: { hours: 2 }, title: event.name, description: event.description, location: event.location, url: event.linkToMaps, status: 'CONFIRMED', busyStatus: 'BUSY', productId: 'u-standup/ics', alarms: [{ action: 'display', trigger: { hours: 2, before: true } }] }, (error, value) => {
+            window.ics.createEvent({ start: [startDate.getFullYear(), startDate.getMonth() + 1, startDate.getDate(), startDate.getHours(), startDate.getMinutes()], duration: { hours: 2 }, title: event.name, description: event.description, location: event.location, url: event.linkToMaps, status: 'CONFIRMED', busyStatus: 'BUSY', productId: 'u-standup/ics', alarms: [{ action: 'display', trigger: { hours: 2, before: true } }] }, (error, value) => {
                 if (error) { console.error(error); return; }
                 const blob = new Blob([value], { type: 'text/calendar;charset=utf-8' });
                 const link = document.createElement('a'); link.href = window.URL.createObjectURL(blob); link.download = event.name + '.ics'; link.click();
