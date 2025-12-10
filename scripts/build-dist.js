@@ -258,6 +258,112 @@ function stripHtml(html) {
     return (html || '').replace(/<[^>]*>/g, '').replace(/\n/g, ' ').trim().substring(0, 200);
 }
 
+/**
+ * Get day of week in Ukrainian
+ */
+function getDayOfWeek(dateString) {
+    const days = ['Неділя', 'Понеділок', 'Вівторок', 'Середа', 'Четвер', "П'ятниця", 'Субота'];
+    const date = new Date(dateString);
+    return days[date.getDay()];
+}
+
+/**
+ * Pre-render hero section in index.html with the featured event
+ */
+function preRenderHeroSection(events) {
+    console.log('Pre-rendering hero section...');
+
+    const now = new Date();
+
+    // Get upcoming events (same logic as app.js)
+    const upcomingEvents = events
+        .filter(e => new Date(`${e.date}T${e.time}`) >= now)
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    if (upcomingEvents.length === 0) {
+        console.log('  No upcoming events, skipping hero pre-render\n');
+        return;
+    }
+
+    // Find hero event (same logic as app.js displayHeroEvent)
+    const heroEvent = upcomingEvents.find(e => e.isFavorite && e.image)
+        || upcomingEvents.find(e => e.image)
+        || upcomingEvents[0];
+
+    if (!heroEvent || !heroEvent.image) {
+        console.log('  No hero event with image found, skipping\n');
+        return;
+    }
+
+    const imageSrc = heroEvent.image.startsWith('/') ? heroEvent.image : `/${heroEvent.image}`;
+    const categoryLabel = categoryLabels[heroEvent.category] || 'Подія';
+    const dateFormatted = `${getDayOfWeek(heroEvent.date)}, ${formatDate(heroEvent.date)}`;
+    const description = stripHtml(heroEvent.description || '').substring(0, 200) + '...';
+
+    // Build actions HTML
+    let actionsHtml = '';
+    if (heroEvent.ticketLink || heroEvent.googleFormLink) {
+        actionsHtml += `<a href="${heroEvent.ticketLink || heroEvent.googleFormLink}" target="_blank" class="btn btn-primary">Придбати квитки</a>`;
+    }
+    actionsHtml += `<a href="/events/${heroEvent.id}/" class="btn btn-outline-light">Дізнатися більше</a>`;
+
+    // Location HTML
+    let locationHtml = heroEvent.location;
+    if (heroEvent.linkToMaps) {
+        locationHtml = `<a href="${heroEvent.linkToMaps}" target="_blank" rel="noopener" style="color: white;">${heroEvent.location}</a>`;
+    }
+
+    // Read index.html from dist
+    const indexPath = path.join(DIST_DIR, 'index.html');
+    let html = fs.readFileSync(indexPath, 'utf8');
+
+    // Add preload link for hero image (before </head>)
+    const preloadLink = `<link rel="preload" href="${imageSrc}" as="image" fetchpriority="high">\n</head>`;
+    html = html.replace('</head>', preloadLink);
+
+    // Replace hero section (remove display:none and populate content)
+    const heroSectionRegex = /<section class="hero-event" id="hero-event" style="display: none;">[\s\S]*?<\/section>\s*<!-- Filter/;
+
+    const preRenderedHero = `<section class="hero-event" id="hero-event">
+            <div class="container">
+                <div class="hero-event__inner">
+                    <div class="hero-event__image">
+                        <img id="hero-event-image" src="${imageSrc}" alt="${heroEvent.name}" onclick="openLightbox(this.src)" style="cursor: pointer;" fetchpriority="high" width="600" height="800">
+                    </div>
+                    <div class="hero-event__content">
+                        <span class="hero-event__badge" id="hero-event-badge">${categoryLabel}</span>
+                        <h1 class="hero-event__title" id="hero-event-title">${heroEvent.name}</h1>
+                        <div class="hero-event__meta">
+                            <div class="hero-event__meta-item">
+                                <span>📅</span>
+                                <span id="hero-event-date">${dateFormatted}</span>
+                            </div>
+                            <div class="hero-event__meta-item">
+                                <span>🕐</span>
+                                <span id="hero-event-time">${heroEvent.time}</span>
+                            </div>
+                            <div class="hero-event__meta-item">
+                                <span>📍</span>
+                                <span id="hero-event-location">${locationHtml}</span>
+                            </div>
+                        </div>
+                        <div class="hero-event__description" id="hero-event-description">${description}</div>
+                        <div class="hero-event__actions" id="hero-event-actions">${actionsHtml}</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filter`;
+
+    html = html.replace(heroSectionRegex, preRenderedHero);
+
+    // Write back
+    fs.writeFileSync(indexPath, html, 'utf8');
+    console.log(`  ✓ Hero pre-rendered: "${heroEvent.name}"`);
+    console.log(`  ✓ Preload added: ${imageSrc}\n`);
+}
+
 function createGoogleCalendarLink(event) {
     const startDate = new Date(`${event.date}T${event.time}`);
     const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000);
@@ -477,6 +583,7 @@ async function build() {
     copyStaticFiles();
     await optimizeImages();
     const events = buildEvents();
+    preRenderHeroSection(events);
     buildEventPages(events);
     generateSitemap(events);
 
