@@ -50,7 +50,12 @@ export function renderHeader(activePage = 'home') {
 }
 
 export function initHeader(activePage = 'home') {
-    document.body.insertAdjacentHTML('afterbegin', renderHeader(activePage));
+    // Skip injection if header is already pre-rendered (fixes CLS)
+    if (document.querySelector('header')) {
+        // Just set up event listeners for existing header
+    } else {
+        document.body.insertAdjacentHTML('afterbegin', renderHeader(activePage));
+    }
 
     // Add mobile menu toggle function to window
     window.toggleMenu = function() {

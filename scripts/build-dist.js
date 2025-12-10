@@ -705,6 +705,77 @@ function getEventImageAttributes(imagePath, options = {}) {
 }
 
 /**
+ * Render header HTML for pre-rendering
+ * Must match header.js renderHeader() function
+ */
+function renderHeaderHtml(activePage = 'home') {
+    const nav = [
+        { id: 'home', label: 'Головна', href: '/' },
+        { id: 'all-events', label: 'Всі події', href: '/all-events.html' },
+        { id: 'about', label: 'Про нас', href: '/#about-us' },
+        { id: 'clubs', label: 'Інші клуби', href: '/other-clubs.html' }
+    ];
+
+    const logoAttrs = getEventImageAttributes('img/logo.webp');
+    const logoSrcset = logoAttrs.srcset ? ` srcset="${logoAttrs.srcset}"` : '';
+
+    const navItems = nav.map(item => `
+                        <li class="nav-item">
+                            <a class="nav-link ${activePage === item.id ? 'active' : ''}" href="${item.href}">${item.label}</a>
+                        </li>`).join('');
+
+    return `<header>
+        <nav class="navbar">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">
+                    <img src="${logoAttrs.src}"${logoSrcset} sizes="120px" alt="У Стендап" width="120" height="50">
+                    <span class="brand-tagline">український стендап у Кельні</span>
+                </a>
+                <button class="navbar-toggler" type="button" aria-label="Toggle navigation" onclick="toggleMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <div class="navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">${navItems}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>`;
+}
+
+/**
+ * Pre-render header in HTML files
+ */
+function preRenderHeader() {
+    console.log('Pre-rendering headers...');
+
+    const pages = [
+        { file: 'index.html', activePage: 'home' },
+        { file: 'all-events.html', activePage: 'all-events' },
+        { file: 'other-clubs.html', activePage: 'clubs' }
+    ];
+
+    for (const page of pages) {
+        const filePath = path.join(DIST_DIR, page.file);
+        if (!fs.existsSync(filePath)) continue;
+
+        let html = fs.readFileSync(filePath, 'utf8');
+
+        // Replace the comment placeholder with actual header
+        const headerHtml = renderHeaderHtml(page.activePage);
+        html = html.replace('<!-- Header is injected by JS -->', headerHtml);
+        html = html.replace('<!-- Header injected by JS -->', headerHtml);
+
+        fs.writeFileSync(filePath, html, 'utf8');
+        console.log(`  ✓ ${page.file}`);
+    }
+
+    console.log('');
+}
+
+/**
  * Pre-render hero section in index.html with the featured event
  */
 function preRenderHeroSection(events) {
@@ -1048,7 +1119,10 @@ async function build() {
     // Step 4: Copy static files (with HTML transformation)
     copyStaticFiles();
 
-    // Step 5: Build events and pages
+    // Step 5: Pre-render header in all pages
+    preRenderHeader();
+
+    // Step 6: Build events and pages
     const events = buildEvents();
     preRenderHeroSection(events);
     buildEventPages(events);
