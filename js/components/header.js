@@ -16,7 +16,7 @@ const SITE_CONFIG = {
 export function renderHeader(activePage = 'home') {
     const nav = [
         { id: 'home', label: 'Головна', href: '/' },
-        { id: 'events', label: 'Події', href: '/#events' },
+        { id: 'all-events', label: 'Всі події', href: '/all-events.html' },
         { id: 'about', label: 'Про нас', href: '/#about-us' },
         { id: 'clubs', label: 'Інші клуби', href: '/other-clubs.html' }
     ];

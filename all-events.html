@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <title>Всі події | У Стендап — Український стендап у Кельні</title>
+    <meta name="description" content="Архів всіх подій українського стендап-клубу У Стендап у Кельні. Концерти, відкриті мікрофони, читки.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.ustandup.club/all-events.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.ustandup.club/all-events.html">
+    <meta property="og:title" content="Всі події | У Стендап">
+    <meta property="og:description" content="Архів всіх подій українського стендап-клубу у Кельні.">
+    <meta property="og:image" content="https://www.ustandup.club/img/og-image.webp">
+    <meta property="og:locale" content="uk_UA">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+
+    <!-- Styles -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .pagination-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--color-border);
+            background: var(--color-bg);
+            color: var(--color-text);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-btn.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        .pagination-info {
+            color: var(--color-text-light);
+            font-size: 0.9rem;
+            margin-left: 1rem;
+        }
+
+        .events-stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--color-text-light);
+        }
+
+        .year-filter {
+            margin-bottom: 1.5rem;
+        }
+
+        .year-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .year-chip {
+            padding: 0.4rem 1rem;
+            border: 1px solid var(--color-border);
+            background: var(--color-bg);
+            color: var(--color-text);
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            transition: all var(--transition);
+            font-size: 0.85rem;
+        }
+
+        .year-chip:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .year-chip.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header injected by JS -->
+
+    <main>
+        <section class="container" style="padding-top: 2rem; padding-bottom: 3rem;">
+            <h1 class="section-title">Всі події</h1>
+
+            <div class="events-stats" id="events-stats"></div>
+
+            <div class="year-filter">
+                <div class="year-chips" id="year-chips"></div>
+            </div>
+
+            <div class="filter-chips" id="filter-chips" style="margin-bottom: 1.5rem;">
+                <button class="filter-chip active" data-filter="all">Всі</button>
+                <button class="filter-chip" data-filter="concert">Концерти</button>
+                <button class="filter-chip" data-filter="open-mic">Відкриті мікрофони</button>
+                <button class="filter-chip" data-filter="workshop">Читки</button>
+            </div>
+
+            <div class="events-grid" id="events-list"></div>
+
+            <p id="no-events-message" class="text-muted text-center mt-4" style="display: none;">
+                Немає подій у цій категорії
+            </p>
+
+            <div class="pagination-container" id="pagination"></div>
+        </section>
+    </main>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <span class="lightbox__close">&times;</span>
+        <img id="lightbox-image" src="" alt="">
+    </div>
+
+    <!-- Footer injected by JS -->
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        import events from './js/events.js';
+        import { initHeader } from './js/components/header.js';
+        import { initFooter } from './js/components/footer.js';
+        import { renderEventCard, getCategoryLabel } from './js/components/event-card.js';
+
+        const EVENTS_PER_PAGE = 40;
+        let currentPage = 1;
+        let currentFilter = 'all';
+        let currentYear = 'all';
+        let filteredEvents = [];
+
+        // Lightbox
+        window.openLightbox = function(imageSrc) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImage = document.getElementById('lightbox-image');
+            if (lightbox && lightboxImage) {
+                lightboxImage.src = imageSrc;
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        };
+
+        window.closeLightbox = function() {
+            const lightbox = document.getElementById('lightbox');
+            if (lightbox) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        };
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') window.closeLightbox();
+        });
+
+        // Sort events by date (newest first)
+        const allEvents = [...events].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        // Get unique years
+        const years = [...new Set(allEvents.map(e => new Date(e.date).getFullYear()))].sort((a, b) => b - a);
+
+        function filterEvents() {
+            filteredEvents = allEvents.filter(event => {
+                const matchesCategory = currentFilter === 'all' || event.category === currentFilter;
+                const matchesYear = currentYear === 'all' || new Date(event.date).getFullYear() === currentYear;
+                return matchesCategory && matchesYear;
+            });
+            currentPage = 1;
+        }
+
+        function renderStats() {
+            const now = new Date();
+            const upcoming = allEvents.filter(e => new Date(`${e.date}T${e.time}`) >= now).length;
+            const past = allEvents.length - upcoming;
+            const concerts = allEvents.filter(e => e.category === 'concert').length;
+            const openMics = allEvents.filter(e => e.category === 'open-mic').length;
+
+            document.getElementById('events-stats').innerHTML = `
+                <div class="stat-item">
+                    <div class="stat-value">${allEvents.length}</div>
+                    <div class="stat-label">Всього подій</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${upcoming}</div>
+                    <div class="stat-label">Майбутніх</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${concerts}</div>
+                    <div class="stat-label">Концертів</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${openMics}</div>
+                    <div class="stat-label">Відкритих мікрофонів</div>
+                </div>
+            `;
+        }
+
+        function renderYearChips() {
+            const container = document.getElementById('year-chips');
+            container.innerHTML = `
+                <button class="year-chip ${currentYear === 'all' ? 'active' : ''}" data-year="all">Всі роки</button>
+                ${years.map(year => `
+                    <button class="year-chip ${currentYear === year ? 'active' : ''}" data-year="${year}">${year}</button>
+                `).join('')}
+            `;
+
+            container.querySelectorAll('.year-chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    currentYear = chip.dataset.year === 'all' ? 'all' : parseInt(chip.dataset.year);
+                    filterEvents();
+                    renderYearChips();
+                    renderEvents();
+                    renderPagination();
+                });
+            });
+        }
+
+        function renderEvents() {
+            const container = document.getElementById('events-list');
+            const noEventsMsg = document.getElementById('no-events-message');
+
+            const startIndex = (currentPage - 1) * EVENTS_PER_PAGE;
+            const endIndex = startIndex + EVENTS_PER_PAGE;
+            const pageEvents = filteredEvents.slice(startIndex, endIndex);
+
+            if (pageEvents.length === 0) {
+                container.innerHTML = '';
+                noEventsMsg.style.display = 'block';
+            } else {
+                container.innerHTML = pageEvents.map(event => renderEventCard(event)).join('');
+                noEventsMsg.style.display = 'none';
+            }
+
+            // Scroll to top of events list
+            if (currentPage > 1) {
+                container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function renderPagination() {
+            const container = document.getElementById('pagination');
+            const totalPages = Math.ceil(filteredEvents.length / EVENTS_PER_PAGE);
+
+            if (totalPages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let html = `
+                <button class="pagination-btn" onclick="goToPage(1)" ${currentPage === 1 ? 'disabled' : ''}>«</button>
+                <button class="pagination-btn" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>‹</button>
+            `;
+
+            // Show page numbers
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+            if (endPage - startPage < maxVisiblePages - 1) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                html += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+            }
+
+            html += `
+                <button class="pagination-btn" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>›</button>
+                <button class="pagination-btn" onclick="goToPage(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''}>»</button>
+                <span class="pagination-info">${filteredEvents.length} подій</span>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        window.goToPage = function(page) {
+            const totalPages = Math.ceil(filteredEvents.length / EVENTS_PER_PAGE);
+            if (page >= 1 && page <= totalPages) {
+                currentPage = page;
+                renderEvents();
+                renderPagination();
+            }
+        };
+
+        function initFilterChips() {
+            const chips = document.querySelectorAll('.filter-chip');
+            chips.forEach(chip => {
+                chip.addEventListener('click', () => {
+                    chips.forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    currentFilter = chip.dataset.filter;
+                    filterEvents();
+                    renderEvents();
+                    renderPagination();
+                });
+            });
+        }
+
+        function init() {
+            initHeader('all-events');
+            initFooter();
+
+            filterEvents();
+            renderStats();
+            renderYearChips();
+            initFilterChips();
+            renderEvents();
+            renderPagination();
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+
+</html>

@@ -224,7 +224,7 @@ function generateEventPage(event) {
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item"><a class="nav-link" href="/">Головна</a></li>
-                        <li class="nav-item"><a class="nav-link active" href="/#events">Події</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="/all-events.html">Всі події</a></li>
                         <li class="nav-item"><a class="nav-link" href="/#about-us">Про нас</a></li>
                         <li class="nav-item"><a class="nav-link" href="/other-clubs.html">Інші клуби</a></li>
                     </ul>
@@ -390,6 +390,12 @@ function generateSitemap(events) {
         <lastmod>${today}</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
+    </url>
+    <url>
+        <loc>${SITE_URL}/all-events.html</loc>
+        <lastmod>${today}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
     </url>
     <url>
         <loc>${SITE_URL}/other-clubs.html</loc>

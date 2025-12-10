@@ -8,6 +8,12 @@
         <priority>1.0</priority>
     </url>
     <url>
+        <loc>https://www.ustandup.club/all-events.html</loc>
+        <lastmod>2025-12-10</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
         <loc>https://www.ustandup.club/other-clubs.html</loc>
         <lastmod>2025-12-10</lastmod>
         <changefreq>monthly</changefreq>
