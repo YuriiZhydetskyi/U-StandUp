@@ -23,18 +23,19 @@ export function renderHeader(activePage = 'home') {
 
     return `
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark">
+        <nav class="navbar">
             <div class="container">
                 <a class="navbar-brand" href="index.html">
                     <img src="${SITE_CONFIG.logo}" alt="${SITE_CONFIG.name}" width="120" height="50">
                     <span class="brand-tagline">${SITE_CONFIG.tagline}</span>
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                <button class="navbar-toggler" type="button" aria-label="Toggle navigation" onclick="toggleMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
+                <div class="navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
                         ${nav.map(item => `
                             <li class="nav-item">
                                 <a class="nav-link ${activePage === item.id ? 'active' : ''}" href="${item.href}">${item.label}</a>
@@ -49,6 +50,35 @@ export function renderHeader(activePage = 'home') {
 
 export function initHeader(activePage = 'home') {
     document.body.insertAdjacentHTML('afterbegin', renderHeader(activePage));
+
+    // Add mobile menu toggle function to window
+    window.toggleMenu = function() {
+        const navCollapse = document.getElementById('navbarNav');
+        if (navCollapse) {
+            navCollapse.classList.toggle('show');
+        }
+    };
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        const navCollapse = document.getElementById('navbarNav');
+        const toggler = document.querySelector('.navbar-toggler');
+        if (navCollapse && navCollapse.classList.contains('show')) {
+            if (!navCollapse.contains(e.target) && !toggler.contains(e.target)) {
+                navCollapse.classList.remove('show');
+            }
+        }
+    });
+
+    // Close menu when clicking a link
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            const navCollapse = document.getElementById('navbarNav');
+            if (navCollapse) {
+                navCollapse.classList.remove('show');
+            }
+        });
+    });
 }
 
 export { SITE_CONFIG };
