@@ -112,10 +112,19 @@ window.generateICS = async function(eventId) {
 
 /**
  * Display the hero event (nearest featured upcoming event)
+ * Note: Hero is pre-rendered at build time, so this only runs if content is missing
  */
 function displayHeroEvent() {
     const heroSection = document.getElementById('hero-event');
     if (!heroSection || upcomingEvents.length === 0) return;
+
+    // Check if hero is already pre-rendered (has content)
+    const heroTitle = document.getElementById('hero-event-title');
+    if (heroTitle && heroTitle.textContent.trim()) {
+        // Already pre-rendered, just show the section
+        heroSection.style.display = 'block';
+        return;
+    }
 
     // Find the nearest featured event, or just the nearest event
     const heroEvent = upcomingEvents.find(e => e.isFavorite && e.image) || upcomingEvents.find(e => e.image) || upcomingEvents[0];
@@ -124,7 +133,7 @@ function displayHeroEvent() {
     // Ensure image path is absolute
     const imageSrc = heroEvent.image.startsWith('/') ? heroEvent.image : `/${heroEvent.image}`;
 
-    // Populate hero section
+    // Populate hero section (fallback if not pre-rendered)
     document.getElementById('hero-event-image').src = imageSrc;
     document.getElementById('hero-event-image').alt = heroEvent.name;
     document.getElementById('hero-event-badge').textContent = getCategoryLabel(heroEvent.category) || 'Подія';

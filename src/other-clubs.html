@@ -205,9 +205,18 @@
             const location = club.city ? `${club.city}, ${club.country}` : club.country;
             const linksHtml = club.links.map(l => `<a href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`).join(' ');
 
+            // Convert image path to responsive format: img/name.webp → img/name-80.webp
+            let imgHtml = '<div></div>';
+            if (club.picture) {
+                const basePath = club.picture.replace(/\.webp$/, '');
+                const src = `${basePath}-80.webp`;
+                const srcset = `${basePath}-80.webp 80w, ${basePath}-120.webp 120w, ${basePath}-160.webp 160w, ${basePath}-240.webp 240w`;
+                imgHtml = `<img src="${src}" srcset="${srcset}" sizes="80px" alt="${club.title}" class="club-card__logo" loading="lazy" width="80" height="80">`;
+            }
+
             return `
             <article class="club-card" id="${club.id}">
-                ${club.picture ? `<img src="${club.picture}" alt="${club.title}" class="club-card__logo" loading="lazy" width="80" height="80">` : '<div></div>'}
+                ${imgHtml}
                 <div>
                     <h2 class="club-card__name">${club.title}</h2>
                     <p class="club-card__location">${location}</p>

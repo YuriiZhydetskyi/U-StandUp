@@ -5,7 +5,8 @@
 const SITE_CONFIG = {
     name: 'У Стендап',
     tagline: 'український стендап у Кельні',
-    logo: '/img/logo.webp',
+    logo: '/img/logo-120.webp',
+    logoSrcset: '/img/logo-120.webp 120w, /img/logo-160.webp 160w, /img/logo-240.webp 240w',
     social: {
         instagram: 'https://www.instagram.com/u_standup_cologne/',
         whatsapp: 'https://chat.whatsapp.com/BXBNeksXPrJ29btgeo9BZZ',
@@ -26,7 +27,7 @@ export function renderHeader(activePage = 'home') {
         <nav class="navbar">
             <div class="container">
                 <a class="navbar-brand" href="index.html">
-                    <img src="${SITE_CONFIG.logo}" alt="${SITE_CONFIG.name}" width="120" height="50">
+                    <img src="${SITE_CONFIG.logo}" srcset="${SITE_CONFIG.logoSrcset}" sizes="120px" alt="${SITE_CONFIG.name}" width="120" height="50">
                     <span class="brand-tagline">${SITE_CONFIG.tagline}</span>
                 </a>
                 <button class="navbar-toggler" type="button" aria-label="Toggle navigation" onclick="toggleMenu()">
