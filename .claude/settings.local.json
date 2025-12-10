@@ -23,7 +23,8 @@
       "Bash(npm run start:*)",
       "Bash(npm run build:*)",
       "Bash(dir:*)",
-      "Bash(xargs:*)"
+      "Bash(xargs:*)",
+      "Bash(npm run build:dist:*)"
     ],
     "deny": [
       "Bash(rm -rf *)",

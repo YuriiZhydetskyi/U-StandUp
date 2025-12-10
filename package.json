@@ -5,7 +5,9 @@
   "main": "app.js",
   "scripts": {
     "start": "npx serve .",
+    "start:dist": "npx serve dist",
     "build": "node scripts/build-events.js && node scripts/build-event-pages.js",
+    "build:dist": "node scripts/build-dist.js",
     "build-events": "node scripts/build-events.js",
     "build-pages": "node scripts/build-event-pages.js",
     "convert-events": "node scripts/convert-events-to-yaml.js",
