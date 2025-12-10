@@ -357,6 +357,7 @@
     width: 100%;
     max-width: 450px;
     margin: 0 auto;
+    aspect-ratio: 3 / 4;
 }
 
 @media (min-width: 768px) {
@@ -367,6 +368,8 @@
 
 .hero-event__image img {
     width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
     cursor: pointer;
