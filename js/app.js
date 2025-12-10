@@ -13,6 +13,31 @@ let showPastEvents = false;
 let upcomingEvents = [];
 let pastEvents = [];
 
+/**
+ * URL state management - read/write filter state to URL
+ */
+function getFilterFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return {
+        category: params.get('category') || 'all',
+        showPast: params.get('past') === 'true'
+    };
+}
+
+function updateURL(category, showPast) {
+    const params = new URLSearchParams();
+    if (category && category !== 'all') {
+        params.set('category', category);
+    }
+    if (showPast) {
+        params.set('past', 'true');
+    }
+    const newURL = params.toString()
+        ? `${window.location.pathname}?${params.toString()}${window.location.hash}`
+        : `${window.location.pathname}${window.location.hash}`;
+    window.history.replaceState({}, '', newURL);
+}
+
 // Lightbox functions (global)
 window.openLightbox = function(imageSrc) {
     const lightbox = document.getElementById('lightbox');
@@ -201,7 +226,24 @@ function initFilterChips() {
             // Filter events
             currentFilter = chip.dataset.filter;
             displayEvents(currentFilter);
+
+            // Update URL
+            updateURL(currentFilter, showPastEvents);
         });
+    });
+}
+
+/**
+ * Set active filter chip based on category
+ */
+function setActiveFilterChip(category) {
+    const chips = document.querySelectorAll('.filter-chip');
+    chips.forEach(chip => {
+        if (chip.dataset.filter === category) {
+            chip.classList.add('active');
+        } else {
+            chip.classList.remove('active');
+        }
     });
 }
 
@@ -242,6 +284,9 @@ function initPastEventsToggle() {
         showPastEvents = checkbox.checked;
         updateFilterCounts();
         displayEvents(currentFilter);
+
+        // Update URL
+        updateURL(currentFilter, showPastEvents);
     });
 }
 
@@ -253,20 +298,32 @@ function init() {
     // Categorize events
     categorizeEvents();
 
+    // Read filter state from URL
+    const urlState = getFilterFromURL();
+    currentFilter = urlState.category;
+    showPastEvents = urlState.showPast;
+
+    // Set checkbox state from URL
+    const checkbox = document.getElementById('show-past-events');
+    if (checkbox) {
+        checkbox.checked = showPastEvents;
+    }
+
     // Display hero event
     displayHeroEvent();
 
     // Update filter counts
     updateFilterCounts();
 
-    // Initialize filter chips
+    // Initialize filter chips and set active state from URL
     initFilterChips();
+    setActiveFilterChip(currentFilter);
 
     // Initialize past events toggle
     initPastEventsToggle();
 
-    // Display upcoming events
-    displayEvents();
+    // Display events with filter from URL
+    displayEvents(currentFilter);
 }
 
 // Initialize when DOM is ready

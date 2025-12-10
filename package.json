@@ -10,6 +10,8 @@
     "build-pages": "node scripts/build-event-pages.js",
     "convert-events": "node scripts/convert-events-to-yaml.js",
     "optimize-images": "node scripts/optimize-images.js",
+    "standardize-ids": "node scripts/standardize-event-ids.js",
+    "standardize-ids:preview": "node scripts/standardize-event-ids.js --dry-run",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

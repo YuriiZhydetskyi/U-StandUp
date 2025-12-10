@@ -21,7 +21,9 @@
       "Bash(npm run build-events:*)",
       "Bash(npm run build-pages:*)",
       "Bash(npm run start:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(dir:*)",
+      "Bash(xargs:*)"
     ],
     "deny": [
       "Bash(rm -rf *)",

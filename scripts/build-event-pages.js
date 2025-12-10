@@ -12,19 +12,15 @@ const EVENTS_JSON = path.join(__dirname, '..', 'data', 'events.json');
 const EVENTS_DIR = path.join(__dirname, '..', 'events');
 const OUTPUT_DIR = path.join(EVENTS_DIR);
 
-const SITE_URL = 'https://www.ustandup.club';
-
-const categoryLabels = {
-    'concert': 'Концерт',
-    'open-mic': 'Відкритий мікрофон',
-    'workshop': 'Читка'
-};
+// Load shared constants
+const constants = require('../data/constants.json');
+const SITE_URL = constants.SITE_URL;
+const categoryLabels = constants.CATEGORY_LABELS;
+const MONTHS_FULL = constants.MONTHS_FULL;
 
 function formatDate(dateString) {
     const date = new Date(dateString);
-    const months = ['січня', 'лютого', 'березня', 'квітня', 'травня', 'червня',
-                   'липня', 'серпня', 'вересня', 'жовтня', 'листопада', 'грудня'];
-    return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+    return `${date.getDate()} ${MONTHS_FULL[date.getMonth()]} ${date.getFullYear()}`;
 }
 
 function formatDateISO(dateString, time) {
@@ -32,7 +28,7 @@ function formatDateISO(dateString, time) {
 }
 
 function stripHtml(html) {
-    return html.replace(/<[^>]*>/g, '').replace(/\n/g, ' ').trim().substring(0, 200);
+    return (html || '').replace(/<[^>]*>/g, '').replace(/\n/g, ' ').trim().substring(0, 200);
 }
 
 function generateEventPage(event) {
@@ -375,6 +371,80 @@ function createGoogleCalendarLink(event) {
     return `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodedName}&dates=${startDate.toISOString().replace(/-|:|\.\d\d\d/g, '')}/${endDate.toISOString().replace(/-|:|\.\d\d\d/g, '')}&details=${encodedDescription}&location=${encodedLocation}`;
 }
 
+/**
+ * Generate sitemap.xml with all pages
+ */
+function generateSitemap(events) {
+    const today = new Date().toISOString().split('T')[0];
+    const now = new Date();
+
+    // Categorize events
+    const upcomingEvents = events.filter(e => new Date(`${e.date}T${e.time}`) >= now);
+    const pastEvents = events.filter(e => new Date(`${e.date}T${e.time}`) < now);
+
+    let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <!-- Main Pages -->
+    <url>
+        <loc>${SITE_URL}/</loc>
+        <lastmod>${today}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+    <url>
+        <loc>${SITE_URL}/other-clubs.html</loc>
+        <lastmod>${today}</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+`;
+
+    // Upcoming events (higher priority)
+    if (upcomingEvents.length > 0) {
+        sitemap += `
+    <!-- Upcoming Events -->`;
+        for (const event of upcomingEvents) {
+            sitemap += `
+    <url>
+        <loc>${SITE_URL}/events/${event.id}/</loc>
+        <lastmod>${today}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>`;
+        }
+    }
+
+    // Past events (lower priority)
+    if (pastEvents.length > 0) {
+        sitemap += `
+
+    <!-- Past Events -->`;
+        for (const event of pastEvents) {
+            sitemap += `
+    <url>
+        <loc>${SITE_URL}/events/${event.id}/</loc>
+        <lastmod>${today}</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
+    </url>`;
+        }
+    }
+
+    sitemap += `
+
+    <!-- Resources -->
+    <url>
+        <loc>${SITE_URL}/data/events.json</loc>
+        <lastmod>${today}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+    </url>
+</urlset>
+`;
+
+    return sitemap;
+}
+
 function buildEventPages() {
     console.log('Building event pages...\n');
 
@@ -396,6 +466,13 @@ function buildEventPages() {
     }
 
     console.log(`\nGenerated ${events.length} event pages`);
+
+    // Generate sitemap
+    console.log('\nGenerating sitemap.xml...');
+    const sitemap = generateSitemap(events);
+    const sitemapPath = path.join(__dirname, '..', 'sitemap.xml');
+    fs.writeFileSync(sitemapPath, sitemap, 'utf8');
+    console.log('✓ sitemap.xml');
 }
 
 buildEventPages();

@@ -2,51 +2,16 @@
  * Event card component - new design with larger images and filter support
  */
 
-const CATEGORY_LABELS = {
-    'concert': 'Концерт',
-    'open-mic': 'Відкритий мікрофон',
-    'workshop': 'Читка'
-};
+import {
+    getCategoryLabel,
+    formatDate,
+    formatDateShort,
+    formatDateFull,
+    createGoogleCalendarLink
+} from '../utils/constants.js';
 
-const MONTHS_SHORT = ['Січ', 'Лют', 'Бер', 'Кві', 'Тра', 'Чер', 'Лип', 'Сер', 'Вер', 'Жов', 'Лис', 'Гру'];
-
-export function formatDate(dateString) {
-    const date = new Date(dateString);
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}.${month}.${year}`;
-}
-
-export function formatDateShort(dateString) {
-    const date = new Date(dateString);
-    return {
-        day: date.getDate(),
-        month: MONTHS_SHORT[date.getMonth()],
-        year: date.getFullYear()
-    };
-}
-
-export function formatDateFull(dateString) {
-    const date = new Date(dateString);
-    const days = ['Неділя', 'Понеділок', 'Вівторок', 'Середа', 'Четвер', 'П\'ятниця', 'Субота'];
-    const months = ['січня', 'лютого', 'березня', 'квітня', 'травня', 'червня', 'липня', 'серпня', 'вересня', 'жовтня', 'листопада', 'грудня'];
-    return `${days[date.getDay()]}, ${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
-}
-
-export function createGoogleCalendarLink(event) {
-    const startDate = new Date(`${event.date}T${event.time}`);
-    const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000);
-    const encodedName = encodeURIComponent(event.name);
-    const encodedDescription = encodeURIComponent((event.description || '').replace(/<[^>]*>/g, ''));
-    const encodedLocation = encodeURIComponent(event.locationForCalendar || event.location);
-
-    return `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodedName}&dates=${startDate.toISOString().replace(/-|:|\.\d\d\d/g, '')}/${endDate.toISOString().replace(/-|:|\.\d\d\d/g, '')}&details=${encodedDescription}&location=${encodedLocation}`;
-}
-
-export function getCategoryLabel(category) {
-    return CATEGORY_LABELS[category] || category;
-}
+// Re-export utilities for backward compatibility
+export { getCategoryLabel, formatDate, formatDateShort, formatDateFull, createGoogleCalendarLink };
 
 /**
  * Render an event card for the grid
