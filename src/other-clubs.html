@@ -207,7 +207,7 @@
 
             return `
             <article class="club-card" id="${club.id}">
-                ${club.picture ? `<img src="${club.picture}" alt="${club.title}" class="club-card__logo" loading="lazy">` : '<div></div>'}
+                ${club.picture ? `<img src="${club.picture}" alt="${club.title}" class="club-card__logo" loading="lazy" width="80" height="80">` : '<div></div>'}
                 <div>
                     <h2 class="club-card__name">${club.title}</h2>
                     <p class="club-card__location">${location}</p>

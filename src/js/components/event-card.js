@@ -26,7 +26,7 @@ export function renderEventCard(event) {
 
     const imageHtml = imageSrc ? `
         <div class="event-card__image-wrapper">
-            <img class="event-card__image" src="${imageSrc}" alt="${event.name}" loading="lazy" onclick="openLightbox('${imageSrc}')">
+            <img class="event-card__image" src="${imageSrc}" alt="${event.name}" loading="lazy" width="350" height="220" onclick="openLightbox('${imageSrc}')">
             <div class="event-card__date-badge">
                 <span class="day">${dateInfo.day}</span>
                 <span class="month">${dateInfo.month}</span>
