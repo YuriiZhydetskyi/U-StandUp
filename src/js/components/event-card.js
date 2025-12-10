@@ -14,13 +14,23 @@ import {
 export { getCategoryLabel, formatDate, formatDateShort, formatDateFull, createGoogleCalendarLink };
 
 /**
- * Convert image path to sized version (e.g., img/photo.webp -> img/photo-400.webp)
+ * Get responsive image attributes for event cards
+ * Returns src, srcset and sizes for optimal loading
  */
-function getSizedImagePath(imagePath, size = 400) {
+function getResponsiveImageAttrs(imagePath) {
     if (!imagePath) return null;
-    const path = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
-    // Replace .webp with -SIZE.webp
-    return path.replace(/\.webp$/, `-${size}.webp`);
+    const basePath = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
+    const pathWithoutExt = basePath.replace(/\.webp$/, '');
+
+    // Available sizes (must match build-dist.js RESPONSIVE_SIZES)
+    const sizes = [300, 400, 600, 800, 1000];
+
+    return {
+        src: `${pathWithoutExt}-400.webp`,
+        srcset: sizes.map(s => `${pathWithoutExt}-${s}.webp ${s}w`).join(', '),
+        // Event cards: ~350px in grid, responsive
+        sizes: '(min-width: 992px) 350px, (min-width: 576px) 45vw, 90vw'
+    };
 }
 
 /**
@@ -31,12 +41,12 @@ export function renderEventCard(event) {
     const isPast = new Date(`${event.date}T${event.time}`) < new Date();
     const categoryLabel = getCategoryLabel(event.category);
     const eventUrl = `/events/${event.id}/`;
-    // Get sized image path (400px for event cards)
-    const imageSrc = getSizedImagePath(event.image, 400);
+    // Get responsive image attributes
+    const imgAttrs = getResponsiveImageAttrs(event.image);
 
-    const imageHtml = imageSrc ? `
+    const imageHtml = imgAttrs ? `
         <div class="event-card__image-wrapper">
-            <img class="event-card__image" src="${imageSrc}" alt="${event.name}" loading="lazy" width="350" height="220" onclick="openLightbox('${imageSrc}')">
+            <img class="event-card__image" src="${imgAttrs.src}" srcset="${imgAttrs.srcset}" sizes="${imgAttrs.sizes}" alt="${event.name}" loading="lazy" width="350" height="220" onclick="openLightbox('${imgAttrs.src}')">
             <div class="event-card__date-badge">
                 <span class="day">${dateInfo.day}</span>
                 <span class="month">${dateInfo.month}</span>
@@ -58,10 +68,10 @@ export function renderEventCard(event) {
         : '';
 
     return `
-    <article class="event-card ${isPast ? 'event-card--past' : ''} ${event.isFavorite ? 'event-card--featured' : ''} ${!imageSrc ? 'event-card--no-image' : ''}"
+    <article class="event-card ${isPast ? 'event-card--past' : ''} ${event.isFavorite ? 'event-card--featured' : ''} ${!imgAttrs ? 'event-card--no-image' : ''}"
              data-category="${event.category || ''}" id="${event.id}">
         <div class="event-card__inner">
-            ${imageSrc ? imageHtml : `
+            ${imgAttrs ? imageHtml : `
                 <div class="event-card__date-badge">
                     <span class="day">${dateInfo.day}</span>
                     <span class="month">${dateInfo.month}</span>
