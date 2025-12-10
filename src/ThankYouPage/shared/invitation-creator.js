@@ -788,6 +788,7 @@
     function openInvitationCreator() {
         if (!invitationCreator) {
             invitationCreator = new InvitationCreator();
+            window.invitationCreator = invitationCreator;
         }
         invitationCreator.open();
     }
