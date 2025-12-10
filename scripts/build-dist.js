@@ -112,7 +112,7 @@ function findFiles(dir, extensions, files = []) {
 /**
  * Parse HTML and JS files to extract image dimensions
  */
-function parseHtmlForImageDimensions() {
+async function parseHtmlForImageDimensions() {
     console.log('Parsing HTML and JS for image dimensions...');
 
     imageDimensionsMap = new Map();
@@ -186,8 +186,8 @@ function parseHtmlForImageDimensions() {
     }
 
     // Parse YAML event files for image paths
-    // Event images are displayed at 600x800 in hero section
-    parseEventImagesFromYaml();
+    // Event images are displayed at 400px in hero section
+    await parseEventImagesFromYaml();
 
     // Parse club logos from other-clubs.html JS data
     // Club logos are displayed at 80x80
@@ -206,7 +206,7 @@ function parseHtmlForImageDimensions() {
  * Hero section CSS: 400px on desktop, max 450px on mobile
  * We use 400px as base (generates 400w + 800w for retina)
  */
-function parseEventImagesFromYaml() {
+async function parseEventImagesFromYaml() {
     const eventFiles = fs.readdirSync(EVENTS_SOURCE)
         .filter(f => f.endsWith('.yaml') || f.endsWith('.yml'));
 
@@ -229,11 +229,15 @@ function parseEventImagesFromYaml() {
                 // Check if file exists
                 const fullPath = path.join(SRC_DIR, imagePath);
                 if (fs.existsSync(fullPath)) {
-                    // Use 400px for hero (CSS: 400px desktop, 450px mobile max)
-                    // This generates 400w + 800w (retina) versions
+                    // Read actual image dimensions to calculate correct aspect ratio
+                    const metadata = await sharp(fullPath).metadata();
+                    const aspectRatio = metadata.width / metadata.height;
+                    const targetWidth = 400;
+                    const targetHeight = Math.round(targetWidth / aspectRatio);
+
                     const existing = imageDimensionsMap.get(imagePath);
-                    if (!existing || existing.width < 400) {
-                        imageDimensionsMap.set(imagePath, { width: 400, height: 533 });
+                    if (!existing || existing.width < targetWidth) {
+                        imageDimensionsMap.set(imagePath, { width: targetWidth, height: targetHeight });
                     }
                 }
             }
@@ -729,6 +733,13 @@ function preRenderHeroSection(events) {
     }
 
     const imageAttrs = getEventImageAttributes(heroEvent.image, { isHero: true });
+
+    // Get actual dimensions from map for correct aspect ratio
+    let imagePath = heroEvent.image;
+    if (imagePath.startsWith('/')) imagePath = imagePath.slice(1);
+    if (!imagePath.startsWith('img/')) imagePath = `img/${imagePath}`;
+    const dimensions = imageDimensionsMap.get(imagePath) || { width: 400, height: 500 };
+
     const categoryLabel = categoryLabels[heroEvent.category] || 'Подія';
     const dateFormatted = `${getDayOfWeek(heroEvent.date)}, ${formatDate(heroEvent.date)}`;
     const description = stripHtml(heroEvent.description || '').substring(0, 200) + '...';
@@ -766,7 +777,7 @@ function preRenderHeroSection(events) {
             <div class="container">
                 <div class="hero-event__inner">
                     <div class="hero-event__image">
-                        <img id="hero-event-image" src="${imageAttrs.src}"${srcsetAttr}${sizesAttr} alt="${heroEvent.name}" onclick="openLightbox(this.src)" style="cursor: pointer;" fetchpriority="high" width="400" height="533">
+                        <img id="hero-event-image" src="${imageAttrs.src}"${srcsetAttr}${sizesAttr} alt="${heroEvent.name}" onclick="openLightbox(this.src)" style="cursor: pointer;" fetchpriority="high" width="${dimensions.width}" height="${dimensions.height}">
                     </div>
                     <div class="hero-event__content">
                         <span class="hero-event__badge" id="hero-event-badge">${categoryLabel}</span>
@@ -1026,7 +1037,7 @@ async function build() {
     console.log('=== Building dist/ for deployment ===\n');
 
     // Step 1: Parse HTML for image dimensions BEFORE cleaning dist
-    parseHtmlForImageDimensions();
+    await parseHtmlForImageDimensions();
 
     // Step 2: Clean and prepare dist
     cleanDist();

@@ -14,6 +14,16 @@ import {
 export { getCategoryLabel, formatDate, formatDateShort, formatDateFull, createGoogleCalendarLink };
 
 /**
+ * Convert image path to sized version (e.g., img/photo.webp -> img/photo-400.webp)
+ */
+function getSizedImagePath(imagePath, size = 400) {
+    if (!imagePath) return null;
+    const path = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
+    // Replace .webp with -SIZE.webp
+    return path.replace(/\.webp$/, `-${size}.webp`);
+}
+
+/**
  * Render an event card for the grid
  */
 export function renderEventCard(event) {
@@ -21,8 +31,8 @@ export function renderEventCard(event) {
     const isPast = new Date(`${event.date}T${event.time}`) < new Date();
     const categoryLabel = getCategoryLabel(event.category);
     const eventUrl = `/events/${event.id}/`;
-    // Ensure image path is absolute
-    const imageSrc = event.image ? (event.image.startsWith('/') ? event.image : `/${event.image}`) : null;
+    // Get sized image path (400px for event cards)
+    const imageSrc = getSizedImagePath(event.image, 400);
 
     const imageHtml = imageSrc ? `
         <div class="event-card__image-wrapper">

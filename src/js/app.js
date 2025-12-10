@@ -130,8 +130,9 @@ function displayHeroEvent() {
     const heroEvent = upcomingEvents.find(e => e.isFavorite && e.image) || upcomingEvents.find(e => e.image) || upcomingEvents[0];
     if (!heroEvent || !heroEvent.image) return;
 
-    // Ensure image path is absolute
-    const imageSrc = heroEvent.image.startsWith('/') ? heroEvent.image : `/${heroEvent.image}`;
+    // Convert to sized image path (400px for hero)
+    let imagePath = heroEvent.image.startsWith('/') ? heroEvent.image : `/${heroEvent.image}`;
+    const imageSrc = imagePath.replace(/\.webp$/, '-400.webp');
 
     // Populate hero section (fallback if not pre-rendered)
     document.getElementById('hero-event-image').src = imageSrc;
