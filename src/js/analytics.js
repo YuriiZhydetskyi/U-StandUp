@@ -9,7 +9,7 @@
     window.__ustandup_analytics_initialized = true;
 
     const startTime = Date.now();
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxaI9W6B2782WKEOC8dqkoxzEfxjkCSdQUCQ5Nkp6v4uDQQ4_CX2tQbyYUPSHctuZ1Trg/exec';
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxvSjgwH2l9kcriQKy7yQTGlnd8pEr9-bUPu3xQYjTZaECrMHZV0V68e5Y5_-UItoE1Yg/exec';
 
     let analyticsSent = false;
 

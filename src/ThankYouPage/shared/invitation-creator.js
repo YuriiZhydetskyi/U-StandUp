@@ -10,6 +10,28 @@
 
     const invConfig = window.INVITATION_CONFIG || {};
 
+    // Analytics tracking
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxvSjgwH2l9kcriQKy7yQTGlnd8pEr9-bUPu3xQYjTZaECrMHZV0V68e5Y5_-UItoE1Yg/exec';
+
+    function trackEvent(eventType, extraData = {}) {
+        const data = new URLSearchParams({
+            timestamp: new Date().toISOString(),
+            page: window.location.pathname,
+            eventType: eventType,
+            eventName: invConfig.eventName || '',
+            ...extraData
+        });
+
+        if (navigator.sendBeacon) {
+            navigator.sendBeacon(GOOGLE_SCRIPT_URL, data);
+        } else {
+            fetch(GOOGLE_SCRIPT_URL + '?' + data.toString(), {
+                method: 'GET',
+                mode: 'no-cors'
+            }).catch(() => {});
+        }
+    }
+
     // Build templates dynamically based on config
     function buildTemplates() {
         const eventDate = invConfig.eventDate || '15 грудня';
@@ -139,6 +161,9 @@
             this.createModal();
             this.render();
             document.body.style.overflow = 'hidden';
+
+            // Track modal open
+            trackEvent('invitation_modal_open');
         }
 
         close() {
@@ -721,6 +746,15 @@
             const text = this.getCurrentText();
             const encodedText = encodeURIComponent(text);
             const telegramUrl = `https://t.me/share/url?url=&text=${encodedText}`;
+
+            // Track Telegram share
+            trackEvent('invitation_share', {
+                messenger: 'telegram',
+                style: this.currentStyle,
+                textLength: text.length,
+                text: text.substring(0, 500) // Limit text length for logging
+            });
+
             window.open(telegramUrl, '_blank', 'width=600,height=600');
         }
 
@@ -728,6 +762,14 @@
             const text = this.getCurrentText();
             const encodedText = encodeURIComponent(text);
             const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+            // Track WhatsApp share
+            trackEvent('invitation_share', {
+                messenger: 'whatsapp',
+                style: this.currentStyle,
+                textLength: text.length,
+                text: text.substring(0, 500) // Limit text length for logging
+            });
 
             let whatsappUrl;
             if (isMobile) {
