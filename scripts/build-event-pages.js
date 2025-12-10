@@ -8,12 +8,13 @@
 const fs = require('fs');
 const path = require('path');
 
-const EVENTS_JSON = path.join(__dirname, '..', 'data', 'events.json');
-const EVENTS_DIR = path.join(__dirname, '..', 'events');
+const SRC_DIR = path.join(__dirname, '..', 'src');
+const EVENTS_JSON = path.join(SRC_DIR, 'data', 'events.json');
+const EVENTS_DIR = path.join(SRC_DIR, 'events');
 const OUTPUT_DIR = path.join(EVENTS_DIR);
 
 // Load shared constants
-const constants = require('../data/constants.json');
+const constants = require('../src/data/constants.json');
 const SITE_URL = constants.SITE_URL;
 const categoryLabels = constants.CATEGORY_LABELS;
 const MONTHS_FULL = constants.MONTHS_FULL;

@@ -13,7 +13,7 @@ const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
 
-const EVENTS_DIR = path.join(__dirname, '..', 'events');
+const EVENTS_DIR = path.join(__dirname, '..', 'src', 'events');
 const DRY_RUN = process.argv.includes('--dry-run');
 
 function slugify(text) {

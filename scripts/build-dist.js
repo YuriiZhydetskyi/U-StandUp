@@ -1,26 +1,29 @@
 /**
  * Full build script that creates a complete dist/ folder for deployment
  *
- * Usage: npm run build:dist
+ * Usage: npm run build
  *
  * This script:
  * 1. Cleans dist/ folder
- * 2. Copies static files (html, css, js, img, etc.)
- * 3. Builds events from YAML → events.js + events.json
- * 4. Generates event detail pages
- * 5. Generates sitemap.xml
+ * 2. Copies static files (html, css, js, etc.)
+ * 3. Optimizes images (converts jpg/png to webp)
+ * 4. Builds events from YAML → events.js + events.json
+ * 5. Generates event detail pages
+ * 6. Generates sitemap.xml
  */
 
 const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
+const sharp = require('sharp');
 
 const ROOT_DIR = path.join(__dirname, '..');
+const SRC_DIR = path.join(ROOT_DIR, 'src');
 const DIST_DIR = path.join(ROOT_DIR, 'dist');
-const EVENTS_SOURCE = path.join(ROOT_DIR, 'events');
+const EVENTS_SOURCE = path.join(SRC_DIR, 'events');
 
 // Load shared constants
-const constants = require('../data/constants.json');
+const constants = require('../src/data/constants.json');
 const SITE_URL = constants.SITE_URL;
 const categoryLabels = constants.CATEGORY_LABELS;
 const MONTHS_FULL = constants.MONTHS_FULL;
@@ -38,11 +41,15 @@ const STATIC_FILES = [
 
 const STATIC_FOLDERS = [
     'css',
-    'img',
     'js',
     'data',
     'ThankYouPage'
 ];
+
+// Image optimization settings
+const WEBP_QUALITY = 80;
+const EXTENSIONS_TO_CONVERT = ['.jpg', '.jpeg', '.png'];
+const EXTENSIONS_TO_COPY = ['.svg', '.webp', '.gif', '.ico'];
 
 /**
  * Recursively copy a directory
@@ -67,6 +74,66 @@ function copyDir(src, dest) {
 }
 
 /**
+ * Optimize and copy images to dist
+ */
+async function optimizeImages() {
+    console.log('Optimizing images...');
+
+    const srcImgDir = path.join(SRC_DIR, 'img');
+    const destImgDir = path.join(DIST_DIR, 'img');
+
+    if (!fs.existsSync(srcImgDir)) {
+        console.log('  No img/ folder found\n');
+        return;
+    }
+
+    fs.mkdirSync(destImgDir, { recursive: true });
+
+    const files = fs.readdirSync(srcImgDir);
+    let converted = 0;
+    let copied = 0;
+    let totalSaved = 0;
+
+    for (const file of files) {
+        const ext = path.extname(file).toLowerCase();
+        const srcPath = path.join(srcImgDir, file);
+        const stat = fs.statSync(srcPath);
+
+        if (stat.isDirectory()) {
+            // Recursively copy subdirectories
+            copyDir(srcPath, path.join(destImgDir, file));
+            console.log(`  ✓ ${file}/ (copied)`);
+            continue;
+        }
+
+        if (EXTENSIONS_TO_CONVERT.includes(ext)) {
+            // Convert to WebP
+            const nameWithoutExt = path.basename(file, ext);
+            const destPath = path.join(destImgDir, `${nameWithoutExt}.webp`);
+
+            const inputSize = stat.size;
+            await sharp(srcPath)
+                .webp({ quality: WEBP_QUALITY })
+                .toFile(destPath);
+
+            const outputSize = fs.statSync(destPath).size;
+            const savings = ((1 - outputSize / inputSize) * 100).toFixed(0);
+            totalSaved += inputSize - outputSize;
+
+            console.log(`  ✓ ${file} → ${nameWithoutExt}.webp (-${savings}%)`);
+            converted++;
+        } else if (EXTENSIONS_TO_COPY.includes(ext)) {
+            // Copy as-is
+            fs.copyFileSync(srcPath, path.join(destImgDir, file));
+            console.log(`  ✓ ${file}`);
+            copied++;
+        }
+    }
+
+    console.log(`\n  Converted: ${converted}, Copied: ${copied}, Saved: ${(totalSaved / 1024).toFixed(0)}KB\n`);
+}
+
+/**
  * Clean and create dist directory
  */
 function cleanDist() {
@@ -82,11 +149,11 @@ function cleanDist() {
  * Copy static files to dist
  */
 function copyStaticFiles() {
-    console.log('Copying static files...');
+    console.log('Copying static files from src/...');
 
-    // Copy individual files
+    // Copy individual files from src/
     for (const file of STATIC_FILES) {
-        const src = path.join(ROOT_DIR, file);
+        const src = path.join(SRC_DIR, file);
         const dest = path.join(DIST_DIR, file);
         if (fs.existsSync(src)) {
             fs.copyFileSync(src, dest);
@@ -94,9 +161,9 @@ function copyStaticFiles() {
         }
     }
 
-    // Copy folders
+    // Copy folders from src/
     for (const folder of STATIC_FOLDERS) {
-        const src = path.join(ROOT_DIR, folder);
+        const src = path.join(SRC_DIR, folder);
         const dest = path.join(DIST_DIR, folder);
         if (fs.existsSync(src)) {
             copyDir(src, dest);
@@ -397,11 +464,12 @@ function generateSitemap(events) {
 /**
  * Main build function
  */
-function build() {
+async function build() {
     console.log('=== Building dist/ for deployment ===\n');
 
     cleanDist();
     copyStaticFiles();
+    await optimizeImages();
     const events = buildEvents();
     buildEventPages(events);
     generateSitemap(events);
@@ -410,4 +478,4 @@ function build() {
     console.log(`Output: ${DIST_DIR}`);
 }
 
-build();
+build().catch(console.error);

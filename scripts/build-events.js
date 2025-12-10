@@ -12,9 +12,10 @@ const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
 
-const EVENTS_DIR = path.join(__dirname, '..', 'events');
-const OUTPUT_JS = path.join(__dirname, '..', 'js', 'events.js');
-const OUTPUT_JSON = path.join(__dirname, '..', 'data', 'events.json');
+const SRC_DIR = path.join(__dirname, '..', 'src');
+const EVENTS_DIR = path.join(SRC_DIR, 'events');
+const OUTPUT_JS = path.join(SRC_DIR, 'js', 'events.js');
+const OUTPUT_JSON = path.join(SRC_DIR, 'data', 'events.json');
 
 function buildEvents() {
     console.log('Building events from YAML files...\n');
