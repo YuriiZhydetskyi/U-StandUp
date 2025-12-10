@@ -27,7 +27,8 @@
       "Bash(npm run build:dist:*)",
       "Skill(superpowers:brainstorming)",
       "Bash(npx tailwindcss --help:*)",
-      "Bash(npm run build:css:*)"
+      "Bash(npm run build:css:*)",
+      "Bash(mkdir:*)"
     ],
     "deny": [
       "Bash(rm -rf *)",

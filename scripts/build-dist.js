@@ -6,16 +6,19 @@
  * This script:
  * 1. Cleans dist/ folder
  * 2. Copies static files (html, css, js, etc.)
- * 3. Optimizes images (converts jpg/png to webp)
- * 4. Builds events from YAML → events.js + events.json
- * 5. Generates event detail pages
- * 6. Generates sitemap.xml
+ * 3. Parses HTML for image dimensions
+ * 4. Generates responsive images (1x, 2x) based on display size
+ * 5. Transforms HTML with srcset attributes
+ * 6. Builds events from YAML → events.js + events.json
+ * 7. Generates event detail pages
+ * 8. Generates sitemap.xml
  */
 
 const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
 const sharp = require('sharp');
+const { parse } = require('node-html-parser');
 
 const ROOT_DIR = path.join(__dirname, '..');
 const SRC_DIR = path.join(ROOT_DIR, 'src');
@@ -49,8 +52,12 @@ const STATIC_FOLDERS = [
 
 // Image optimization settings
 const WEBP_QUALITY = 80;
-const EXTENSIONS_TO_CONVERT = ['.jpg', '.jpeg', '.png'];
-const EXTENSIONS_TO_COPY = ['.svg', '.webp', '.gif', '.ico'];
+const EXTENSIONS_TO_CONVERT = ['.jpg', '.jpeg', '.png', '.webp'];
+const EXTENSIONS_TO_COPY = ['.svg', '.gif', '.ico'];
+
+// Store image dimensions found in HTML
+// Map: imagePath -> { width, height }
+let imageDimensionsMap = new Map();
 
 /**
  * Recursively copy a directory
@@ -75,10 +82,114 @@ function copyDir(src, dest) {
 }
 
 /**
- * Optimize and copy images to dist
+ * Find all files with given extensions recursively
  */
-async function optimizeImages() {
-    console.log('Optimizing images...');
+function findFiles(dir, extensions, files = []) {
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+
+    for (const entry of entries) {
+        const fullPath = path.join(dir, entry.name);
+        if (entry.isDirectory()) {
+            findFiles(fullPath, extensions, files);
+        } else if (extensions.some(ext => entry.name.endsWith(ext))) {
+            files.push(fullPath);
+        }
+    }
+
+    return files;
+}
+
+/**
+ * Parse HTML and JS files to extract image dimensions
+ */
+function parseHtmlForImageDimensions() {
+    console.log('Parsing HTML and JS for image dimensions...');
+
+    imageDimensionsMap = new Map();
+
+    // Parse HTML files
+    const htmlFiles = findFiles(SRC_DIR, ['.html']);
+    for (const htmlFile of htmlFiles) {
+        const content = fs.readFileSync(htmlFile, 'utf8');
+        const root = parse(content);
+        const imgs = root.querySelectorAll('img');
+
+        for (const img of imgs) {
+            const src = img.getAttribute('src');
+            const width = img.getAttribute('width');
+            const height = img.getAttribute('height');
+
+            if (!src) continue;
+
+            // Skip external URLs and data URIs
+            if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('data:')) {
+                continue;
+            }
+
+            // Skip SVGs
+            if (src.endsWith('.svg')) continue;
+
+            // Normalize path (remove leading /)
+            const normalizedSrc = src.startsWith('/') ? src.slice(1) : src;
+
+            if (width && height) {
+                const w = parseInt(width, 10);
+                const h = parseInt(height, 10);
+
+                if (!isNaN(w) && !isNaN(h)) {
+                    // If image already in map, keep the largest dimensions
+                    const existing = imageDimensionsMap.get(normalizedSrc);
+                    if (!existing || existing.width < w) {
+                        imageDimensionsMap.set(normalizedSrc, { width: w, height: h });
+                    }
+                }
+            }
+        }
+    }
+
+    // Parse JS files for img tags with dimensions
+    const jsFiles = findFiles(SRC_DIR, ['.js']);
+    const imgRegex = /<img[^>]*src=["']([^"']+)["'][^>]*width=["'](\d+)["'][^>]*height=["'](\d+)["'][^>]*>|<img[^>]*width=["'](\d+)["'][^>]*height=["'](\d+)["'][^>]*src=["']([^"']+)["'][^>]*>/g;
+
+    for (const jsFile of jsFiles) {
+        const content = fs.readFileSync(jsFile, 'utf8');
+        let match;
+
+        while ((match = imgRegex.exec(content)) !== null) {
+            // Handle both orders of attributes
+            const src = match[1] || match[6];
+            const width = parseInt(match[2] || match[4], 10);
+            const height = parseInt(match[3] || match[5], 10);
+
+            if (!src || src.endsWith('.svg')) continue;
+            if (src.startsWith('http://') || src.startsWith('https://')) continue;
+
+            const normalizedSrc = src.startsWith('/') ? src.slice(1) : src;
+
+            if (!isNaN(width) && !isNaN(height)) {
+                const existing = imageDimensionsMap.get(normalizedSrc);
+                if (!existing || existing.width < width) {
+                    imageDimensionsMap.set(normalizedSrc, { width, height });
+                }
+            }
+        }
+    }
+
+    // Add known dimensions for images used via JS variables
+    // Logo in header.js: width="120" height="50"
+    imageDimensionsMap.set('img/logo.webp', { width: 120, height: 50 });
+    // Hero event images: width="600" height="800" (from index.html template)
+    imageDimensionsMap.set('img/winter_standup.webp', { width: 600, height: 800 });
+
+    console.log(`  Found ${imageDimensionsMap.size} images with dimensions\n`);
+    return imageDimensionsMap;
+}
+
+/**
+ * Generate responsive images (1x and 2x versions)
+ */
+async function generateResponsiveImages() {
+    console.log('Generating responsive images...');
 
     const srcImgDir = path.join(SRC_DIR, 'img');
     const destImgDir = path.join(DIST_DIR, 'img');
@@ -91,8 +202,9 @@ async function optimizeImages() {
     fs.mkdirSync(destImgDir, { recursive: true });
 
     const files = fs.readdirSync(srcImgDir);
-    let converted = 0;
+    let generated = 0;
     let copied = 0;
+    let warnings = 0;
     let totalSaved = 0;
 
     for (const file of files) {
@@ -107,31 +219,165 @@ async function optimizeImages() {
             continue;
         }
 
+        // For images that can be resized
         if (EXTENSIONS_TO_CONVERT.includes(ext)) {
-            // Convert to WebP
+            const imagePath = `img/${file}`;
+            const dimensions = imageDimensionsMap.get(imagePath);
             const nameWithoutExt = path.basename(file, ext);
-            const destPath = path.join(destImgDir, `${nameWithoutExt}.webp`);
-
             const inputSize = stat.size;
-            await sharp(srcPath)
-                .webp({ quality: WEBP_QUALITY })
-                .toFile(destPath);
 
-            const outputSize = fs.statSync(destPath).size;
-            const savings = ((1 - outputSize / inputSize) * 100).toFixed(0);
-            totalSaved += inputSize - outputSize;
+            // Get original image dimensions
+            const metadata = await sharp(srcPath).metadata();
+            const originalWidth = metadata.width;
+            const originalHeight = metadata.height;
 
-            console.log(`  ✓ ${file} → ${nameWithoutExt}.webp (-${savings}%)`);
-            converted++;
+            if (dimensions) {
+                const { width, height } = dimensions;
+
+                // Calculate aspect ratio to maintain proportions
+                const aspectRatio = originalWidth / originalHeight;
+
+                // Generate 1x version
+                const width1x = width;
+                const height1x = Math.round(width1x / aspectRatio);
+                const dest1x = path.join(destImgDir, `${nameWithoutExt}-${width1x}.webp`);
+
+                await sharp(srcPath)
+                    .resize(width1x, height1x, { fit: 'cover' })
+                    .webp({ quality: WEBP_QUALITY })
+                    .toFile(dest1x);
+
+                const size1x = fs.statSync(dest1x).size;
+
+                // Generate 2x version (only if original is large enough)
+                const width2x = width * 2;
+                const height2x = Math.round(width2x / aspectRatio);
+                let size2x = 0;
+
+                if (originalWidth >= width2x) {
+                    const dest2x = path.join(destImgDir, `${nameWithoutExt}-${width2x}.webp`);
+                    await sharp(srcPath)
+                        .resize(width2x, height2x, { fit: 'cover' })
+                        .webp({ quality: WEBP_QUALITY })
+                        .toFile(dest2x);
+                    size2x = fs.statSync(dest2x).size;
+
+                    const savings = ((1 - (size1x + size2x) / inputSize) * 100).toFixed(0);
+                    totalSaved += inputSize - (size1x + size2x);
+                    console.log(`  ✓ ${file} → ${nameWithoutExt}-${width1x}.webp + ${nameWithoutExt}-${width2x}.webp (${savings}% saved)`);
+                } else {
+                    // Only 1x, original too small for 2x
+                    const savings = ((1 - size1x / inputSize) * 100).toFixed(0);
+                    totalSaved += inputSize - size1x;
+                    console.log(`  ✓ ${file} → ${nameWithoutExt}-${width1x}.webp (${savings}% saved, no 2x - original too small)`);
+                }
+
+                generated++;
+            } else {
+                // No dimensions found, copy as-is with WebP conversion
+                const destPath = path.join(destImgDir, `${nameWithoutExt}.webp`);
+                await sharp(srcPath)
+                    .webp({ quality: WEBP_QUALITY })
+                    .toFile(destPath);
+
+                const outputSize = fs.statSync(destPath).size;
+                totalSaved += inputSize - outputSize;
+
+                console.log(`  ⚠ ${file} → ${nameWithoutExt}.webp (no dimensions in HTML, copying as-is)`);
+                warnings++;
+            }
         } else if (EXTENSIONS_TO_COPY.includes(ext)) {
-            // Copy as-is
+            // Copy SVG, GIF, ICO as-is
             fs.copyFileSync(srcPath, path.join(destImgDir, file));
             console.log(`  ✓ ${file}`);
             copied++;
         }
     }
 
-    console.log(`\n  Converted: ${converted}, Copied: ${copied}, Saved: ${(totalSaved / 1024).toFixed(0)}KB\n`);
+    console.log(`\n  Generated: ${generated}, Copied: ${copied}, Warnings: ${warnings}`);
+    if (totalSaved > 0) {
+        console.log(`  Total saved: ${(totalSaved / 1024).toFixed(0)}KB\n`);
+    } else {
+        console.log('');
+    }
+}
+
+/**
+ * Get responsive image filename based on dimensions
+ */
+function getResponsiveImageSrc(originalSrc) {
+    // Normalize path
+    const normalizedSrc = originalSrc.startsWith('/') ? originalSrc.slice(1) : originalSrc;
+    const dimensions = imageDimensionsMap.get(normalizedSrc);
+
+    if (!dimensions) {
+        // No dimensions, use original path but with .webp extension
+        const ext = path.extname(normalizedSrc);
+        if (['.jpg', '.jpeg', '.png', '.webp'].includes(ext.toLowerCase())) {
+            return originalSrc.replace(ext, '.webp');
+        }
+        return originalSrc;
+    }
+
+    const ext = path.extname(normalizedSrc);
+    const nameWithoutExt = normalizedSrc.replace(ext, '');
+    const leading = originalSrc.startsWith('/') ? '/' : '';
+
+    return `${leading}${nameWithoutExt}-${dimensions.width}.webp`;
+}
+
+/**
+ * Get srcset attribute for an image
+ */
+function getSrcsetAttribute(originalSrc) {
+    const normalizedSrc = originalSrc.startsWith('/') ? originalSrc.slice(1) : originalSrc;
+    const dimensions = imageDimensionsMap.get(normalizedSrc);
+
+    if (!dimensions) return null;
+
+    const ext = path.extname(normalizedSrc);
+    const nameWithoutExt = normalizedSrc.replace(ext, '');
+    const leading = originalSrc.startsWith('/') ? '/' : '';
+
+    const src1x = `${leading}${nameWithoutExt}-${dimensions.width}.webp`;
+    const src2x = `${leading}${nameWithoutExt}-${dimensions.width * 2}.webp`;
+
+    // Check if 2x version exists
+    const dest2x = path.join(DIST_DIR, nameWithoutExt.replace(/^\//, '') + `-${dimensions.width * 2}.webp`);
+    if (fs.existsSync(dest2x)) {
+        return `${src1x} 1x, ${src2x} 2x`;
+    }
+
+    return `${src1x} 1x`;
+}
+
+/**
+ * Transform HTML content with responsive image srcset
+ */
+function transformHtmlWithSrcset(htmlContent) {
+    const root = parse(htmlContent, { comment: true });
+    const imgs = root.querySelectorAll('img');
+
+    for (const img of imgs) {
+        const src = img.getAttribute('src');
+        if (!src) continue;
+
+        // Skip external URLs, data URIs, and SVGs
+        if (src.startsWith('http://') || src.startsWith('https://') ||
+            src.startsWith('data:') || src.endsWith('.svg')) {
+            continue;
+        }
+
+        const newSrc = getResponsiveImageSrc(src);
+        const srcset = getSrcsetAttribute(src);
+
+        img.setAttribute('src', newSrc);
+        if (srcset) {
+            img.setAttribute('srcset', srcset);
+        }
+    }
+
+    return root.toString();
 }
 
 /**
@@ -147,7 +393,7 @@ function cleanDist() {
 }
 
 /**
- * Copy static files to dist
+ * Copy static files to dist (with HTML transformation)
  */
 function copyStaticFiles() {
     console.log('Copying static files from src/...');
@@ -157,8 +403,16 @@ function copyStaticFiles() {
         const src = path.join(SRC_DIR, file);
         const dest = path.join(DIST_DIR, file);
         if (fs.existsSync(src)) {
-            fs.copyFileSync(src, dest);
-            console.log(`  ✓ ${file}`);
+            if (file.endsWith('.html')) {
+                // Transform HTML with srcset
+                const content = fs.readFileSync(src, 'utf8');
+                const transformed = transformHtmlWithSrcset(content);
+                fs.writeFileSync(dest, transformed, 'utf8');
+                console.log(`  ✓ ${file} (transformed)`);
+            } else {
+                fs.copyFileSync(src, dest);
+                console.log(`  ✓ ${file}`);
+            }
         }
     }
 
@@ -167,7 +421,7 @@ function copyStaticFiles() {
         const src = path.join(SRC_DIR, folder);
         const dest = path.join(DIST_DIR, folder);
         if (fs.existsSync(src)) {
-            copyDir(src, dest);
+            copyDirWithHtmlTransform(src, dest);
             console.log(`  ✓ ${folder}/`);
         }
     }
@@ -180,6 +434,32 @@ function copyStaticFiles() {
     }
 
     console.log('');
+}
+
+/**
+ * Copy directory with HTML transformation
+ */
+function copyDirWithHtmlTransform(src, dest) {
+    if (!fs.existsSync(dest)) {
+        fs.mkdirSync(dest, { recursive: true });
+    }
+
+    const entries = fs.readdirSync(src, { withFileTypes: true });
+
+    for (const entry of entries) {
+        const srcPath = path.join(src, entry.name);
+        const destPath = path.join(dest, entry.name);
+
+        if (entry.isDirectory()) {
+            copyDirWithHtmlTransform(srcPath, destPath);
+        } else if (entry.name.endsWith('.html')) {
+            const content = fs.readFileSync(srcPath, 'utf8');
+            const transformed = transformHtmlWithSrcset(content);
+            fs.writeFileSync(destPath, transformed, 'utf8');
+        } else {
+            fs.copyFileSync(srcPath, destPath);
+        }
+    }
 }
 
 /**
@@ -268,6 +548,40 @@ function getDayOfWeek(dateString) {
 }
 
 /**
+ * Get responsive image attributes for event images
+ */
+function getEventImageAttributes(imagePath) {
+    if (!imagePath) return { src: '', srcset: '' };
+
+    const normalizedPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
+    const dimensions = imageDimensionsMap.get(normalizedPath);
+
+    if (!dimensions) {
+        // No dimensions, just convert extension to webp
+        const ext = path.extname(normalizedPath);
+        const webpPath = normalizedPath.replace(ext, '.webp');
+        return {
+            src: `/${webpPath}`,
+            srcset: ''
+        };
+    }
+
+    const ext = path.extname(normalizedPath);
+    const nameWithoutExt = normalizedPath.replace(ext, '');
+
+    const src1x = `/${nameWithoutExt}-${dimensions.width}.webp`;
+    const src2x = `/${nameWithoutExt}-${dimensions.width * 2}.webp`;
+
+    // Check if 2x exists
+    const dest2x = path.join(DIST_DIR, `${nameWithoutExt}-${dimensions.width * 2}.webp`);
+    const srcset = fs.existsSync(dest2x)
+        ? `${src1x} 1x, ${src2x} 2x`
+        : `${src1x} 1x`;
+
+    return { src: src1x, srcset };
+}
+
+/**
  * Pre-render hero section in index.html with the featured event
  */
 function preRenderHeroSection(events) {
@@ -295,7 +609,7 @@ function preRenderHeroSection(events) {
         return;
     }
 
-    const imageSrc = heroEvent.image.startsWith('/') ? heroEvent.image : `/${heroEvent.image}`;
+    const imageAttrs = getEventImageAttributes(heroEvent.image);
     const categoryLabel = categoryLabels[heroEvent.category] || 'Подія';
     const dateFormatted = `${getDayOfWeek(heroEvent.date)}, ${formatDate(heroEvent.date)}`;
     const description = stripHtml(heroEvent.description || '').substring(0, 200) + '...';
@@ -318,8 +632,11 @@ function preRenderHeroSection(events) {
     let html = fs.readFileSync(indexPath, 'utf8');
 
     // Add preload link for hero image (before </head>)
-    const preloadLink = `<link rel="preload" href="${imageSrc}" as="image" fetchpriority="high">\n</head>`;
+    const preloadLink = `<link rel="preload" href="${imageAttrs.src}" as="image" fetchpriority="high">\n</head>`;
     html = html.replace('</head>', preloadLink);
+
+    // Build srcset attribute
+    const srcsetAttr = imageAttrs.srcset ? ` srcset="${imageAttrs.srcset}"` : '';
 
     // Replace hero section (remove display:none and populate content)
     const heroSectionRegex = /<section class="hero-event" id="hero-event" style="display: none;">[\s\S]*?<\/section>\s*<!-- Filter/;
@@ -328,7 +645,7 @@ function preRenderHeroSection(events) {
             <div class="container">
                 <div class="hero-event__inner">
                     <div class="hero-event__image">
-                        <img id="hero-event-image" src="${imageSrc}" alt="${heroEvent.name}" onclick="openLightbox(this.src)" style="cursor: pointer;" fetchpriority="high" width="600" height="800">
+                        <img id="hero-event-image" src="${imageAttrs.src}"${srcsetAttr} alt="${heroEvent.name}" onclick="openLightbox(this.src)" style="cursor: pointer;" fetchpriority="high" width="600" height="800">
                     </div>
                     <div class="hero-event__content">
                         <span class="hero-event__badge" id="hero-event-badge">${categoryLabel}</span>
@@ -361,7 +678,7 @@ function preRenderHeroSection(events) {
     // Write back
     fs.writeFileSync(indexPath, html, 'utf8');
     console.log(`  ✓ Hero pre-rendered: "${heroEvent.name}"`);
-    console.log(`  ✓ Preload added: ${imageSrc}\n`);
+    console.log(`  ✓ Preload added: ${imageAttrs.src}\n`);
 }
 
 function createGoogleCalendarLink(event) {
@@ -384,6 +701,14 @@ function generateEventPage(event) {
     const startDateTime = formatDateISO(event.date, event.time);
     const endDateTime = formatDateISO(event.date,
         `${(parseInt(event.time.split(':')[0]) + 2).toString().padStart(2, '0')}:${event.time.split(':')[1]}`);
+
+    // Get responsive image attributes
+    const imageAttrs = getEventImageAttributes(event.image);
+    const srcsetAttr = imageAttrs.srcset ? ` srcset="${imageAttrs.srcset}"` : '';
+
+    // Logo responsive attributes
+    const logoAttrs = getEventImageAttributes('img/logo.webp');
+    const logoSrcset = logoAttrs.srcset ? ` srcset="${logoAttrs.srcset}"` : '';
 
     return `<!DOCTYPE html>
 <html lang="uk">
@@ -450,7 +775,7 @@ function generateEventPage(event) {
     <header>
         <nav class="navbar">
             <div class="container">
-                <a class="navbar-brand" href="/"><img src="/img/logo.webp" alt="У Стендап" width="120" height="50"><span class="brand-tagline">український стендап у Кельні</span></a>
+                <a class="navbar-brand" href="/"><img src="${logoAttrs.src}"${logoSrcset} alt="У Стендап" width="120" height="50"><span class="brand-tagline">український стендап у Кельні</span></a>
                 <button class="navbar-toggler" type="button" aria-label="Toggle navigation" onclick="toggleMenu()"><span></span><span></span><span></span></button>
                 <div class="navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
@@ -474,7 +799,7 @@ function generateEventPage(event) {
                     <div class="event-page__meta-item"><strong>📍</strong> ${event.linkToMaps ? `<a href="${event.linkToMaps}" target="_blank" rel="noopener">${event.location}</a>` : event.location}</div>
                 </div>
             </div>
-            ${event.image ? `<img src="/${event.image}" alt="${event.name}" class="event-page__image" onclick="openLightbox(this.src)">` : ''}
+            ${event.image ? `<img src="${imageAttrs.src}"${srcsetAttr} alt="${event.name}" class="event-page__image" onclick="openLightbox(this.src)">` : ''}
             <div class="event-page__description">${event.description || ''}</div>
             <div class="event-page__actions">
                 ${event.ticketLink ? `<a href="${event.ticketLink}" target="_blank" class="btn btn-primary btn-lg">Купити квитки</a>` : ''}
@@ -579,9 +904,19 @@ function generateSitemap(events) {
 async function build() {
     console.log('=== Building dist/ for deployment ===\n');
 
+    // Step 1: Parse HTML for image dimensions BEFORE cleaning dist
+    parseHtmlForImageDimensions();
+
+    // Step 2: Clean and prepare dist
     cleanDist();
+
+    // Step 3: Generate responsive images
+    await generateResponsiveImages();
+
+    // Step 4: Copy static files (with HTML transformation)
     copyStaticFiles();
-    await optimizeImages();
+
+    // Step 5: Build events and pages
     const events = buildEvents();
     preRenderHeroSection(events);
     buildEventPages(events);
