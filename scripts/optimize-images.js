@@ -2,11 +2,11 @@ const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
 
-const IMG_DIR = path.join(__dirname, '..', 'img');
+const IMG_DIR = path.join(__dirname, '..', 'src', 'img');
 const PROJECT_ROOT = path.join(__dirname, '..');
 const EXTENSIONS_TO_CONVERT = ['.jpg', '.jpeg', '.png'];
 const EXTENSIONS_TO_SKIP = ['.svg', '.webp'];
-const CODE_EXTENSIONS = ['.html', '.js', '.css'];
+const CODE_EXTENSIONS = ['.html', '.js', '.css', '.yaml', '.yml'];
 
 // WebP quality (0-100)
 const WEBP_QUALITY = 80;
