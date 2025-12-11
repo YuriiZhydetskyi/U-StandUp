@@ -31,7 +31,8 @@
       "Bash(mkdir:*)",
       "Bash(node -e:*)",
       "Bash(ls:*)",
-      "Bash(dir \"c:\\Users\\Yurii-PC\\Documents\\GitHub\\U-StandUp\\dist\\img\\winter_standup*\")"
+      "Bash(dir \"c:\\Users\\Yurii-PC\\Documents\\GitHub\\U-StandUp\\dist\\img\\winter_standup*\")",
+      "Bash(npm run:*)"
     ],
     "deny": [
       "Bash(rm -rf *)",
