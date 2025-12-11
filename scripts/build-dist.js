@@ -1098,7 +1098,19 @@ function generateSitemap(events) {
 </urlset>`;
 
     fs.writeFileSync(path.join(DIST_DIR, 'sitemap.xml'), sitemap, 'utf8');
-    console.log('✓ sitemap.xml\n');
+    console.log('✓ sitemap.xml');
+
+    // Generate sitemap.txt (plain text format - one URL per line)
+    const allUrls = [
+        `${SITE_URL}/`,
+        `${SITE_URL}/all-events.html`,
+        `${SITE_URL}/other-clubs.html`,
+        ...upcomingEvents.map(e => `${SITE_URL}/events/${e.id}/`),
+        ...pastEvents.map(e => `${SITE_URL}/events/${e.id}/`),
+        `${SITE_URL}/data/events.json`
+    ];
+    fs.writeFileSync(path.join(DIST_DIR, 'sitemap.txt'), allUrls.join('\n'), 'utf8');
+    console.log('✓ sitemap.txt\n');
 }
 
 /**
