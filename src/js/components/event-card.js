@@ -28,8 +28,9 @@ function getResponsiveImageAttrs(imagePath) {
     return {
         src: `${pathWithoutExt}-400.webp`,
         srcset: sizes.map(s => `${pathWithoutExt}-${s}.webp ${s}w`).join(', '),
-        // Event cards: ~350px in grid, responsive
-        sizes: '(min-width: 992px) 350px, (min-width: 576px) 45vw, 90vw'
+        // Unified sizes with hero section to enable browser caching
+        // When same image appears in hero and card, browser downloads once
+        sizes: '(min-width: 768px) 400px, min(450px, 100vw)'
     };
 }
 
