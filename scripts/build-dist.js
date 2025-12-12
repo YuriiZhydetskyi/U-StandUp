@@ -54,6 +54,8 @@ const STATIC_FOLDERS = [
 const WEBP_QUALITY = 80;
 const EXTENSIONS_TO_CONVERT = ['.jpg', '.jpeg', '.png', '.webp'];
 const EXTENSIONS_TO_COPY = ['.svg', '.gif', '.ico'];
+// Files to copy as-is without WebP conversion (favicons must stay as PNG for browser compatibility)
+const FILES_TO_COPY_AS_IS = ['favicon-', 'apple-touch-icon'];
 
 // Store image dimensions found in HTML
 // Map: imagePath -> { width, height }
@@ -319,6 +321,15 @@ async function generateResponsiveImages() {
 
         // For images that can be resized
         if (EXTENSIONS_TO_CONVERT.includes(ext)) {
+            // Check if this file should be copied as-is (favicons, apple-touch-icon)
+            const shouldCopyAsIs = FILES_TO_COPY_AS_IS.some(prefix => file.startsWith(prefix));
+            if (shouldCopyAsIs) {
+                fs.copyFileSync(srcPath, path.join(destImgDir, file));
+                console.log(`  ✓ ${file} (copied as-is for favicon)`);
+                copied++;
+                continue;
+            }
+
             const imagePath = `img/${file}`;
             const dimensions = imageDimensionsMap.get(imagePath);
             const nameWithoutExt = path.basename(file, ext);
@@ -935,7 +946,11 @@ function generateEventPage(event) {
     <meta name="twitter:image" content="${imageUrl}">
     <meta name="geo.region" content="DE-NW">
     <meta name="geo.placename" content="Köln">
-    <link rel="icon" type="image/svg+xml" href="/img/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/img/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/img/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/img/favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png">
+    <link rel="shortcut icon" href="/img/favicon.ico">
     <link rel="stylesheet" href="/css/style.css">
     <style>
         .event-page { padding: 2rem 0; }

@@ -6,10 +6,11 @@
   "scripts": {
     "start": "npx serve dist",
     "build:css": "npx @tailwindcss/cli -i ./src/css/input.css -o ./dist/css/style.css --minify",
-    "build": "node scripts/build-dist.js && npm run build:css",
+    "build": "npm run generate-favicons && node scripts/build-dist.js && npm run build:css",
     "watch:css": "npx @tailwindcss/cli -i ./src/css/input.css -o ./dist/css/style.css --watch",
     "convert-events": "node scripts/convert-events-to-yaml.js",
     "optimize-images": "node scripts/optimize-images.js",
+    "generate-favicons": "node scripts/generate-favicons.js",
     "standardize-ids": "node scripts/standardize-event-ids.js",
     "standardize-ids:preview": "node scripts/standardize-event-ids.js --dry-run",
     "test": "echo \"Error: no test specified\" && exit 1"
