@@ -858,9 +858,9 @@ function preRenderHeroSection(events) {
     const preRenderedHero = `<section class="hero-event" id="hero-event">
             <div class="container">
                 <div class="hero-event__inner">
-                    <div class="hero-event__image">
-                        <img id="hero-event-image" src="${imageAttrs.src}"${srcsetAttr}${sizesAttr} alt="${heroEvent.name}" onclick="openLightbox(this.src)" style="cursor: pointer;" fetchpriority="high" width="${dimensions.width}" height="${dimensions.height}">
-                    </div>
+                    <a href="/events/${heroEvent.id}/" id="hero-event-link" class="hero-event__image">
+                        <img id="hero-event-image" src="${imageAttrs.src}"${srcsetAttr}${sizesAttr} alt="${heroEvent.name}" fetchpriority="high" width="${dimensions.width}" height="${dimensions.height}">
+                    </a>
                     <div class="hero-event__content">
                         <span class="hero-event__badge" id="hero-event-badge">${categoryLabel}</span>
                         <h1 class="hero-event__title" id="hero-event-title">${heroEvent.name}</h1>

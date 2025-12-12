@@ -137,6 +137,7 @@ function displayHeroEvent() {
     // Populate hero section (fallback if not pre-rendered)
     document.getElementById('hero-event-image').src = imageSrc;
     document.getElementById('hero-event-image').alt = heroEvent.name;
+    document.getElementById('hero-event-link').href = `/events/${heroEvent.id}/`;
     document.getElementById('hero-event-badge').textContent = getCategoryLabel(heroEvent.category) || 'Подія';
     document.getElementById('hero-event-title').textContent = heroEvent.name;
     document.getElementById('hero-event-date').textContent = formatDateFull(heroEvent.date);

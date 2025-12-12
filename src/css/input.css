@@ -202,6 +202,7 @@
 }
 
 .event-card__image-wrapper {
+    display: block;
     position: relative;
     aspect-ratio: 16/10;
     overflow: hidden;
@@ -265,6 +266,15 @@
     font-weight: 700;
     margin: 0 0 0.5rem 0;
     color: var(--color-primary);
+}
+
+.event-card__title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.event-card__title a:hover {
+    text-decoration: underline;
 }
 
 .event-card__meta {
@@ -354,6 +364,7 @@
 }
 
 .hero-event__image {
+    display: block;
     width: 100%;
     max-width: 450px;
     margin: 0 auto;

@@ -34,7 +34,8 @@
       "Bash(dir \"c:\\Users\\Yurii-PC\\Documents\\GitHub\\U-StandUp\\dist\\img\\winter_standup*\")",
       "Bash(npm run:*)",
       "Bash(node scripts/generate-favicons.js:*)",
-      "Bash(npm run generate-favicons:*)"
+      "Bash(npm run generate-favicons:*)",
+      "Bash(curl:*)"
     ],
     "deny": [
       "Bash(rm -rf *)",

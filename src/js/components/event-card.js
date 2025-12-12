@@ -46,14 +46,14 @@ export function renderEventCard(event) {
     const imgAttrs = getResponsiveImageAttrs(event.image);
 
     const imageHtml = imgAttrs ? `
-        <div class="event-card__image-wrapper">
-            <img class="event-card__image" src="${imgAttrs.src}" srcset="${imgAttrs.srcset}" sizes="${imgAttrs.sizes}" alt="${event.name}" loading="lazy" width="350" height="220" onclick="openLightbox('${imgAttrs.src}')">
+        <a href="${eventUrl}" class="event-card__image-wrapper">
+            <img class="event-card__image" src="${imgAttrs.src}" srcset="${imgAttrs.srcset}" sizes="${imgAttrs.sizes}" alt="${event.name}" loading="lazy" width="350" height="220">
             <div class="event-card__date-badge">
                 <span class="day">${dateInfo.day}</span>
                 <span class="month">${dateInfo.month}</span>
             </div>
             ${event.category ? `<span class="event-card__category-badge">${categoryLabel}</span>` : ''}
-        </div>
+        </a>
     ` : '';
 
     const locationHtml = event.linkToMaps
@@ -79,7 +79,7 @@ export function renderEventCard(event) {
                 </div>
             `}
             <div class="event-card__body">
-                <h3 class="event-card__title">${event.name}</h3>
+                <h3 class="event-card__title"><a href="${eventUrl}">${event.name}</a></h3>
                 <div class="event-card__meta">
                     <span>${event.time}</span>
                     <span>${locationHtml}</span>
