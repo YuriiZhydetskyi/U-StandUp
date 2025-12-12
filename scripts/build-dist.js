@@ -911,7 +911,10 @@ function generateEventPage(event) {
     const eventUrl = `${SITE_URL}/events/${event.id}/`;
     const imageUrl = event.image ? `${SITE_URL}/${event.image}` : `${SITE_URL}/img/og-image.webp`;
     const categoryLabel = categoryLabels[event.category] || 'Подія';
+    const seoDescription = event.seo?.description || stripHtml(event.description || '');
     const description = stripHtml(event.description || '');
+    const geoRegion = event.geo?.region || 'DE-NW';
+    const geoPlacename = event.geo?.placename || 'Köln';
     const startDateTime = formatDateISO(event.date, event.time);
     const endDateTime = formatDateISO(event.date,
         `${(parseInt(event.time.split(':')[0]) + 2).toString().padStart(2, '0')}:${event.time.split(':')[1]}`);
@@ -930,22 +933,23 @@ function generateEventPage(event) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${event.name} | У Стендап</title>
-    <meta name="description" content="${description}">
+    <meta name="description" content="${seoDescription}">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="${eventUrl}">
     <meta property="og:type" content="event">
     <meta property="og:url" content="${eventUrl}">
     <meta property="og:title" content="${event.name}">
-    <meta property="og:description" content="${description}">
+    <meta property="og:description" content="${seoDescription}">
     <meta property="og:image" content="${imageUrl}">
+    <meta property="og:site_name" content="У Стендап">
     <meta property="og:locale" content="uk_UA">
     <meta property="event:start_time" content="${startDateTime}">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="${event.name}">
-    <meta name="twitter:description" content="${description}">
+    <meta name="twitter:description" content="${seoDescription}">
     <meta name="twitter:image" content="${imageUrl}">
-    <meta name="geo.region" content="DE-NW">
-    <meta name="geo.placename" content="Köln">
+    <meta name="geo.region" content="${geoRegion}">
+    <meta name="geo.placename" content="${geoPlacename}">
     <link rel="icon" type="image/png" sizes="48x48" href="/img/favicon-48x48.png">
     <link rel="icon" type="image/png" sizes="96x96" href="/img/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="192x192" href="/img/favicon-192x192.png">
@@ -982,7 +986,7 @@ function generateEventPage(event) {
         "location": {
             "@type": "Place",
             "name": "${(event.location || '').replace(/"/g, '\\"')}",
-            "address": { "@type": "PostalAddress", "streetAddress": "${(event.locationForCalendar || event.location || '').replace(/"/g, '\\"')}", "addressLocality": "Köln", "addressCountry": "DE" }
+            "address": { "@type": "PostalAddress", "streetAddress": "${(event.locationForCalendar || event.location || '').replace(/"/g, '\\"')}", "addressLocality": "${geoPlacename}", "addressCountry": "DE" }
         },
         "organizer": { "@type": "Organization", "name": "У Стендап", "url": "${SITE_URL}" },
         "image": "${imageUrl}"${event.ticketLink ? `, "offers": { "@type": "Offer", "url": "${event.ticketLink}", "availability": "https://schema.org/InStock" }` : ''}

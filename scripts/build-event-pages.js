@@ -36,7 +36,10 @@ function generateEventPage(event) {
     const eventUrl = `${SITE_URL}/events/${event.id}/`;
     const imageUrl = event.image ? `${SITE_URL}/${event.image}` : `${SITE_URL}/img/og-image.webp`;
     const categoryLabel = categoryLabels[event.category] || 'Подія';
+    const seoDescription = event.seo?.description || stripHtml(event.description || '');
     const description = stripHtml(event.description || '');
+    const geoRegion = event.geo?.region || 'DE-NW';
+    const geoPlacename = event.geo?.placename || 'Köln';
     const startDateTime = formatDateISO(event.date, event.time);
     const endDateTime = formatDateISO(event.date,
         `${(parseInt(event.time.split(':')[0]) + 2).toString().padStart(2, '0')}:${event.time.split(':')[1]}`);
@@ -49,7 +52,7 @@ function generateEventPage(event) {
 
     <!-- SEO -->
     <title>${event.name} | У Стендап</title>
-    <meta name="description" content="${description}">
+    <meta name="description" content="${seoDescription}">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="${eventUrl}">
 
@@ -57,20 +60,21 @@ function generateEventPage(event) {
     <meta property="og:type" content="event">
     <meta property="og:url" content="${eventUrl}">
     <meta property="og:title" content="${event.name}">
-    <meta property="og:description" content="${description}">
+    <meta property="og:description" content="${seoDescription}">
     <meta property="og:image" content="${imageUrl}">
+    <meta property="og:site_name" content="У Стендап">
     <meta property="og:locale" content="uk_UA">
     <meta property="event:start_time" content="${startDateTime}">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="${event.name}">
-    <meta name="twitter:description" content="${description}">
+    <meta name="twitter:description" content="${seoDescription}">
     <meta name="twitter:image" content="${imageUrl}">
 
     <!-- Geo -->
-    <meta name="geo.region" content="DE-NW">
-    <meta name="geo.placename" content="Köln">
+    <meta name="geo.region" content="${geoRegion}">
+    <meta name="geo.placename" content="${geoPlacename}">
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="../../img/favicon.svg">
@@ -191,7 +195,7 @@ function generateEventPage(event) {
             "address": {
                 "@type": "PostalAddress",
                 "streetAddress": "${(event.locationForCalendar || event.location || '').replace(/"/g, '\\"')}",
-                "addressLocality": "Köln",
+                "addressLocality": "${geoPlacename}",
                 "addressCountry": "DE"
             }
         },

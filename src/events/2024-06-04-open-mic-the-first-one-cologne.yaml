@@ -7,6 +7,11 @@ location: Theatercafe Filmdose, Zülpicher Str. 39, 50674 Köln
 linkToMaps: https://maps.app.goo.gl/BPHbnNLBU87iRAmM9
 image: img/openMic1.webp
 isFavorite: true
+geo:
+  region: DE-NW
+  placename: Köln
+seo:
+  description: "Перший український відкритий мікрофон у Кельні 4 червня о 19:00. Виступити може кожен бажаючий. 100% виручки йде на підтримку ЗСУ."
 description: |-
   Запрошуємо всіх охочих взяти участь у першому українському відкритому мікрофоні у Кельні!
   • Виступити може кожен бажаючий безкоштовно.

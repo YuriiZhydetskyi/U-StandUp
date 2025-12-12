@@ -4,6 +4,11 @@ category: open-mic
 date: "2025-04-28"
 time: "19:00"
 location: Kölner Landstraße 148, Düsseldorf
+geo:
+  region: DE-NW
+  placename: Düsseldorf
+seo:
+  description: "Відкритий мікрофон у Дюссельдорфі 28 квітня о 19:00. Отримай свої 5 хвилин слави або просто насолоджуйся жартами. Вхід безкоштовний."
 description: |-
   Як зробити понеділок незабутнім?
 

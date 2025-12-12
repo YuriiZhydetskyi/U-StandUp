@@ -6,6 +6,11 @@ time: "16:00"
 location: Lew Kopelew Forum e.V., Neumarkt 18, 50667 Köln
 image: img/AnnaLew workshop.webp
 isFavorite: true
+geo:
+  region: DE-NW
+  placename: Köln
+seo:
+  description: "Майстер-клас з постановки голосу від Анни Лев у Кельні 7 червня о 16:00. Голос Барта Сімпсона навчить приборкати твій голос."
 description: |-
   Розкрий магію голосу, який ти чув в улюблених мультфільмах!
 

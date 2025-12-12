@@ -7,6 +7,11 @@ location: Theatercafe Filmdose, Zülpicher Str. 39, 50674 Köln
 linkToMaps: https://maps.app.goo.gl/BPHbnNLBU87iRAmM9
 image: img/october.webp
 isFavorite: true
+geo:
+  region: DE-NW
+  placename: Köln
+seo:
+  description: "Український стендап у Кельні 1 жовтня о 19:00. 5 коміків, ведучий Абрам Оганесян з Ліги Сміху. Theatercafe Filmdose."
 description: |-
   Вже у вівторок, 1 жовтня, ми зустрінемось, щоб провести неймовірно смішний вечір у товаристві українських коміків, які розпочинають свій шлях у гуморі у нашому клубі «УСтендап».
 

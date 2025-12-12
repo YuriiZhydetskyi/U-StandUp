@@ -6,6 +6,11 @@ time: "17:00"
 location: Shadow-Arkaden, Schadowstraße 11, Düsseldorf
 locationForCalendar: Shadow-Arkaden, Schadowstraße 11, Düsseldorf
 image: img/OpenMic-18-10-25.webp
+geo:
+  region: DE-NW
+  placename: Düsseldorf
+seo:
+  description: "Відкритий мікрофон у Дюссельдорфі 18 жовтня о 17:00. Shadow-Arkaden. Вхід — будь-яка паперова купюра."
 description: |-
   Ну що, давно не бачились? Вже наступної суботи зустрінемось у Дюссельдорфі на відкритому мікрофоні — приходьте підтримати коміків гучними оплесками і будь-якою паперовою купюрою.
 

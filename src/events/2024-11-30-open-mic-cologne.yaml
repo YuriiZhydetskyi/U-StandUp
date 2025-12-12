@@ -8,6 +8,11 @@ locationForCalendar: Clevischer Ring 7, 51065 Köln
 linkToMaps: https://maps.app.goo.gl/v5argQe8wJKerXSS8?g_st=it
 image: img/OpenMic-30-11-24.webp
 isFavorite: true
+geo:
+  region: DE-NW
+  placename: Köln
+seo:
+  description: "Відкритий мікрофон у Кельні 30 листопада о 17:00. Твій шанс зробити перший крок у стендапі. Мовна школа Prisma."
 description: |-
   Переїхав у Німеччину, але досі жартуєш лише на інтеграційних курсах? Ходиш із думкою: "Та це ж золото, а не матеріал для сцени!"? Тоді час діяти! 
 

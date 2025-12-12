@@ -4,6 +4,11 @@ category: concert
 date: "2025-03-06"
 time: "19:00"
 location: Theatercafe Filmdose, Zülpicher Str. 39, Köln
+geo:
+  region: DE-NW
+  placename: Köln
+seo:
+  description: "Весняний стендап у Кельні 6 березня о 19:00. 6 коміків, ведучий Абрам Оганесян. Theatercafe Filmdose."
 description: |-
   Цілу зиму ми готували для вас новий матеріал і тепер настав час вас смішити.
 

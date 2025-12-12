@@ -5,6 +5,11 @@ date: "2025-10-24"
 time: "19:30"
 location: Nowa Mowa, Bonn
 image: img/OpenMic-24-10-25.webp
+geo:
+  region: DE-NW
+  placename: Bonn
+seo:
+  description: "Відкритий мікрофон у Бонні 24 жовтня о 19:30. Нові жарти та українська кухня у ресторані Nowa Mowa. Вхід — будь-яка паперова купюра."
 description: |-
   Наша наступна зупинка — Бонн! Замість симфоній пропонуємо нові жарти та неймовірно смачну кухню від <a href="https://www.instagram.com/nowamowa.bonn/" target="_blank">@nowamowa.bonn</a>
 

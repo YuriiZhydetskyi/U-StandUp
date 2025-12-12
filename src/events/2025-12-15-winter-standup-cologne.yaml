@@ -9,6 +9,11 @@ linkToMaps: https://maps.app.goo.gl/BPHbnNLBU87iRAmM9
 ticketLink: https://secure.wayforpay.com/payment/winterstandup
 image: img/winter_standup.webp
 isFavorite: true
+geo:
+  region: DE-NW
+  placename: Köln
+seo:
+  description: "Український стендап у Кьольні 15 грудня о 19:30. 6 українських коміків, які живуть у Німеччині, жартуватимуть про наше життя тут і зараз."
 description: |-
   Хочеться відпочити від новин, паперів, термінів і дедлайнів? Тоді тобі до нас на Зимовий стендап у Кельні!
 

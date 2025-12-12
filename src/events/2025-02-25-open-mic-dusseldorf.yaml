@@ -7,6 +7,11 @@ location: Дитяче кафе
 locationForCalendar: Kölner Landstraße 148, 40591 Düsseldorf
 linkToMaps: https://maps.app.goo.gl/ZQ7gmr9L7PaQd8kq7
 image: open-mic-26-02-25.webp
+geo:
+  region: DE-NW
+  placename: Düsseldorf
+seo:
+  description: "Відкритий мікрофон у Дюссельдорфі 26 лютого о 19:30. Жарти про еміграцію, батьківство та страхи дитинства. Вхід безкоштовний."
 description: |-
   Український стендап у Кельні їде у Дюссельдорф! 
 
