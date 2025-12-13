@@ -204,12 +204,14 @@ function generateEventPage(event) {
             "name": "У Стендап",
             "url": "${SITE_URL}"
         },
-        "image": "${imageUrl}"${event.ticketLink ? `,
+        "image": "${imageUrl}"${event.performer ? `,
+        "performer": ${JSON.stringify(event.performer)}` : ''}${event.offers ? `,
+        "offers": ${JSON.stringify(event.offers)}` : (event.ticketLink ? `,
         "offers": {
             "@type": "Offer",
             "url": "${event.ticketLink}",
             "availability": "https://schema.org/InStock"
-        }` : ''}
+        }` : '')}
     }
     </script>
 </head>

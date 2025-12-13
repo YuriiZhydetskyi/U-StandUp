@@ -10,6 +10,12 @@ geo:
   placename: Bonn
 seo:
   description: "Відкритий мікрофон у Бонні 24 жовтня о 19:30. Нові жарти та українська кухня у ресторані Nowa Mowa. Вхід — будь-яка паперова купюра."
+offers:
+  "@type": Offer
+  price: 0
+  priceCurrency: EUR
+  availability: https://schema.org/InStock
+  description: "Вхід — будь-яка паперова купюра"
 description: |-
   Наша наступна зупинка — Бонн! Замість симфоній пропонуємо нові жарти та неймовірно смачну кухню від <a href="https://www.instagram.com/nowamowa.bonn/" target="_blank">@nowamowa.bonn</a>
 

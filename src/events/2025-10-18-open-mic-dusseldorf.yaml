@@ -11,6 +11,12 @@ geo:
   placename: Düsseldorf
 seo:
   description: "Відкритий мікрофон у Дюссельдорфі 18 жовтня о 17:00. Shadow-Arkaden. Вхід — будь-яка паперова купюра."
+offers:
+  "@type": Offer
+  price: 0
+  priceCurrency: EUR
+  availability: https://schema.org/InStock
+  description: "Вхід — будь-яка паперова купюра"
 description: |-
   Ну що, давно не бачились? Вже наступної суботи зустрінемось у Дюссельдорфі на відкритому мікрофоні — приходьте підтримати коміків гучними оплесками і будь-якою паперовою купюрою.
 

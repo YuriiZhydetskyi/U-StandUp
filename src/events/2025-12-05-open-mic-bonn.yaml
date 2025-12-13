@@ -12,6 +12,12 @@ geo:
   placename: Bonn
 seo:
   description: "Відкритий мікрофон у Бонні 5 грудня о 19:00. Формат gratis testen — платиш тільки якщо сподобалось. Ресторан Nowa Mowa."
+offers:
+  "@type": Offer
+  price: 0
+  priceCurrency: EUR
+  availability: https://schema.org/InStock
+  description: "Вхід — будь-яка паперова купюра"
 description: |-
   Ю-ху, Бонн! Ми знову до вас зі стендапом 💥
 

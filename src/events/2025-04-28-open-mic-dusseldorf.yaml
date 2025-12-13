@@ -9,6 +9,12 @@ geo:
   placename: Düsseldorf
 seo:
   description: "Відкритий мікрофон у Дюссельдорфі 28 квітня о 19:00. Отримай свої 5 хвилин слави або просто насолоджуйся жартами. Вхід безкоштовний."
+offers:
+  "@type": Offer
+  price: 0
+  priceCurrency: EUR
+  availability: https://schema.org/InStock
+  description: "Вхід — будь-яка паперова купюра"
 description: |-
   Як зробити понеділок незабутнім?
 

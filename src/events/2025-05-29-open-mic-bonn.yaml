@@ -9,6 +9,12 @@ geo:
   placename: Bonn
 seo:
   description: "Перший відкритий мікрофон у Бонні 29 травня о 19:00. Український гумор + українська кухня у ресторані Nowa Mowa. Вхід безкоштовний."
+offers:
+  "@type": Offer
+  price: 0
+  priceCurrency: EUR
+  availability: https://schema.org/InStock
+  description: "Вхід — будь-яка паперова купюра"
 description: |-
   Український гумор + українська кухня. Цим ідеальним комбо можна буде насолодитись вже 29 травня.
 
