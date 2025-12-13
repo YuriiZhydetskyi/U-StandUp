@@ -19,6 +19,39 @@ geo:
   addressCountry: DE
 seo:
   description: "Український стендап у Кьольні 15 грудня о 19:30. 6 українських коміків, які живуть у Німеччині, жартуватимуть про наше життя тут і зараз."
+performer:
+  - "@type": Person
+    name: Леся Калина
+    description: "Стендап комікеса. Мама двох дітей. Вийшла заміж за вірменина."
+    sameAs:
+      - "https://www.instagram.com/lesiakalyna/"
+  - "@type": Person
+    name: Артем Кобзан
+    jobTitle: Сценарист
+    description: "Засновник першого в Україні стендап клубу"
+    sameAs:
+      - "https://www.instagram.com/kobzanart/"
+  - "@type": Person
+    name: Антон Новосад
+    jobTitle: Бармен
+    description: "Бармен і стендап-комік із Луцька"
+    sameAs:
+      - "https://www.instagram.com/antonynovosad/"
+  - "@type": Person
+    name: Панна Вікторія
+    sameAs:
+      - "https://www.instagram.com/panna_victoria/"
+  - "@type": Person
+    name: Володимир Волинський
+    description: "Стендап-комік із ДЦП."
+    sameAs:
+      - "https://www.instagram.com/volunskiy_mc/"
+  - "@type": Person
+    name: Віталій Абрамов
+    jobTitle: Стендап-комік
+    description: "Український стендап-комік родом із Донецька."
+    sameAs:
+      - https://www.instagram.com/abramov2388/
 description: |-
   Хочеться відпочити від новин, паперів, термінів і дедлайнів? Тоді тобі до нас на Зимовий стендап у Кельні!
 
