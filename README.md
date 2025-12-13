@@ -133,6 +133,11 @@ isFavorite: true  # Показувати в hero секції
 geo:
   region: DE-NW
   placename: Köln
+  name: Назва локації           # Для Schema.org Place.name
+  streetAddress: Вулиця 123     # Для Schema.org PostalAddress
+  addressLocality: Köln
+  postalCode: "50674"
+  addressCountry: DE            # ISO 3166-1 alpha-2 код країни
 seo:
   description: "SEO опис для meta тегів"
 ticketLink: https://...
@@ -251,6 +256,11 @@ isFavorite: true  # (опціонально) показувати в hero сек
 geo:
   region: DE-NW
   placename: Köln
+  name: Theatercafé Filmdose     # Назва закладу для Schema.org
+  streetAddress: Zülpicher Str. 39
+  addressLocality: Köln
+  postalCode: "50674"
+  addressCountry: DE
 seo:
   description: "Короткий SEO опис для пошукових систем"
 # Для платних подій:

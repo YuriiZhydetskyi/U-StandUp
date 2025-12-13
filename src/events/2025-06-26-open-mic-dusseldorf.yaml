@@ -10,6 +10,11 @@ image: img/open-mic-26-06-25.webp
 geo:
   region: DE-NW
   placename: Düsseldorf
+  name: Kindercafé Wunderhaus
+  streetAddress: Kölner Landstraße 148
+  addressLocality: Düsseldorf
+  postalCode: "40591"
+  addressCountry: DE
 seo:
   description: "Відкритий мікрофон у Дюссельдорфі 26 червня о 19:30. Жарти про еміграцію серед своїх. Вхід — будь-яка паперова купюра."
 offers:

@@ -11,6 +11,11 @@ image: img/November2025.webp
 geo:
   region: DE-NW
   placename: Köln
+  name: Theatercafé Filmdose
+  streetAddress: Zülpicher Str. 39
+  addressLocality: Köln
+  postalCode: "50674"
+  addressCountry: DE
 seo:
   description: "Осінній стендап у Кельні 3 листопада о 19:00. 6 українських коміків, ведучий Абрам Оганесян. Theatercafé Filmdose."
 description: |-

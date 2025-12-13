@@ -8,6 +8,11 @@ location: Zülpicher Str. 39, 50674 Köln
 geo:
   region: DE-NW
   placename: Köln
+  name: Theatercafé Filmdose
+  streetAddress: Zülpicher Str. 39
+  addressLocality: Köln
+  postalCode: "50674"
+  addressCountry: DE
 seo:
   description: "Сольний стендап Віталія Абрамова у Кельні 18 березня о 19:00. 8 років досвіду в гуморі, учасник Ліги Сміху."
 description: |-

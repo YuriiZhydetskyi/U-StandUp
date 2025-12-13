@@ -12,6 +12,11 @@ isFavorite: true
 geo:
   region: DE-NW
   placename: Köln
+  name: Theatercafé Filmdose
+  streetAddress: Zülpicher Str. 39
+  addressLocality: Köln
+  postalCode: "50674"
+  addressCountry: DE
 seo:
   description: "Український стендап у Кьольні 15 грудня о 19:30. 6 українських коміків, які живуть у Німеччині, жартуватимуть про наше життя тут і зараз."
 description: |-

@@ -8,6 +8,11 @@ linkToMaps: https://maps.app.goo.gl/BPHbnNLBU87iRAmM9
 geo:
   region: DE-NW
   placename: Köln
+  name: Theatercafe Filmdose
+  streetAddress: Zülpicher Str. 39
+  addressLocality: Köln
+  postalCode: "50674"
+  addressCountry: DE
 seo:
   description: "Український відкритий мікрофон у Кельні 27 серпня о 19:00. Виступити може кожен бажаючий безкоштовно. Theatercafe Filmdose."
 description: |-

@@ -985,8 +985,14 @@ function generateEventPage(event) {
         "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
         "location": {
             "@type": "Place",
-            "name": "${(event.location || '').replace(/"/g, '\\"')}",
-            "address": { "@type": "PostalAddress", "streetAddress": "${(event.locationForCalendar || event.location || '').replace(/"/g, '\\"')}", "addressLocality": "${geoPlacename}", "addressCountry": "DE" }
+            "name": "${(event.geo?.name || event.location || '').replace(/"/g, '\\"')}",
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "${(event.geo?.streetAddress || event.locationForCalendar || event.location || '').replace(/"/g, '\\"')}",
+                "addressLocality": "${event.geo?.addressLocality || geoPlacename}",
+                "postalCode": "${event.geo?.postalCode || ''}",
+                "addressCountry": "${event.geo?.addressCountry || 'DE'}"
+            }
         },
         "organizer": { "@type": "Organization", "name": "У Стендап", "url": "${SITE_URL}" },
         "image": "${imageUrl}"${event.performer ? `, "performer": ${JSON.stringify(event.performer)}` : ''}${event.offers ? `, "offers": ${JSON.stringify(event.offers)}` : (event.ticketLink ? `, "offers": { "@type": "Offer", "url": "${event.ticketLink}", "availability": "https://schema.org/InStock" }` : '')}

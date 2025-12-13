@@ -10,6 +10,11 @@ image: img/open-mic-bonn-05-12-25.webp
 geo:
   region: DE-NW
   placename: Bonn
+  name: Nowa Mowa
+  streetAddress: Paulstraße 5
+  addressLocality: Bonn
+  postalCode: "53111"
+  addressCountry: DE
 seo:
   description: "Відкритий мікрофон у Бонні 5 грудня о 19:00. Формат gratis testen — платиш тільки якщо сподобалось. Ресторан Nowa Mowa."
 offers:

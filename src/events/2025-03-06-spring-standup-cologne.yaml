@@ -7,6 +7,11 @@ location: Theatercafe Filmdose, Zülpicher Str. 39, Köln
 geo:
   region: DE-NW
   placename: Köln
+  name: Theatercafe Filmdose
+  streetAddress: Zülpicher Str. 39
+  addressLocality: Köln
+  postalCode: "50674"
+  addressCountry: DE
 seo:
   description: "Весняний стендап у Кельні 6 березня о 19:00. 6 коміків, ведучий Абрам Оганесян. Theatercafe Filmdose."
 description: |-

@@ -9,6 +9,11 @@ isFavorite: true
 geo:
   region: DE-NW
   placename: Köln
+  name: Lew Kopelew Forum e.V.
+  streetAddress: Neumarkt 18
+  addressLocality: Köln
+  postalCode: "50667"
+  addressCountry: DE
 seo:
   description: "Майстер-клас з постановки голосу від Анни Лев у Кельні 7 червня о 16:00. Голос Барта Сімпсона навчить приборкати твій голос."
 description: |-

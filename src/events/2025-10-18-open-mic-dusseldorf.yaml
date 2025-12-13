@@ -9,6 +9,11 @@ image: img/OpenMic-18-10-25.webp
 geo:
   region: DE-NW
   placename: Düsseldorf
+  name: Shadow-Arkaden
+  streetAddress: Schadowstraße 11
+  addressLocality: Düsseldorf
+  postalCode: "40212"
+  addressCountry: DE
 seo:
   description: "Відкритий мікрофон у Дюссельдорфі 18 жовтня о 17:00. Shadow-Arkaden. Вхід — будь-яка паперова купюра."
 offers:

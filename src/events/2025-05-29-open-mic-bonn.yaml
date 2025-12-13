@@ -7,6 +7,11 @@ location: Paulstraße 5, 53111 Bonn
 geo:
   region: DE-NW
   placename: Bonn
+  name: Nowa Mowa
+  streetAddress: Paulstraße 5
+  addressLocality: Bonn
+  postalCode: "53111"
+  addressCountry: DE
 seo:
   description: "Перший відкритий мікрофон у Бонні 29 травня о 19:00. Український гумор + українська кухня у ресторані Nowa Mowa. Вхід безкоштовний."
 offers:
