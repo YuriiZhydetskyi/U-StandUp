@@ -989,7 +989,7 @@ function generateEventPage(event) {
             "address": { "@type": "PostalAddress", "streetAddress": "${(event.locationForCalendar || event.location || '').replace(/"/g, '\\"')}", "addressLocality": "${geoPlacename}", "addressCountry": "DE" }
         },
         "organizer": { "@type": "Organization", "name": "У Стендап", "url": "${SITE_URL}" },
-        "image": "${imageUrl}"${event.ticketLink ? `, "offers": { "@type": "Offer", "url": "${event.ticketLink}", "availability": "https://schema.org/InStock" }` : ''}
+        "image": "${imageUrl}"${event.performer ? `, "performer": ${JSON.stringify(event.performer)}` : ''}${event.offers ? `, "offers": ${JSON.stringify(event.offers)}` : (event.ticketLink ? `, "offers": { "@type": "Offer", "url": "${event.ticketLink}", "availability": "https://schema.org/InStock" }` : '')}
     }
     </script>
 </head>
