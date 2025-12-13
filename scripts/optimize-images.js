@@ -8,6 +8,13 @@ const EXTENSIONS_TO_CONVERT = ['.jpg', '.jpeg', '.png'];
 const EXTENSIONS_TO_SKIP = ['.svg', '.webp'];
 const CODE_EXTENSIONS = ['.html', '.js', '.css', '.yaml', '.yml'];
 
+// Files to skip (favicons must stay as PNG for browser compatibility)
+const FILES_TO_SKIP = [
+    'favicon',           // matches favicon*.png
+    'apple-touch-icon',  // matches apple-touch-icon*.png
+    'fovicon',           // matches fovicon*.png (source file for favicon generation)
+];
+
 // WebP quality (0-100)
 const WEBP_QUALITY = 80;
 
@@ -15,6 +22,12 @@ async function findFilesToConvert() {
     const files = fs.readdirSync(IMG_DIR);
     return files.filter(file => {
         const ext = path.extname(file).toLowerCase();
+        const nameWithoutExt = path.basename(file, ext).toLowerCase();
+
+        // Skip files that match FILES_TO_SKIP prefixes
+        const shouldSkip = FILES_TO_SKIP.some(prefix => nameWithoutExt.startsWith(prefix.toLowerCase()));
+        if (shouldSkip) return false;
+
         return EXTENSIONS_TO_CONVERT.includes(ext);
     });
 }
