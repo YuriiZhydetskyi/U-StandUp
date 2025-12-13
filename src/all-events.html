@@ -166,12 +166,6 @@
         </section>
     </main>
 
-    <!-- Lightbox -->
-    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
-        <span class="lightbox__close">&times;</span>
-        <img id="lightbox-image" src="" alt="">
-    </div>
-
     <!-- Footer injected by JS -->
 
     <!-- Scripts -->
@@ -186,29 +180,6 @@
         let currentFilter = 'all';
         let currentYear = 'all';
         let filteredEvents = [];
-
-        // Lightbox
-        window.openLightbox = function(imageSrc) {
-            const lightbox = document.getElementById('lightbox');
-            const lightboxImage = document.getElementById('lightbox-image');
-            if (lightbox && lightboxImage) {
-                lightboxImage.src = imageSrc;
-                lightbox.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-        };
-
-        window.closeLightbox = function() {
-            const lightbox = document.getElementById('lightbox');
-            if (lightbox) {
-                lightbox.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        };
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') window.closeLightbox();
-        });
 
         // Sort events by date (newest first)
         const allEvents = [...events].sort((a, b) => new Date(b.date) - new Date(a.date));

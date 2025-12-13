@@ -38,32 +38,6 @@ function updateURL(category, showPast) {
     window.history.replaceState({}, '', newURL);
 }
 
-// Lightbox functions (global)
-window.openLightbox = function(imageSrc) {
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImage = document.getElementById('lightbox-image');
-    if (lightbox && lightboxImage) {
-        lightboxImage.src = imageSrc;
-        lightbox.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
-};
-
-window.closeLightbox = function() {
-    const lightbox = document.getElementById('lightbox');
-    if (lightbox) {
-        lightbox.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-};
-
-// Close lightbox on Escape key
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        window.closeLightbox();
-    }
-});
-
 // ICS generation for Apple Calendar
 window.generateICS = async function(eventId) {
     const event = events.find(e => e.id === eventId);
