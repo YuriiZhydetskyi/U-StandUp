@@ -82,24 +82,45 @@
 
         .events-stats {
             display: flex;
-            gap: 2rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding-bottom: 0.5rem;
+        }
+
+        .events-stats::-webkit-scrollbar {
+            display: none;
         }
 
         .stat-item {
             text-align: center;
+            flex-shrink: 0;
         }
 
         .stat-value {
-            font-size: 2rem;
+            font-size: 1.75rem;
             font-weight: 700;
             color: var(--color-primary);
         }
 
         .stat-label {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--color-text-light);
+            white-space: nowrap;
+        }
+
+        @media (max-width: 480px) {
+            .events-stats {
+                gap: 1rem;
+            }
+            .stat-value {
+                font-size: 1.5rem;
+            }
+            .stat-label {
+                font-size: 0.75rem;
+            }
         }
 
         .year-filter {
@@ -187,6 +208,18 @@
         // Get unique years
         const years = [...new Set(allEvents.map(e => new Date(e.date).getFullYear()))].sort((a, b) => b - a);
 
+        // Ukrainian pluralization: 1 -> one, 2-4 -> few, 5-0 -> many
+        function pluralize(n, one, few, many) {
+            const abs = Math.abs(n);
+            const lastTwo = abs % 100;
+            const lastOne = abs % 10;
+
+            if (lastTwo >= 11 && lastTwo <= 14) return many;
+            if (lastOne === 1) return one;
+            if (lastOne >= 2 && lastOne <= 4) return few;
+            return many;
+        }
+
         function filterEvents() {
             filteredEvents = allEvents.filter(event => {
                 const matchesCategory = currentFilter === 'all' || event.category === currentFilter;
@@ -210,15 +243,15 @@
                 </div>
                 <div class="stat-item">
                     <div class="stat-value">${upcoming}</div>
-                    <div class="stat-label">Майбутніх</div>
+                    <div class="stat-label">${pluralize(upcoming, 'Майбутня', 'Майбутні', 'Майбутніх')}</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-value">${concerts}</div>
-                    <div class="stat-label">Концертів</div>
+                    <div class="stat-label">${pluralize(concerts, 'Концерт', 'Концерти', 'Концертів')}</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-value">${openMics}</div>
-                    <div class="stat-label">Відкритих мікрофонів</div>
+                    <div class="stat-label">${pluralize(openMics, 'Опен-майк', 'Опен-майки', 'Опен-майків')}</div>
                 </div>
             `;
         }
