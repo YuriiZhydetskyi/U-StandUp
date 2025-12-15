@@ -285,8 +285,22 @@ function parseClubLogosFromHtml() {
 }
 
 /**
+ * Check if any output file is older than the source file
+ */
+function needsRegeneration(srcPath, destPaths) {
+    const srcStat = fs.statSync(srcPath);
+    for (const destPath of destPaths) {
+        if (!fs.existsSync(destPath)) return true;
+        const destStat = fs.statSync(destPath);
+        if (destStat.mtime < srcStat.mtime) return true;
+    }
+    return false;
+}
+
+/**
  * Generate responsive images with multiple sizes
  * Dynamically generates sizes based on original image dimensions
+ * Uses mtime-based caching to skip unchanged images
  */
 async function generateResponsiveImages() {
     console.log('Generating responsive images...');
@@ -303,6 +317,7 @@ async function generateResponsiveImages() {
 
     const files = fs.readdirSync(srcImgDir);
     let generated = 0;
+    let skipped = 0;
     let copied = 0;
     let warnings = 0;
     let totalSaved = 0;
@@ -324,7 +339,13 @@ async function generateResponsiveImages() {
             // Check if this file should be copied as-is (favicons, apple-touch-icon)
             const shouldCopyAsIs = FILES_TO_COPY_AS_IS.some(prefix => file.startsWith(prefix));
             if (shouldCopyAsIs) {
-                fs.copyFileSync(srcPath, path.join(destImgDir, file));
+                const destPath = path.join(destImgDir, file);
+                if (!needsRegeneration(srcPath, [destPath])) {
+                    console.log(`  ⏭️  ${file} (up to date)`);
+                    skipped++;
+                    continue;
+                }
+                fs.copyFileSync(srcPath, destPath);
                 console.log(`  ✓ ${file} (copied as-is for favicon)`);
                 copied++;
                 continue;
@@ -361,6 +382,20 @@ async function generateResponsiveImages() {
                 // Sort sizes
                 sizesToGenerate.sort((a, b) => a - b);
 
+                // Store generated sizes for srcset building (needed even if skipped)
+                generatedSizesMap.set(imagePath, sizesToGenerate);
+
+                // Check if all output files exist and are newer than source
+                const outputPaths = sizesToGenerate.map(w =>
+                    path.join(destImgDir, `${nameWithoutExt}-${w}.webp`)
+                );
+
+                if (!needsRegeneration(srcPath, outputPaths)) {
+                    console.log(`  ⏭️  ${file} (up to date)`);
+                    skipped++;
+                    continue;
+                }
+
                 // Generate all sizes
                 let totalOutputSize = 0;
                 const generatedFiles = [];
@@ -378,9 +413,6 @@ async function generateResponsiveImages() {
                     generatedFiles.push(`${nameWithoutExt}-${width}.webp`);
                 }
 
-                // Store generated sizes for srcset building
-                generatedSizesMap.set(imagePath, sizesToGenerate);
-
                 // Calculate savings: compare smallest generated vs original
                 const smallestSize = fs.statSync(
                     path.join(destImgDir, `${nameWithoutExt}-${sizesToGenerate[0]}.webp`)
@@ -395,6 +427,13 @@ async function generateResponsiveImages() {
             } else {
                 // No dimensions found, copy as-is with WebP conversion
                 const destPath = path.join(destImgDir, `${nameWithoutExt}.webp`);
+
+                if (!needsRegeneration(srcPath, [destPath])) {
+                    console.log(`  ⏭️  ${file} (up to date, no dimensions)`);
+                    skipped++;
+                    continue;
+                }
+
                 await sharp(srcPath)
                     .webp({ quality: WEBP_QUALITY })
                     .toFile(destPath);
@@ -407,13 +446,19 @@ async function generateResponsiveImages() {
             }
         } else if (EXTENSIONS_TO_COPY.includes(ext)) {
             // Copy SVG, GIF, ICO as-is
-            fs.copyFileSync(srcPath, path.join(destImgDir, file));
+            const destPath = path.join(destImgDir, file);
+            if (!needsRegeneration(srcPath, [destPath])) {
+                console.log(`  ⏭️  ${file} (up to date)`);
+                skipped++;
+                continue;
+            }
+            fs.copyFileSync(srcPath, destPath);
             console.log(`  ✓ ${file}`);
             copied++;
         }
     }
 
-    console.log(`\n  Generated: ${generated}, Copied: ${copied}, Warnings: ${warnings}`);
+    console.log(`\n  Generated: ${generated}, Skipped: ${skipped}, Copied: ${copied}, Warnings: ${warnings}`);
     if (totalSaved > 0) {
         console.log(`  Total saved: ${(totalSaved / 1024).toFixed(0)}KB\n`);
     } else {
@@ -501,14 +546,25 @@ function transformHtmlWithSrcset(htmlContent) {
 
 /**
  * Clean and create dist directory
+ * Preserves img/ folder for incremental image builds
  */
 function cleanDist() {
     console.log('Cleaning dist/...');
     if (fs.existsSync(DIST_DIR)) {
-        fs.rmSync(DIST_DIR, { recursive: true });
+        // Preserve img/ folder for caching, delete everything else
+        const entries = fs.readdirSync(DIST_DIR);
+        for (const entry of entries) {
+            const entryPath = path.join(DIST_DIR, entry);
+            if (entry === 'img') {
+                console.log('  ⏭️  Preserving img/ for caching');
+                continue;
+            }
+            fs.rmSync(entryPath, { recursive: true });
+        }
+    } else {
+        fs.mkdirSync(DIST_DIR, { recursive: true });
     }
-    fs.mkdirSync(DIST_DIR, { recursive: true });
-    console.log('✓ dist/ cleaned\n');
+    console.log('✓ dist/ cleaned (img/ preserved)\n');
 }
 
 /**

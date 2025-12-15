@@ -36,14 +36,17 @@ async function convertToWebP(filename) {
     const inputPath = path.join(IMG_DIR, filename);
     const nameWithoutExt = path.basename(filename, path.extname(filename));
     const outputPath = path.join(IMG_DIR, `${nameWithoutExt}.webp`);
-
-    // Check if WebP already exists
-    if (fs.existsSync(outputPath)) {
-        console.log(`  ⚠️  ${nameWithoutExt}.webp already exists, skipping conversion`);
-        return { converted: false, originalName: filename, newName: `${nameWithoutExt}.webp` };
-    }
-
     const inputStats = fs.statSync(inputPath);
+
+    // Check if WebP already exists and is newer than source
+    if (fs.existsSync(outputPath)) {
+        const outputStats = fs.statSync(outputPath);
+        if (outputStats.mtime >= inputStats.mtime) {
+            console.log(`  ⏭️  ${nameWithoutExt}.webp is up to date, skipping`);
+            return { converted: false, originalName: filename, newName: `${nameWithoutExt}.webp` };
+        }
+        console.log(`  🔄 ${nameWithoutExt}.webp is outdated, regenerating...`);
+    }
     const inputSizeKB = (inputStats.size / 1024).toFixed(1);
 
     await sharp(inputPath)

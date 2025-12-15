@@ -33,8 +33,21 @@ async function generateFavicons() {
     console.log('━'.repeat(50));
     console.log('Generating favicons...\n');
 
+    let skipped = 0;
+    let generated = 0;
+
     for (const { size, name } of FAVICON_SIZES) {
         const outputPath = path.join(IMG_DIR, name);
+
+        // Skip if output exists and is newer than source
+        if (fs.existsSync(outputPath)) {
+            const outputStats = fs.statSync(outputPath);
+            if (outputStats.mtime >= sourceStats.mtime) {
+                console.log(`  ⏭️  ${name} is up to date, skipping`);
+                skipped++;
+                continue;
+            }
+        }
 
         try {
             await sharp(SOURCE_FILE)
@@ -47,6 +60,7 @@ async function generateFavicons() {
 
             const outputStats = fs.statSync(outputPath);
             console.log(`  ✅ ${name} (${size}x${size}) - ${(outputStats.size / 1024).toFixed(1)} KB`);
+            generated++;
         } catch (error) {
             console.error(`  ❌ Error creating ${name}: ${error.message}`);
         }
@@ -56,29 +70,47 @@ async function generateFavicons() {
     console.log('\n━'.repeat(50));
     console.log('Generating ICO file...\n');
 
-    try {
-        // ICO typically contains 16, 32, 48 sizes
-        // We'll create a 48x48 version as favicon.ico (browsers will scale)
-        const icoPath = path.join(IMG_DIR, 'favicon.ico');
-        await sharp(SOURCE_FILE)
-            .resize(48, 48, {
-                fit: 'cover',
-                position: 'center'
-            })
-            .png()
-            .toFile(icoPath);
+    const icoPath = path.join(IMG_DIR, 'favicon.ico');
+    let icoGenerated = false;
 
+    // Skip if ICO exists and is newer than source
+    if (fs.existsSync(icoPath)) {
         const icoStats = fs.statSync(icoPath);
-        console.log(`  ✅ favicon.ico (48x48) - ${(icoStats.size / 1024).toFixed(1)} KB`);
-        console.log('  ℹ️  Note: This is a PNG renamed to .ico (works in modern browsers)');
-    } catch (error) {
-        console.error(`  ❌ Error creating favicon.ico: ${error.message}`);
+        if (icoStats.mtime >= sourceStats.mtime) {
+            console.log(`  ⏭️  favicon.ico is up to date, skipping`);
+            skipped++;
+        } else {
+            icoGenerated = true;
+        }
+    } else {
+        icoGenerated = true;
+    }
+
+    if (icoGenerated) {
+        try {
+            // ICO typically contains 16, 32, 48 sizes
+            // We'll create a 48x48 version as favicon.ico (browsers will scale)
+            await sharp(SOURCE_FILE)
+                .resize(48, 48, {
+                    fit: 'cover',
+                    position: 'center'
+                })
+                .png()
+                .toFile(icoPath);
+
+            const icoStats = fs.statSync(icoPath);
+            console.log(`  ✅ favicon.ico (48x48) - ${(icoStats.size / 1024).toFixed(1)} KB`);
+            console.log('  ℹ️  Note: This is a PNG renamed to .ico (works in modern browsers)');
+            generated++;
+        } catch (error) {
+            console.error(`  ❌ Error creating favicon.ico: ${error.message}`);
+        }
     }
 
     console.log('\n━'.repeat(50));
     console.log('📊 Summary:\n');
-    console.log(`  • Generated ${FAVICON_SIZES.length} PNG favicons`);
-    console.log(`  • Generated 1 ICO file`);
+    console.log(`  • Generated: ${generated} file(s)`);
+    console.log(`  • Skipped (up to date): ${skipped} file(s)`);
     console.log('\n💡 Recommended HTML for <head>:\n');
     console.log(`  <link rel="icon" type="image/png" sizes="48x48" href="img/favicon-48x48.png">`);
     console.log(`  <link rel="icon" type="image/png" sizes="96x96" href="img/favicon-96x96.png">`);
