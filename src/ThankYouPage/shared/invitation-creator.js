@@ -960,9 +960,18 @@
                 btn.className = `style-btn ${styleKey === this.currentStyle ? 'active' : ''}`;
                 btn.innerHTML = `<span>${style.icon}</span><span>${style.name}</span>`;
                 btn.onclick = () => {
+                    const previousStyle = this.currentStyle;
                     this.currentStyle = styleKey;
                     this.selectedWords = {};
                     this.render();
+
+                    // Track style change
+                    if (previousStyle !== styleKey) {
+                        trackEvent('invitation_style_change', {
+                            fromStyle: previousStyle,
+                            toStyle: styleKey
+                        });
+                    }
                 };
                 selector.appendChild(btn);
             });
