@@ -42,6 +42,11 @@ const STATIC_FILES = [
     'ics-browserified.js'
 ];
 
+// Files to copy to root (for Google favicon discovery)
+const ROOT_COPY_FILES = [
+    { src: 'img/favicon.ico', dest: 'favicon.ico' }
+];
+
 const STATIC_FOLDERS = [
     'js',
     'data',
@@ -608,6 +613,16 @@ function copyStaticFiles() {
         console.log('  ✓ css/ (created for Tailwind)');
     }
 
+    // Copy files to root (favicon.ico for Google)
+    for (const { src, dest } of ROOT_COPY_FILES) {
+        const srcPath = path.join(SRC_DIR, src);
+        const destPath = path.join(DIST_DIR, dest);
+        if (fs.existsSync(srcPath)) {
+            fs.copyFileSync(srcPath, destPath);
+            console.log(`  ✓ ${dest} (copied to root for Google)`);
+        }
+    }
+
     console.log('');
 }
 
@@ -1010,7 +1025,7 @@ function generateEventPage(event) {
     <link rel="icon" type="image/png" sizes="96x96" href="/img/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="192x192" href="/img/favicon-192x192.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png">
-    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="shortcut icon" href="/favicon.ico">
     <link rel="stylesheet" href="/css/style.css">
     <style>
         .event-page { padding: 2rem 0; }
