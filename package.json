@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npx serve dist",
     "build:css": "npx @tailwindcss/cli -i ./src/css/input.css -o ./dist/css/style.css --minify",
-    "build": "npm run generate-favicons && node scripts/build-dist.js && npm run build:css",
+    "build": "npm run generate-favicons && node scripts/build-dist.js && npm run build:css && node scripts/cache-bust.js",
     "watch:css": "npx @tailwindcss/cli -i ./src/css/input.css -o ./dist/css/style.css --watch",
     "convert-events": "node scripts/convert-events-to-yaml.js",
     "optimize-images": "node scripts/optimize-images.js",
