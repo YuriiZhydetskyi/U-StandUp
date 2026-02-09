@@ -20,7 +20,7 @@ export { getCategoryLabel, formatDate, formatDateShort, formatDateFull, createGo
 function getResponsiveImageAttrs(imagePath) {
     if (!imagePath) return null;
     const basePath = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
-    const pathWithoutExt = basePath.replace(/\.webp$/, '');
+    const pathWithoutExt = basePath.replace(/\.(webp|gif|jpg|jpeg|png)$/, '');
 
     // Available sizes (must match build-dist.js RESPONSIVE_SIZES)
     const sizes = [300, 400, 600, 800, 1000];
