@@ -1,0 +1,55 @@
+id: 2026-03-05-handmade-standup-cologne
+name: "Handmade Stand-up"
+category: concert
+date: "2026-03-05"
+time: "19:00"
+location: Theatercafé Filmdose, Köln
+locationForCalendar: Zülpicher Str. 39, 50674 Köln
+linkToMaps: https://maps.app.goo.gl/BPHbnNLBU87iRAmM9
+image: img/2026-03-05-handmade-standup-cologne.webp
+isFavorite: true
+ticketLink: https://secure.wayforpay.com/payment/handmadestandup
+geo:
+  region: DE-NW
+  placename: Köln
+  name: Theatercafé Filmdose
+  streetAddress: Zülpicher Str. 39
+  addressLocality: Köln
+  postalCode: "50674"
+  addressCountry: DE
+seo:
+  description: "Український стендап 5 березня о 19:00 у Кельні. 7 українських коміків."
+performer:
+  - "@type": Person
+    name: Леся Калина
+  - "@type": Person
+    name: Володимир Волинський
+  - "@type": Person
+    name: Антон Новосад
+  - "@type": Person
+    name: Панна Вікторія
+  - "@type": Person
+    name: Євген Прус
+  - "@type": Person
+    name: Юрій Жидецький
+description: |-
+  Ви можете подумати, що це ті самі коміки.
+  Але за 3 місяці в їхніх тілах оновилось ≈25% атомів.
+  Але жарти — 100% нові.
+
+  Handmade Stand-up — це матеріал не з конвеєра, а зроблений головою, записаний руками і перевірений сценою.
+
+  🔥 Стендапери:
+  — Леся Калина
+  — Володимир Волинський
+  — Антон Новосад
+  — Панна Вікторія
+  — Євген Прус
+  — Юрій Жидецький
+  🎤 Ведучий: Абрам Оганесян
+
+  🗓 5 березня
+  🕖 19:00
+  📍 Theatercafé Filmdose, Zülpicher Str. 39
+
+  Квитки: <a href="https://secure.wayforpay.com/payment/handmadestandup" target="_blank">тут</a>

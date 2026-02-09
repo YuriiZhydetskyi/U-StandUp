@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Дякуємо за купівлю квитка | Handmade Stand-up</title>
+    <meta name="description" content="Дякуємо за купівлю квитка на Handmade Stand-up у Кельні">
+
+    <!-- Favicon - Google recommends PNG format, multiple of 48px -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/img/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/img/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/img/favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <!-- Cloudflare Web Analytics -->
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "e9e3d01d906d4f06946bb1f72ba15410"}'></script>
+
+    <!-- Google Tag Manager -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'page_view',
+        page_type: 'thank_you'
+      });
+    </script>
+    <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-5J239V2K');
+    </script>
+
+    <!-- Meta Pixel Code -->
+    <script>
+    function getUrlParams() {
+        const params = new URLSearchParams(window.location.search);
+        return {
+            success: params.get('success') || params.get('ok') || params.get('status'),
+            amount: params.get('amount') || params.get('value') || '15.00',
+            currency: params.get('currency') || 'EUR',
+            orderId: params.get('orderReference') || params.get('order_id') || 'order_' + Date.now(),
+            reason: params.get('reason'),
+            reasonCode: params.get('reasonCode')
+        };
+    }
+
+    function isValidPurchase() {
+        const params = getUrlParams();
+        const hasSuccessParam = params.success !== null;
+        const isNotError = !params.reason && !params.reasonCode;
+        const purchaseTracked = sessionStorage.getItem('fb_purchase_tracked');
+        return hasSuccessParam && isNotError && !purchaseTracked;
+    }
+
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+
+    fbq('init', '3052217368299588');
+    fbq('track', 'PageView');
+
+    if (isValidPurchase()) {
+        const params = getUrlParams();
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: 'purchase',
+          value: parseFloat(params.amount),
+          currency: params.currency,
+          transaction_id: params.orderId,
+          items: [{
+            item_name: 'Handmade Stand-up',
+            item_category: 'Standup Show',
+            quantity: 1,
+            price: parseFloat(params.amount),
+            item_id: params.orderId
+          }]
+        });
+
+        fbq('track', 'Purchase', {
+            value: parseFloat(params.amount),
+            currency: params.currency,
+            content_name: 'Handmade Stand-up',
+            content_type: 'product',
+            content_ids: [params.orderId],
+            num_items: 1
+        });
+
+        fbq('track', 'ViewContent', {
+            content_name: 'Handmade Stand-up - Thank You Page',
+            content_category: 'Standup Show',
+            content_ids: [params.orderId],
+            content_type: 'product',
+            value: parseFloat(params.amount),
+            currency: params.currency
+        });
+
+        sessionStorage.setItem('fb_purchase_tracked', 'true');
+        sessionStorage.setItem('fb_purchase_time', new Date().toISOString());
+        sessionStorage.setItem('fb_order_id', params.orderId);
+    }
+    </script>
+    <noscript>
+        <img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id=3052217368299588&ev=PageView&noscript=1"/>
+    </noscript>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
+
+    <!-- Shared Base CSS -->
+    <link rel="stylesheet" href="/ThankYouPage/shared/thank-you-base.css">
+
+    <!-- Spring Theme Variables -->
+    <style>
+    :root {
+        /* Spring theme colors */
+        --primary-color: #4CAF50;
+        --accent-color: #F8BBD0;
+        --soft-primary: #66BB6A;
+        --soft-accent: #FCE4EC;
+        --light-primary: #E8F5E9;
+        --light-accent: #FFF8E1;
+
+        /* Background gradient */
+        --bg-start: #E8F5E9;
+        --bg-middle: #FFFDE7;
+        --bg-end: #F1F8E9;
+
+        /* Button shadows */
+        --accent-shadow: rgba(248, 187, 208, 0.3);
+
+        /* Invitation button */
+        --invitation-gradient: linear-gradient(90deg, #66BB6A 0%, #F06292 50%, #81C784 100%);
+        --invitation-shadow: 0 6px 20px rgba(102, 187, 106, 0.25);
+        --invitation-hover-shadow: 0 18px 40px rgba(102, 187, 106, 0.26), 0 0 50px rgba(240, 98, 146, 0.12);
+        --invitation-pulse-shadow: 0 12px 30px rgba(102, 187, 106, 0.28), 0 0 40px rgba(240, 98, 146, 0.10);
+        --invitation-glow: 0 0 30px rgba(102, 187, 106, 0.12), 0 0 60px rgba(240, 98, 146, 0.08);
+    }
+
+    /* Spring-specific: flower petal animation */
+    .petal {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        opacity: 0.7;
+        border-radius: 50% 0 50% 50%;
+        animation: fall linear infinite;
+    }
+    </style>
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5J239V2K"
+              height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+
+    <!-- Animated background -->
+    <div class="animation-container" id="animationContainer"></div>
+
+    <!-- Confetti canvas -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <div class="container">
+        <div class="content-card">
+            <div class="success-icon">
+                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+                    <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                </svg>
+            </div>
+
+            <h1 class="title">Вітаємо! 🌸</h1>
+            <h2 class="subtitle">Ваш квиток придбано</h2>
+
+            <div class="thank-you-message">
+                <p>Дякуємо, що долучаєтесь до розвитку українського стендапу у Кельні. Беріть з собою друзів, а ми зробимо все, що у наших силах, щоб ви гарно провели цей час.</p>
+                <p>Якщо маєте якісь пропозиції — не соромтесь писати нам у <a href="https://www.instagram.com/u_standup_cologne/" target="_blank" class="instagram-link">Інстаграмі</a>. Ми дуже раді зворотному зв'язку.</p>
+            </div>
+
+            <div class="invitation-section">
+                <button class="btn btn-invitation" onclick="openInvitationCreator()">
+                    ✨ Створити креативне запрошення для друзів
+                </button>
+            </div>
+
+            <div class="event-details">
+                <h3>🌿 Деталі події</h3>
+                <div class="detail-item">
+                    <span class="detail-label">Подія:</span>
+                    <span class="detail-value">Handmade Stand-up</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Дата:</span>
+                    <span class="detail-value">5 березня 2026</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Початок:</span>
+                    <span class="detail-value">19:00</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Місце:</span>
+                    <span class="detail-value">Theatercafé Filmdose</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Адреса:</span>
+                    <span class="detail-value">Zülpicher Str. 39, 50674 Köln</span>
+                </div>
+            </div>
+
+            <div class="footer-note">
+                <p>До зустрічі на стендапі! 🎤🌸</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="invitation-modal"></div>
+
+    <!-- Event Configuration -->
+    <script>
+    window.EVENT_CONFIG = {
+        emoji: '🌸',
+        eventName: 'Handmade Stand-up',
+        shareUrl: 'https://secure.wayforpay.com/payment/handmadestandup',
+        shareText: '🌸 Приєднуйся до Handmade Stand-up у Кельні! 5 березня о 19:00. Український стендап, гарна атмосфера та море сміху!',
+        confettiColors: ['#4CAF50', '#F8BBD0', '#81C784', '#F06292', '#FFFDE7', '#A5D6A7'],
+        animation: {
+            type: 'snowflakes',
+            count: 25,
+            chars: ['🌸', '🌷', '🌺', '🌼', '💐', '🌿']
+        }
+    };
+
+    window.INVITATION_CONFIG = {
+        eventName: 'Handmade Stand-up',
+        eventDate: '5 березня',
+        eventDateISO: '2026-03-05',
+        time: '19:00',
+        city: 'Кельні',
+        paymentUrl: 'https://secure.wayforpay.com/payment/handmadestandup',
+        emoji: '🌸',
+        themeGradient: 'linear-gradient(135deg, #4CAF50, #F8BBD0)'
+    };
+    </script>
+
+    <!-- Shared JavaScript -->
+    <script src="/ThankYouPage/shared/thank-you.js"></script>
+    <script src="/ThankYouPage/shared/invitation-creator.js"></script>
+</body>
+</html>
