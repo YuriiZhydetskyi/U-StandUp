@@ -1,0 +1,108 @@
+# Довідник локацій, де ми проводимо події
+# Використовуй назву закладу + місто для швидкого пошуку
+# Наприклад: "Nowa Mowa, Bonn" або "Filmdose, Köln"
+
+venues:
+  # ═══════════════════════════════════════════
+  # KÖLN (Кельн)
+  # ═══════════════════════════════════════════
+
+  - name: Theatercafé Filmdose
+    shortName: Filmdose
+    city: Köln
+    streetAddress: Zülpicher Str. 39
+    postalCode: "50674"
+    addressCountry: DE
+    region: DE-NW
+    linkToMaps: https://maps.app.goo.gl/BPHbnNLBU87iRAmM9
+    locationDisplay: "Theatercafé Filmdose, Zülpicher Str. 39, 50674 Köln"
+    locationForCalendar: "Zülpicher Str. 39, 50674 Köln"
+    notes: "Основна локація для концертів та відкритих мікрофонів у Кельні. Театральне кафе."
+    eventsCount: 8
+
+  - name: Prisma Bildungsplattform
+    shortName: Prisma
+    city: Köln
+    streetAddress: Clevischer Ring 7
+    postalCode: "51065"
+    addressCountry: DE
+    region: DE-NW
+    linkToMaps: https://maps.app.goo.gl/v5argQe8wJKerXSS8
+    locationDisplay: "Мовна школа на Clevischer Ring 7, 51065 Köln"
+    locationForCalendar: "Clevischer Ring 7, 51065 Köln"
+    notes: "Мовна школа. Використовували для читок та відкритих мікрофонів."
+    eventsCount: 4
+
+  - name: Lew Kopelew Forum e.V.
+    shortName: Lew Kopelew Forum
+    city: Köln
+    streetAddress: Neumarkt 18
+    postalCode: "50667"
+    addressCountry: DE
+    region: DE-NW
+    linkToMaps: ""
+    locationDisplay: "Lew Kopelew Forum e.V., Neumarkt 18, 50667 Köln"
+    locationForCalendar: "Neumarkt 18, 50667 Köln"
+    notes: "Культурний форум. Використовували для майстер-класу з постановки голосу."
+    eventsCount: 1
+
+  - name: Park Tables (Hansaring)
+    shortName: Парк Hansaring
+    city: Köln
+    streetAddress: Schach- und Mühletische
+    postalCode: "50670"
+    addressCountry: DE
+    region: DE-NW
+    linkToMaps: https://maps.app.goo.gl/tscc3bUP3BpQkBFt9
+    locationDisplay: "Столики в парку біля Hansaring, Köln"
+    locationForCalendar: "Schach- und Mühletische, 50670 Köln"
+    notes: "Літня локація для читок на відкритому повітрі."
+    eventsCount: 6
+
+  # ═══════════════════════════════════════════
+  # BONN (Бонн)
+  # ═══════════════════════════════════════════
+
+  - name: Nowa Mowa
+    shortName: Nowa Mowa
+    city: Bonn
+    streetAddress: Paulstraße 5
+    postalCode: "53111"
+    addressCountry: DE
+    region: DE-NW
+    linkToMaps: https://maps.app.goo.gl/LtJavSnNtFofUdrf6
+    locationDisplay: "Ресторан української кухні Nowa Mowa, Bonn"
+    locationForCalendar: "Paulstraße 5, 53111 Bonn"
+    notes: "Ресторан української кухні. Основна локація у Бонні. Столик треба бронювати заздалегідь."
+    instagram: https://www.instagram.com/nowamowa.bonn/
+    eventsCount: 3
+
+  # ═══════════════════════════════════════════
+  # DÜSSELDORF (Дюссельдорф)
+  # ═══════════════════════════════════════════
+
+  - name: Kindercafé Wunderhaus
+    shortName: Wunderhaus
+    city: Düsseldorf
+    streetAddress: Kölner Landstraße 148
+    postalCode: "40591"
+    addressCountry: DE
+    region: DE-NW
+    linkToMaps: https://maps.app.goo.gl/ZQ7gmr9L7PaQd8kq7
+    locationDisplay: "Kindercafé Wunderhaus, Kölner Landstraße 148, 40591 Düsseldorf"
+    locationForCalendar: "Kölner Landstraße 148, 40591 Düsseldorf"
+    notes: "Дитяче кафе. Використовували для перших відкритих мікрофонів у Дюссельдорфі."
+    eventsCount: 3
+
+  - name: Shadow-Arkaden
+    shortName: Shadow-Arkaden
+    city: Düsseldorf
+    streetAddress: Schadowstraße 11
+    postalCode: "40212"
+    addressCountry: DE
+    region: DE-NW
+    linkToMaps: https://maps.app.goo.gl/iXUWsHcSP3evfL9u7
+    locationDisplay: "Shadow-Arkaden, Schadowstraße 11, Düsseldorf"
+    locationForCalendar: "Schadowstraße 11, 40212 Düsseldorf"
+    notes: "Торговий центр. Вхід біля DM. Поверх може змінюватись (був 4-й і 2-й)."
+    eventsCount: 2

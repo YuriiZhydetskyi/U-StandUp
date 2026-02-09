@@ -57,8 +57,8 @@ const STATIC_FOLDERS = [
 
 // Image optimization settings
 const WEBP_QUALITY = 80;
-const EXTENSIONS_TO_CONVERT = ['.jpg', '.jpeg', '.png', '.webp'];
-const EXTENSIONS_TO_COPY = ['.svg', '.gif', '.ico'];
+const EXTENSIONS_TO_CONVERT = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
+const EXTENSIONS_TO_COPY = ['.svg', '.ico'];
 // Files to copy as-is without WebP conversion (favicons must stay as PNG for browser compatibility)
 const FILES_TO_COPY_AS_IS = ['favicon-', 'apple-touch-icon'];
 
@@ -405,11 +405,13 @@ async function generateResponsiveImages() {
                 let totalOutputSize = 0;
                 const generatedFiles = [];
 
+                const isAnimated = ext === '.gif';
+
                 for (const width of sizesToGenerate) {
                     const height = Math.round(width / aspectRatio);
                     const destPath = path.join(destImgDir, `${nameWithoutExt}-${width}.webp`);
 
-                    await sharp(srcPath)
+                    await sharp(srcPath, { animated: isAnimated })
                         .resize(width, height, { fit: 'cover' })
                         .webp({ quality: WEBP_QUALITY })
                         .toFile(destPath);
@@ -439,7 +441,8 @@ async function generateResponsiveImages() {
                     continue;
                 }
 
-                await sharp(srcPath)
+                const isAnimatedFallback = ext === '.gif';
+                await sharp(srcPath, { animated: isAnimatedFallback })
                     .webp({ quality: WEBP_QUALITY })
                     .toFile(destPath);
 
@@ -469,6 +472,30 @@ async function generateResponsiveImages() {
     } else {
         console.log('');
     }
+
+    // Clean up stale files in dist/img/ that were previously copied
+    // but should now be converted to WebP (e.g. .gif after adding GIF support)
+    const distFiles = fs.readdirSync(destImgDir);
+    let removed = 0;
+    const convertableNonWebp = EXTENSIONS_TO_CONVERT.filter(e => e !== '.webp');
+    for (const distFile of distFiles) {
+        const distPath = path.join(destImgDir, distFile);
+        if (fs.statSync(distPath).isDirectory()) continue;
+
+        const ext = path.extname(distFile).toLowerCase();
+        if (convertableNonWebp.includes(ext)) {
+            // This file should have been converted to .webp, not copied — it's a leftover
+            const shouldCopyAsIs = FILES_TO_COPY_AS_IS.some(prefix => distFile.startsWith(prefix));
+            if (!shouldCopyAsIs) {
+                fs.unlinkSync(distPath);
+                console.log(`  🗑️  Removed stale: ${distFile}`);
+                removed++;
+            }
+        }
+    }
+    if (removed > 0) {
+        console.log(`  Removed ${removed} stale file(s) from dist/img/\n`);
+    }
 }
 
 /**
@@ -482,7 +509,7 @@ function getResponsiveImageSrc(originalSrc) {
     if (!dimensions) {
         // No dimensions, use original path but with .webp extension
         const ext = path.extname(normalizedSrc);
-        if (['.jpg', '.jpeg', '.png', '.webp'].includes(ext.toLowerCase())) {
+        if (['.jpg', '.jpeg', '.png', '.webp', '.gif'].includes(ext.toLowerCase())) {
             return originalSrc.replace(ext, '.webp');
         }
         return originalSrc;
