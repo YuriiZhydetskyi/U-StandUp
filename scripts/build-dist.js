@@ -718,6 +718,19 @@ function buildEvents() {
         return new Date(b.date) - new Date(a.date);
     });
 
+    // Add responsive sizes from generatedSizesMap to each event
+    for (const event of events) {
+        if (event.image) {
+            let imgPath = event.image;
+            if (imgPath.startsWith('/')) imgPath = imgPath.slice(1);
+            if (!imgPath.startsWith('img/')) imgPath = `img/${imgPath}`;
+            const sizes = generatedSizesMap.get(imgPath);
+            if (sizes) {
+                event.responsiveSizes = sizes;
+            }
+        }
+    }
+
     // Write events.js
     const jsContent = `// Auto-generated from YAML files
 // Run 'npm run build:dist' to regenerate

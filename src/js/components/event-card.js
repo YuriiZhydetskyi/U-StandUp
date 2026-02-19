@@ -17,13 +17,13 @@ export { getCategoryLabel, formatDate, formatDateShort, formatDateFull, createGo
  * Get responsive image attributes for event cards
  * Returns src, srcset and sizes for optimal loading
  */
-function getResponsiveImageAttrs(imagePath) {
+export function getResponsiveImageAttrs(imagePath, responsiveSizes) {
     if (!imagePath) return null;
     const basePath = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
     const pathWithoutExt = basePath.replace(/\.(webp|gif|jpg|jpeg|png)$/, '');
 
-    // Available sizes (must match build-dist.js RESPONSIVE_SIZES)
-    const sizes = [300, 400, 600, 800, 1000];
+    // Use actual generated sizes from build, fallback to default set
+    const sizes = responsiveSizes || [300, 400, 600, 800, 1000];
 
     return {
         src: `${pathWithoutExt}-400.webp`,
@@ -43,7 +43,7 @@ export function renderEventCard(event) {
     const categoryLabel = getCategoryLabel(event.category);
     const eventUrl = `/events/${event.id}/`;
     // Get responsive image attributes
-    const imgAttrs = getResponsiveImageAttrs(event.image);
+    const imgAttrs = getResponsiveImageAttrs(event.image, event.responsiveSizes);
 
     const imageHtml = imgAttrs ? `
         <a href="${eventUrl}" class="event-card__image-wrapper">

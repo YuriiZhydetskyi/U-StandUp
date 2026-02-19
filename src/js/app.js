@@ -5,7 +5,7 @@
 import events from './events.js';
 import { initHeader } from './components/header.js';
 import { initFooter } from './components/footer.js';
-import { renderEventCard, createGoogleCalendarLink, formatDateFull, getCategoryLabel } from './components/event-card.js';
+import { renderEventCard, getResponsiveImageAttrs, createGoogleCalendarLink, formatDateFull, getCategoryLabel } from './components/event-card.js';
 
 let icsModule = null;
 let currentFilter = 'all';
@@ -104,13 +104,15 @@ function displayHeroEvent() {
     const heroEvent = upcomingEvents.find(e => e.isFavorite && e.image) || upcomingEvents.find(e => e.image) || upcomingEvents[0];
     if (!heroEvent || !heroEvent.image) return;
 
-    // Convert to sized image path (400px for hero)
-    let imagePath = heroEvent.image.startsWith('/') ? heroEvent.image : `/${heroEvent.image}`;
-    const imageSrc = imagePath.replace(/\.webp$/, '-400.webp');
+    // Get responsive image attributes
+    const imgAttrs = getResponsiveImageAttrs(heroEvent.image, heroEvent.responsiveSizes);
 
     // Populate hero section (fallback if not pre-rendered)
-    document.getElementById('hero-event-image').src = imageSrc;
-    document.getElementById('hero-event-image').alt = heroEvent.name;
+    const heroImg = document.getElementById('hero-event-image');
+    heroImg.src = imgAttrs.src;
+    if (imgAttrs.srcset) heroImg.srcset = imgAttrs.srcset;
+    if (imgAttrs.sizes) heroImg.sizes = imgAttrs.sizes;
+    heroImg.alt = heroEvent.name;
     document.getElementById('hero-event-link').href = `/events/${heroEvent.id}/`;
     document.getElementById('hero-event-badge').textContent = getCategoryLabel(heroEvent.category) || 'Подія';
     document.getElementById('hero-event-title').textContent = heroEvent.name;
