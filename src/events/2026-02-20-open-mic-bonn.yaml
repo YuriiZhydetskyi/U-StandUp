@@ -7,6 +7,7 @@ location: Ресторан української кухні Nowa Mowa, Bonn
 locationForCalendar: Paulstraße 5, 53111 Bonn
 linkToMaps: https://maps.app.goo.gl/LtJavSnNtFofUdrf6
 image: img/2026-02-20-open-mic-bonn.jpg
+isFavorite: true
 geo:
   region: DE-NW
   placename: Bonn
