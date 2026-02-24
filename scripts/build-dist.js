@@ -1280,4 +1280,7 @@ async function build() {
     console.log(`Output: ${DIST_DIR}`);
 }
 
-build().catch(console.error);
+build().catch(err => {
+    console.error(err);
+    process.exit(1);
+});

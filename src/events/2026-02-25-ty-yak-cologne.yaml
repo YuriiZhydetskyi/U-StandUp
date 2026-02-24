@@ -1,0 +1,56 @@
+id: 2026-02-25-ty-yak-cologne
+name: "Ти як? — психологічно-розважальне ток-шоу"
+category: concert
+date: "2026-02-25"
+time: "19:00"
+location: Theatercafé Filmdose, Köln
+locationForCalendar: Zülpicher Str. 39, 50674 Köln
+linkToMaps: https://maps.app.goo.gl/BPHbnNLBU87iRAmM9
+image: img/2026-02-25-ty-yak.webp
+isFavorite: true
+ticketLink: https://secure.wayforpay.com/payment/seb82a0cd9a54
+geo:
+  region: DE-NW
+  placename: Köln
+  name: Theatercafé Filmdose
+  streetAddress: Zülpicher Str. 39
+  addressLocality: Köln
+  postalCode: "50674"
+  addressCountry: DE
+seo:
+  description: "Ток-шоу «Ти як?» 25 лютого о 19:00 у Кельні. Психотерапевт і стендап-комік розбирають реальні питання глядачів. Theatercafé Filmdose."
+offers:
+  "@type": Offer
+  price: 15
+  priceCurrency: EUR
+  availability: https://schema.org/InStock
+  url: https://secure.wayforpay.com/payment/seb82a0cd9a54
+performer:
+  - "@type": Person
+    name: Олег Верба
+    jobTitle: Психотерапевт
+  - "@type": Person
+    name: Віталій Абрамов
+    jobTitle: Стендап-комік
+description: |-
+  Привіт, Кельн! Ми знову їдемо до вас з психологічно-розважальним ток-шоу «Ти як?», де двоє ведучих — психотерапевт і стендап-комік — дивляться на важливі теми з різних ракурсів.
+
+  🎙 Олег Верба — психотерапевт, пропонує глибину та професійний погляд.
+  😂 Віталій Абрамов — стендап-комік, додає легкості і здорової самоіронії.
+
+  Про що будемо говорити:
+  — стосунки та близькість
+  — конфлікти та чи завжди можна домовитись у стосунках
+  — еміграція і звідки брати ресурс переживати цей досвід
+  — батьки та діти і чому нам буває так важко знайти спільну мову
+
+  Можна буде поставити своє питання або обговорити те, що хвилює саме вас. Питання можна ставити анонімно — або відкрито. А можна просто прийти послухати.
+
+  Атмосфера камерна та дружня — всі залишаються задоволеними 🤝
+
+  📅 25 лютого
+  🕖 19:00
+  📍 Theatercafé Filmdose, Zülpicher Str. 39
+  💰 Квиток: 15 €
+
+  Квитки: <a href="https://secure.wayforpay.com/payment/seb82a0cd9a54" target="_blank">тут</a>
