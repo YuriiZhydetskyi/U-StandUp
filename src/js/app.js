@@ -92,10 +92,10 @@ function displayHeroEvent() {
     const heroSection = document.getElementById('hero-event');
     if (!heroSection || upcomingEvents.length === 0) return;
 
-    // Check if hero is already pre-rendered (has content)
-    const heroTitle = document.getElementById('hero-event-title');
-    if (heroTitle && heroTitle.textContent.trim()) {
-        // Already pre-rendered, just show the section
+    // Check if hero is already pre-rendered with a still-upcoming event
+    const preRenderedId = heroSection.getAttribute('data-hero-event-id');
+    if (preRenderedId && upcomingEvents.some(e => e.id === preRenderedId)) {
+        // Pre-rendered event is still upcoming, just show it
         heroSection.style.display = 'block';
         return;
     }

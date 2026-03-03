@@ -966,7 +966,7 @@ function preRenderHeroSection(events) {
     // Replace hero section (remove display:none and populate content)
     const heroSectionRegex = /<section class="hero-event" id="hero-event" style="display: none;">[\s\S]*?<\/section>\s*<!-- Filter/;
 
-    const preRenderedHero = `<section class="hero-event" id="hero-event">
+    const preRenderedHero = `<section class="hero-event" id="hero-event" data-hero-event-id="${heroEvent.id}">
             <div class="container">
                 <div class="hero-event__inner">
                     <a href="/events/${heroEvent.id}/" id="hero-event-link" class="hero-event__image">
