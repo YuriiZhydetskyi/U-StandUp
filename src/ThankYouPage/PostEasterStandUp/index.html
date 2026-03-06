@@ -208,6 +208,31 @@
         0%, 100% { transform: translateY(0) rotate(0deg); }
         50% { transform: translateY(-20px) rotate(15deg); }
     }
+
+    /* Readability fixes: contrast overrides for Easter theme */
+
+    /* Title gradient — replace near-white yellow (#FFF176) with readable golden amber */
+    .title {
+        background: linear-gradient(135deg, #4CAF50, #C6A800);
+    }
+
+    /* Instagram link — darken on light-green background (2.4:1 -> 7.1:1) */
+    .instagram-link {
+        color: #2E7D32;
+    }
+    .instagram-link:hover {
+        color: #1B5E20;
+    }
+
+    /* Message body — deepen text on gradient background (4.7:1 -> 6.4:1) */
+    .thank-you-message p {
+        color: #1A252F;
+    }
+
+    /* Detail labels — darken from barely-failing to AA-passing (4.48 -> 6.1:1) */
+    .detail-label {
+        color: #545B62;
+    }
     </style>
 </head>
 <body>
