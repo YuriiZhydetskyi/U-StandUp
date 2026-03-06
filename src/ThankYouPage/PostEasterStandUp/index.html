@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Дякуємо за купівлю квитка | Пост Великодній Стендап</title>
+    <meta name="description" content="Дякуємо за купівлю квитка на Пост Великодній Стендап у Кельні">
+
+    <!-- Favicon - Google recommends PNG format, multiple of 48px -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/img/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/img/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/img/favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <!-- Cloudflare Web Analytics -->
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "e9e3d01d906d4f06946bb1f72ba15410"}'></script>
+
+    <!-- Google Tag Manager -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'page_view',
+        page_type: 'thank_you'
+      });
+    </script>
+    <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-5J239V2K');
+    </script>
+
+    <!-- Meta Pixel Code -->
+    <script>
+    function getUrlParams() {
+        const params = new URLSearchParams(window.location.search);
+        return {
+            success: params.get('success') || params.get('ok') || params.get('status'),
+            amount: params.get('amount') || params.get('value') || '15.00',
+            currency: params.get('currency') || 'EUR',
+            orderId: params.get('orderReference') || params.get('order_id') || 'order_' + Date.now(),
+            reason: params.get('reason'),
+            reasonCode: params.get('reasonCode')
+        };
+    }
+
+    function isValidPurchase() {
+        const params = getUrlParams();
+        const hasSuccessParam = params.success !== null;
+        const isNotError = !params.reason && !params.reasonCode;
+        const purchaseTracked = sessionStorage.getItem('fb_purchase_tracked');
+        return hasSuccessParam && isNotError && !purchaseTracked;
+    }
+
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+
+    fbq('init', '3052217368299588');
+    fbq('track', 'PageView');
+
+    if (isValidPurchase()) {
+        const params = getUrlParams();
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: 'purchase',
+          value: parseFloat(params.amount),
+          currency: params.currency,
+          transaction_id: params.orderId,
+          items: [{
+            item_name: 'Пост Великодній Стендап',
+            item_category: 'Standup Show',
+            quantity: 1,
+            price: parseFloat(params.amount),
+            item_id: params.orderId
+          }]
+        });
+
+        fbq('track', 'Purchase', {
+            value: parseFloat(params.amount),
+            currency: params.currency,
+            content_name: 'Пост Великодній Стендап',
+            content_type: 'product',
+            content_ids: [params.orderId],
+            num_items: 1
+        });
+
+        fbq('track', 'ViewContent', {
+            content_name: 'Пост Великодній Стендап - Thank You Page',
+            content_category: 'Standup Show',
+            content_ids: [params.orderId],
+            content_type: 'product',
+            value: parseFloat(params.amount),
+            currency: params.currency
+        });
+
+        sessionStorage.setItem('fb_purchase_tracked', 'true');
+        sessionStorage.setItem('fb_purchase_time', new Date().toISOString());
+        sessionStorage.setItem('fb_order_id', params.orderId);
+    }
+    </script>
+    <noscript>
+        <img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id=3052217368299588&ev=PageView&noscript=1"/>
+    </noscript>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
+
+    <!-- Shared Base CSS -->
+    <link rel="stylesheet" href="/ThankYouPage/shared/thank-you-base.css">
+
+    <!-- Easter Theme Variables -->
+    <style>
+    :root {
+        /* Easter theme colors */
+        --primary-color: #4CAF50;
+        --accent-color: #FFF176;
+        --soft-primary: #66BB6A;
+        --soft-accent: #FFF9C4;
+        --light-primary: #E8F5E9;
+        --light-accent: #FFFDE7;
+
+        /* Background gradient */
+        --bg-start: #E8F5E9;
+        --bg-middle: #FFFDE7;
+        --bg-end: #FCE4EC;
+
+        /* Button shadows */
+        --accent-shadow: rgba(255, 241, 118, 0.3);
+
+        /* Invitation button */
+        --invitation-gradient: linear-gradient(90deg, #66BB6A 0%, #FFF176 50%, #CE93D8 100%);
+        --invitation-shadow: 0 6px 20px rgba(102, 187, 106, 0.25);
+        --invitation-hover-shadow: 0 18px 40px rgba(102, 187, 106, 0.26), 0 0 50px rgba(206, 147, 216, 0.12);
+        --invitation-pulse-shadow: 0 12px 30px rgba(102, 187, 106, 0.28), 0 0 40px rgba(206, 147, 216, 0.10);
+        --invitation-glow: 0 0 30px rgba(102, 187, 106, 0.12), 0 0 60px rgba(206, 147, 216, 0.08);
+    }
+
+    /* Easter grass at the bottom */
+    body::after {
+        content: '';
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background:
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 60'%3E%3Cpath d='M0,60 Q5,20 10,60 Q15,15 20,60 Q25,25 30,60 Q35,10 40,60 Q45,20 50,60 Q55,30 60,60 Q65,15 70,60 Q75,25 75,60 Q80,10 85,60 Q90,20 95,60 Q100,30 105,60 Q110,15 115,60 Q118,25 120,60 Z' fill='%234CAF50'/%3E%3Cpath d='M0,60 Q8,35 15,60 Q22,30 30,60 Q38,40 45,60 Q52,25 60,60 Q68,35 75,60 Q82,30 90,60 Q98,40 105,60 Q112,30 120,60 Z' fill='%2366BB6A'/%3E%3C/svg%3E") repeat-x;
+        background-size: 120px 60px;
+        background-position: bottom;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    /* Easter eggs decorations */
+    .content-card::after {
+        content: '🥚🐣🥚';
+        position: absolute;
+        bottom: -8px;
+        right: 20px;
+        font-size: 1.5rem;
+        letter-spacing: 8px;
+        opacity: 0.6;
+    }
+
+    /* Easter bunny decoration */
+    .easter-bunny {
+        position: fixed;
+        bottom: 50px;
+        right: 30px;
+        font-size: 3rem;
+        z-index: 2;
+        animation: bunnyHop 2s ease-in-out infinite;
+        filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+    }
+
+    @keyframes bunnyHop {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        25% { transform: translateY(-15px) rotate(-5deg); }
+        75% { transform: translateY(-5px) rotate(5deg); }
+    }
+
+    /* Colored Easter eggs floating in background */
+    .easter-egg {
+        position: fixed;
+        font-size: 1.8rem;
+        opacity: 0.15;
+        z-index: 0;
+        animation: eggFloat 6s ease-in-out infinite;
+    }
+    .easter-egg:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+    .easter-egg:nth-child(2) { top: 20%; right: 8%; animation-delay: 1s; }
+    .easter-egg:nth-child(3) { top: 50%; left: 3%; animation-delay: 2s; }
+    .easter-egg:nth-child(4) { top: 70%; right: 5%; animation-delay: 3s; }
+    .easter-egg:nth-child(5) { top: 35%; right: 3%; animation-delay: 4s; }
+
+    @keyframes eggFloat {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(15deg); }
+    }
+    </style>
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5J239V2K"
+              height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+
+    <!-- Easter egg decorations in background -->
+    <div class="easter-egg">🥚</div>
+    <div class="easter-egg">🐣</div>
+    <div class="easter-egg">🥚</div>
+    <div class="easter-egg">🌷</div>
+    <div class="easter-egg">🥚</div>
+
+    <!-- Easter bunny -->
+    <div class="easter-bunny">🐰</div>
+
+    <!-- Animated background -->
+    <div class="animation-container" id="animationContainer"></div>
+
+    <!-- Confetti canvas -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <div class="container">
+        <div class="content-card">
+            <div class="success-icon">
+                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+                    <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                </svg>
+            </div>
+
+            <h1 class="title">Вітаємо! 🐣</h1>
+            <h2 class="subtitle">Ваш квиток придбано</h2>
+
+            <div class="thank-you-message">
+                <p>Дякуємо, що долучаєтесь до розвитку українського стендапу у Кельні. Беріть з собою друзів, а ми зробимо все, що у наших силах, щоб ви гарно провели цей час.</p>
+                <p>Якщо маєте якісь пропозиції — не соромтесь писати нам у <a href="https://www.instagram.com/u_standup_cologne/" target="_blank" class="instagram-link">Інстаграмі</a>. Ми дуже раді зворотному зв'язку.</p>
+            </div>
+
+            <div class="invitation-section">
+                <button class="btn btn-invitation" onclick="openInvitationCreator()">
+                    ✨ Створити креативне запрошення для друзів
+                </button>
+            </div>
+
+            <div class="event-details">
+                <h3>🐰 Деталі події</h3>
+                <div class="detail-item">
+                    <span class="detail-label">Подія:</span>
+                    <span class="detail-value">Пост Великодній Стендап</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Дата:</span>
+                    <span class="detail-value">22 квітня 2026</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Початок:</span>
+                    <span class="detail-value">19:00</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Місце:</span>
+                    <span class="detail-value">Theatercafé Filmdose</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Адреса:</span>
+                    <span class="detail-value">Zülpicher Str. 39, 50674 Köln</span>
+                </div>
+            </div>
+
+            <div class="footer-note">
+                <p>До зустрічі на стендапі! 🎤🐣</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="invitation-modal"></div>
+
+    <!-- Event Configuration -->
+    <script>
+    window.EVENT_CONFIG = {
+        emoji: '🐣',
+        eventName: 'Пост Великодній Стендап',
+        shareUrl: 'https://secure.wayforpay.com/payment/posteaster',
+        shareText: '🐣 Приєднуйся до Пост Великоднього Стендапу у Кельні! 22 квітня о 19:00. Український стендап, гарна атмосфера та море сміху!',
+        confettiColors: ['#4CAF50', '#FFF176', '#CE93D8', '#F8BBD0', '#81C784', '#FFCC80'],
+        animation: {
+            type: 'snowflakes',
+            count: 25,
+            chars: ['🐣', '🐰', '🥚', '🌷', '🐥', '🌿']
+        }
+    };
+
+    window.INVITATION_CONFIG = {
+        eventName: 'Пост Великодній Стендап',
+        eventDate: '22 квітня',
+        eventDateISO: '2026-04-22',
+        time: '19:00',
+        city: 'Кельні',
+        paymentUrl: 'https://secure.wayforpay.com/payment/posteaster',
+        emoji: '🐣',
+        themeGradient: 'linear-gradient(135deg, #4CAF50, #FFF176, #CE93D8)'
+    };
+    </script>
+
+    <!-- Shared JavaScript -->
+    <script src="/ThankYouPage/shared/thank-you.js"></script>
+    <script src="/ThankYouPage/shared/invitation-creator.js"></script>
+</body>
+</html>
