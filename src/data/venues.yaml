@@ -106,3 +106,16 @@ venues:
     locationForCalendar: "Schadowstraße 11, 40212 Düsseldorf"
     notes: "Торговий центр. Вхід біля DM. Поверх може змінюватись (був 4-й і 2-й)."
     eventsCount: 2
+
+  - name: Haus der Jugend
+    shortName: Haus der Jugend
+    city: Düsseldorf
+    streetAddress: Lacombletstraße 10
+    postalCode: "40239"
+    addressCountry: DE
+    region: DE-NW
+    linkToMaps: https://maps.app.goo.gl/ZVUARAHEHCnyK6Q79
+    locationDisplay: "Haus der Jugend, Lacombletstraße 10, 40239 Düsseldorf"
+    locationForCalendar: "Lacombletstraße 10, 40239 Düsseldorf"
+    notes: "Локація для концертів у Дюссельдорфі. Партнер — de.Perspektive."
+    eventsCount: 1

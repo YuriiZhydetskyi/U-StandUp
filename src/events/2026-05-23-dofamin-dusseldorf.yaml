@@ -1,0 +1,61 @@
+id: 2026-05-23-dofamin-dusseldorf
+name: "Дофаміновий стендап"
+category: concert
+date: "2026-05-23"
+time: "19:00"
+location: Haus der Jugend, Düsseldorf
+locationForCalendar: Lacombletstraße 10, 40239 Düsseldorf
+linkToMaps: https://maps.app.goo.gl/ZVUARAHEHCnyK6Q79
+image: img/2026-05-23-dofamin-dusseldorf.jpg
+isFavorite: true
+geo:
+  region: DE-NW
+  placename: Düsseldorf
+  name: Haus der Jugend
+  streetAddress: Lacombletstraße 10
+  addressLocality: Düsseldorf
+  postalCode: "40239"
+  addressCountry: DE
+performer:
+  - "@type": Person
+    name: Леся Калина
+  - "@type": Person
+    name: Володимир Волинський
+  - "@type": Person
+    name: Антон Новосад
+  - "@type": Person
+    name: Панна Вікторія
+  - "@type": Person
+    name: Євген Прус
+  - "@type": Person
+    name: Юрій Жидецький
+offers:
+  "@type": Offer
+  price: 0
+  priceCurrency: EUR
+  availability: https://schema.org/InStock
+  description: "Вхід безкоштовний, але необхідно забронювати місце наперед"
+seo:
+  description: "Дофаміновий стендап — український стендап у Дюссельдорфі 23 травня о 19:00. Вхід безкоштовний, потрібна бронь."
+description: |-
+  Це буде український стендап із хорошим, перевіреним матеріалом.
+
+  Шість українських коміків зберуться на одній сцені в Дюссельдорфі, щоб подарувати вам вечір живого гумору — про життя українців у Німеччині, культурні відмінності й ситуації, знайомі кожному, хто опинився за кордоном.
+
+  🔥 Стендапери:
+  — Леся Калина
+  — Володимир Волинський
+  — Антон Новосад
+  — Панна Вікторія
+  — Євген Прус
+  — Юрій Жидецький
+  🎤 Ведучий вечора: Абрам Оганесян
+
+  🗓 23 травня
+  🕖 19:00
+  📍 Haus der Jugend, Lacombletstraße 10, 40239 Düsseldorf
+
+  🎟 Вхід безкоштовний, але кількість місць обмежена — потрібна попередня бронь.
+  Щоб забронювати місця, напишіть нам у приватні повідомлення в <a href="https://fb.me/e/5OhPaawvU" target="_blank">Facebook</a> (через подію) або в <a href="https://www.instagram.com/u_standup_cologne/" target="_blank">Instagram</a> (@u_standup_cologne), вказавши кількість місць.
+
+  📘 Подія у Facebook: <a href="https://fb.me/e/5OhPaawvU" target="_blank">fb.me/e/5OhPaawvU</a>
